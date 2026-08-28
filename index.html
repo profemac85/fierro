@@ -1,0 +1,2033 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E6E7E2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Fierro">
+<title>Fierro</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+/* ============ tokens: hormigón y tinta ============ */
+:root{
+  --fondo:#E6E7E2;
+  --tarjeta:#F8F8F6;
+  --tinta:#14171B;
+  --suave:#6B7178;
+  --acento:#2440E8;
+  --marca:#C07A00;
+  --linea:#D0D2CB;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--fondo);color:var(--tinta);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px;line-height:1.4;
+}
+main{max-width:480px;margin:0 auto;padding:12px 12px 140px}
+body.con-sesion main{padding-bottom:250px}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input{font:inherit;color:inherit}
+a{color:var(--acento)}
+
+/* etiquetas pequeñas en mayúsculas: la personalidad de la interfaz */
+.etq{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--suave)}
+.num{font-variant-numeric:tabular-nums;font-weight:800}
+
+/* ============ cabecera de HOY ============ */
+.fila-marca{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 2px 10px}
+.marca{font-size:20px;font-weight:900;letter-spacing:.22em}
+.minimapa{display:grid;grid-template-columns:repeat(48,1fr);gap:1px;flex:1;max-width:190px;height:7px}
+.minimapa i{background:var(--linea);border-radius:1px}
+.minimapa i.ok{background:var(--acento)}
+.minimapa i.aqui{background:var(--fondo);outline:1px solid var(--acento)}
+.fila-semana{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.fila-semana .btn-flecha{width:44px;height:44px;font-size:18px;color:var(--suave)}
+.sem-centro{text-align:center}
+.sem-titulo{font-size:17px;font-weight:800;letter-spacing:.06em}
+.pills{display:flex;gap:6px;margin-bottom:12px}
+.pill{flex:1;min-height:48px;border:1px solid var(--linea);border-radius:8px;background:var(--tarjeta);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.pill b{font-size:15px}
+.pill small{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--suave)}
+.pill.sel{border-color:var(--acento);outline:1px solid var(--acento)}
+.pill.ok b::after{content:" ✓";color:var(--acento)}
+
+/* ============ tarjetas ============ */
+.tarjeta{background:var(--tarjeta);border:1px solid var(--linea);border-radius:10px;padding:12px;margin-bottom:12px}
+.tarjeta-cab{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:8px}
+.chip{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  border:1px solid var(--linea);border-radius:5px;padding:2px 6px;color:var(--suave);vertical-align:2px}
+.chip.acc{border-color:var(--acento);color:var(--acento)}
+.aviso-suave{color:var(--suave);font-size:13px}
+
+/* grilla de registro por bloque */
+.ej{padding:10px 0;border-top:1px solid var(--linea)}
+.ej:first-of-type{border-top:none}
+.ej-fila{display:flex;align-items:flex-start;gap:8px}
+.ej-nombre{flex:1;min-width:0;padding-top:4px}
+.ej-nombre b{font-size:14px;display:block;line-height:1.25}
+.ej-nombre .rango{font-size:11px;color:var(--suave)}
+.celdas{display:flex;gap:5px}
+.celda{width:58px;min-height:48px;border:1px solid var(--linea);border-radius:7px;background:var(--fondo);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.celda .punto{color:var(--linea);font-size:18px;font-weight:800}
+.celda input{width:100%;border:none;background:none;text-align:center;
+  font-variant-numeric:tabular-nums;font-weight:800;outline:none}
+.celda input.reps{font-size:19px;height:30px}
+.celda input.kg{font-size:11px;height:18px;color:var(--suave);border-top:1px dashed var(--linea)}
+.celda input.seg{font-size:19px;height:44px}
+.celda:focus-within{border-color:var(--acento);outline:1px solid var(--acento);background:#fff}
+.celda .u{position:absolute;right:3px;bottom:2px;font-size:8px;color:var(--suave)}
+.rec-dot{position:absolute;top:-5px;right:-5px;width:12px;height:12px;border-radius:50%;
+  background:var(--marca);display:none}
+.rec-dot.si{display:block}
+.rec-linea{color:var(--marca);font-size:11px;font-weight:700;margin-top:4px;display:none}
+.rec-linea.si{display:block}
+.cab-rondas{display:flex;gap:5px;justify-content:flex-end;margin-bottom:2px}
+.cab-rondas span{width:58px;text-align:center}
+
+.meta-ej{margin-top:6px;font-size:12px;color:var(--suave)}
+.meta-ej b{color:var(--tinta);font-weight:700}
+
+/* cambiar el ejercicio de una casilla, o de la sesión entera */
+.fila-sw{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.sw{display:flex;align-items:center;gap:9px;min-height:44px;font-size:13.5px;font-weight:700}
+.sw-riel{width:42px;height:25px;border-radius:13px;background:var(--linea);position:relative;
+  transition:background .15s;flex:none}
+.sw-bolita{position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:var(--tarjeta);
+  transition:transform .15s}
+.sw.on .sw-riel{background:var(--acento)}
+.sw.on .sw-bolita{transform:translateX(17px)}
+.link-reset{font-size:12px;font-weight:600;color:var(--acento);text-decoration:underline;
+  min-height:44px;text-align:right}
+.ej-pie{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ej-pie details.como{flex:1;min-width:0}
+.btn-swap{width:44px;height:44px;border:1px solid var(--linea);border-radius:8px;background:var(--fondo);
+  font-size:16px;font-weight:700;color:var(--suave);flex:none;position:relative}
+.btn-swap.manual{border-color:var(--acento);color:var(--acento)}
+.btn-swap.manual::after{content:"";position:absolute;top:-4px;right:-4px;width:9px;height:9px;
+  border-radius:50%;background:var(--acento)}
+
+/* cómo se hace */
+details.como{margin-top:6px}
+details.como summary{list-style:none;font-size:12px;font-weight:700;color:var(--acento);
+  min-height:32px;display:flex;align-items:center;cursor:pointer}
+details.como summary::-webkit-details-marker{display:none}
+details.como summary::before{content:"▸ ";margin-right:2px}
+details.como[open] summary::before{content:"▾ "}
+/* fondo blanco: casi todas las ilustraciones de wger traen fondo blanco y
+   sobre el hormigón se les notaba el recorte */
+.visual{width:100%;max-height:200px;display:flex;align-items:center;justify-content:center;
+  background:#fff;border:1px solid var(--linea);border-radius:7px;overflow:hidden;margin-bottom:2px}
+.visual img{max-width:100%;max-height:200px;object-fit:contain;display:block}
+.visual svg{width:100%;max-height:200px}
+.procedencia{font-size:11px;color:var(--suave);margin:2px 0 8px}
+.ficha ol{padding-left:20px;margin:6px 0}
+.ficha li{margin-bottom:4px;font-size:13px}
+.ficha .cue{background:var(--fondo);border-left:3px solid var(--acento);border-radius:0 6px 6px 0;
+  padding:7px 9px;font-size:13px;font-weight:600;margin:8px 0}
+.ficha .errores{font-size:12.5px;color:var(--suave);margin-bottom:8px}
+.ficha .errores li{margin-bottom:2px}
+.btn-video{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--linea);
+  border-radius:8px;font-size:13px;font-weight:600;color:var(--tinta);text-decoration:none;background:var(--fondo)}
+
+/* botones */
+.btn-grande{display:flex;align-items:center;justify-content:center;width:100%;min-height:54px;
+  border-radius:10px;font-size:16px;font-weight:800;letter-spacing:.02em}
+.btn-acento{background:var(--acento);color:#fff}
+.btn-acento:disabled{background:var(--linea);color:var(--suave)}
+.btn-borde{border:1px solid var(--linea);background:var(--tarjeta)}
+.btn-chico{min-height:44px;padding:0 14px;border:1px solid var(--linea);border-radius:8px;
+  font-size:13px;font-weight:700;background:var(--tarjeta)}
+
+/* ============ barra de sesión (cronómetro) ============ */
+#barra{position:fixed;left:0;right:0;bottom:calc(56px + env(safe-area-inset-bottom));
+  background:var(--tarjeta);border-top:1px solid var(--linea);display:none;z-index:20}
+body.con-sesion #barra{display:block}
+.barra-int{max-width:480px;margin:0 auto;padding:8px 12px 6px}
+.barra-linea1{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:40px}
+.barra-estado{min-width:0;flex:1}
+.barra-tramo{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--suave)}
+/* el nombre del ejercicio que viene es lo que se lee durante el descanso:
+   se deja hasta en dos líneas antes que truncarlo */
+.barra-info{font-size:14.5px;font-weight:800;line-height:1.2;display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.barra-info small{font-weight:600;color:var(--suave)}
+.barra-reloj{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;text-align:right}
+.barra-reloj.pasado{color:var(--marca)}
+.barra-reloj.descanso{color:var(--acento)}
+.segmentos{display:flex;gap:2px;height:5px;margin:6px 0}
+.segmentos .seg{background:var(--linea);border-radius:2px;overflow:hidden}
+.segmentos .seg i{display:block;height:100%;background:var(--acento);width:0}
+.barra-controles{display:flex;gap:4px}
+.barra-controles button{flex:1;min-height:44px;border:1px solid var(--linea);border-radius:7px;
+  background:var(--fondo);font-size:11px;font-weight:700;color:var(--tinta);padding:2px}
+.barra-controles button:disabled{opacity:.35}
+.barra-msj{font-size:11.5px;color:var(--marca);font-weight:600;min-height:15px;margin-top:3px}
+
+/* ============ navegación ============ */
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--tarjeta);border-top:1px solid var(--linea);
+  z-index:30;padding-bottom:env(safe-area-inset-bottom)}
+.nav-int{max-width:480px;margin:0 auto;display:flex}
+nav button{flex:1;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;color:var(--suave)}
+nav button.sel{color:var(--acento)}
+nav button svg{width:22px;height:22px}
+nav button span{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+/* ============ progreso ============ */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.kpi{background:var(--tarjeta);border:1px solid var(--linea);border-radius:10px;padding:10px 12px}
+.kpi .num{font-size:28px;line-height:1.1}
+.kpi .num small{font-size:13px;font-weight:700;color:var(--suave)}
+.mapa{display:grid;grid-template-columns:24px repeat(4,1fr);gap:3px;align-items:center}
+.mapa .rot{font-size:9px;font-weight:700;color:var(--suave);text-align:right;padding-right:2px;
+  font-variant-numeric:tabular-nums}
+.mapa .celda-mapa{aspect-ratio:3.2/1;border:1px solid var(--linea);border-radius:4px;background:var(--fondo)}
+.mapa .celda-mapa.ok{background:var(--acento);border-color:var(--acento)}
+/* sesión hecha sin mancuernas: se distingue, no se degrada */
+.mapa .celda-mapa.sinpeso{background:repeating-linear-gradient(135deg,var(--acento) 0 5px,#5A6EEE 5px 10px)}
+.mapa .celda-mapa.aqui{outline:2px solid var(--acento);outline-offset:1px}
+.mapa .cab-col{font-size:9px;font-weight:700;color:var(--suave);text-align:center;letter-spacing:.1em}
+.mapa .celda-mapa.nueva{animation:pintar .8s ease-out}
+@keyframes pintar{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+.barras8{display:flex;gap:6px;align-items:flex-end;height:64px;margin-top:8px}
+.barras8 .col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
+.barras8 .palo{width:100%;max-width:30px;background:var(--acento);border-radius:3px 3px 0 0;min-height:2px}
+.barras8 .palo.cero{background:var(--linea)}
+.barras8 small{font-size:9px;color:var(--suave);font-variant-numeric:tabular-nums}
+.logros{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.logro{border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:var(--tarjeta)}
+.logro b{display:block;font-size:13px}
+.logro small{font-size:11px;color:var(--suave);display:block;margin-top:2px}
+.logro.si{border-color:var(--marca)}
+.logro.si b{color:var(--marca)}
+.logro.no{opacity:.6}
+.lista-rec{font-size:13px}
+.lista-rec div{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-bottom:1px solid var(--linea)}
+.lista-rec div:last-child{border-bottom:none}
+.lista-rec span{color:var(--suave)}
+.lista-rec b{font-variant-numeric:tabular-nums;white-space:nowrap}
+select{width:100%;min-height:44px;border:1px solid var(--linea);border-radius:8px;background:var(--fondo);
+  padding:0 10px;font:inherit;font-weight:600;-webkit-appearance:none;appearance:none}
+.curva-svg{width:100%;margin-top:8px}
+.curva-nota{font-size:11px;color:var(--suave);margin-top:4px}
+
+/* ============ ejercicios / guía ============ */
+.buscador{width:100%;min-height:48px;border:1px solid var(--linea);border-radius:10px;background:var(--tarjeta);
+  padding:0 14px;font-size:15px;margin-bottom:12px;outline:none}
+.buscador:focus{border-color:var(--acento)}
+.guia h3{font-size:14px;letter-spacing:.04em;margin:18px 0 6px}
+.guia p{font-size:13.5px;margin-bottom:8px}
+.guia table{width:100%;border-collapse:collapse;font-size:13px;margin:8px 0}
+.guia td,.guia th{border:1px solid var(--linea);padding:6px 8px;text-align:left}
+.guia th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--suave)}
+.creditos-lista{font-size:12px;color:var(--suave)}
+.creditos-lista li{margin-bottom:3px}
+
+/* ============ pantalla de cierre ============ */
+#cierre{position:fixed;inset:0;background:var(--fondo);z-index:50;display:none;overflow-y:auto}
+#cierre.abierto{display:block}
+.cierre-int{max-width:480px;margin:0 auto;padding:32px 16px;display:flex;flex-direction:column;gap:16px;min-height:100%}
+.cierre-frase{font-size:22px;font-weight:800;line-height:1.3}
+.cierre-datos{display:flex;gap:8px}
+.cierre-datos .kpi{flex:1}
+.logro-nuevo{border:1px solid var(--marca);border-radius:10px;padding:10px 12px;background:var(--tarjeta)}
+.logro-nuevo .etq{color:var(--marca)}
+.logro-nuevo b{font-size:15px}
+
+/* modal simple (sesión colgada, confirmaciones) */
+#modal{position:fixed;inset:0;background:rgba(20,23,27,.45);z-index:60;display:none;
+  align-items:center;justify-content:center;padding:20px}
+#modal.abierto{display:flex}
+.modal-caja{background:var(--tarjeta);border-radius:12px;padding:18px;max-width:340px;width:100%}
+.modal-caja h3{font-size:15px;margin-bottom:8px}
+.modal-caja p{font-size:13px;color:var(--suave);margin-bottom:14px}
+.modal-caja .btn-grande{margin-bottom:8px;min-height:48px;font-size:14px}
+
+/* toast */
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(140px + env(safe-area-inset-bottom));
+  background:var(--tinta);color:var(--fondo);border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;
+  z-index:70;display:none;max-width:90%}
+#toast.abierto{display:flex;align-items:center;gap:12px}
+/* el toast va sobre tinta, así que el acento azul no contrasta: se aclara */
+.toast-btn{color:#9DB0FF;font-weight:800;font-size:13px;text-decoration:underline;
+  padding:6px 0;min-height:32px;white-space:nowrap}
+
+/* ============ esquemas SVG animados ============ */
+.esq .seg{stroke:var(--tinta);stroke-width:5.5;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.esq .seg-fino{stroke:var(--tinta);stroke-width:4;stroke-linecap:round;fill:none}
+.esq .seg-suave{stroke:var(--linea);stroke-width:3;stroke-linecap:round;fill:none}
+.esq .acc-f{fill:var(--acento);stroke:none}
+.esq .acc-s{stroke:var(--acento);stroke-width:6;stroke-linecap:round;fill:none}
+.esq .etq-esq{fill:var(--suave);font-size:12px;font-weight:600;text-anchor:middle;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+.esq.estatico{display:none}
+/* los keyframes rotan alrededor de pivotes en coordenadas del lienzo, así que
+   el origen tiene que ser la esquina del viewBox, no el centro por defecto */
+.esq.animado g{transform-box:view-box;transform-origin:0 0}
+/* los @keyframes de los esquemas los genera cssEsquemas() al arrancar, desde la
+   misma geometría que dibuja las figuras (ver ESQ en el script) */
+
+/* movimiento: solo la celda del mapa y el cronómetro. Con reduced motion, nada. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .esq.animado{display:none}
+  .esq.estatico{display:block}
+}
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<div id="barra">
+  <div class="barra-int">
+    <div class="barra-linea1">
+      <div class="barra-estado">
+        <div class="barra-tramo" id="bTramo"></div>
+        <div class="barra-info" id="bInfo"></div>
+      </div>
+      <div class="barra-reloj" id="bReloj">0:00</div>
+    </div>
+    <div class="segmentos" id="bSegs"></div>
+    <div class="barra-controles">
+      <button id="btnPausa" onclick="pausarReanudar()">Pausa</button>
+      <button id="btnMenos" onclick="ajustarDescanso(-30)">-30 s</button>
+      <button id="btnMas" onclick="ajustarDescanso(30)">+30 s</button>
+      <button id="btnSaltoD" onclick="saltarDescanso()">Saltar</button>
+      <button onclick="saltarTramo()">Tramo ▸</button>
+      <button id="btnSonido" onclick="toggleSonido()">Son.</button>
+    </div>
+    <div class="barra-msj" id="bMsj"></div>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-int">
+    <button id="nav_hoy" onclick="irVista('hoy')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h2m14 0h2M7 8v8m10-8v8M10 10v4m4-4v4"/></svg>
+      <span>Hoy</span></button>
+    <button id="nav_progreso" onclick="irVista('progreso')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+      <span>Progreso</span></button>
+    <button id="nav_ejercicios" onclick="irVista('ejercicios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      <span>Ejercicios</span></button>
+    <button id="nav_guia" onclick="irVista('guia')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.8.3-.9 1-.9 1.7m0 3h.01"/></svg>
+      <span>Guía</span></button>
+  </div>
+</nav>
+
+<div id="cierre"><div class="cierre-int" id="cierreInt"></div></div>
+<div id="modal"><div class="modal-caja" id="modalCaja"></div></div>
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* ================================================================
+   FIERRO · programa de fuerza en casa, 12 semanas
+   Mapa del código:
+     1. almacenamiento (claves fz_)      4. cronómetro de sesión
+     2. biblioteca de ejercicios (LIB)   5. vistas (pintarHoy, etc.)
+     3. programa (SESIONES, FASES)       6. refuerzo (racha, logros, cierre)
+   ================================================================ */
+
+const $ = s => document.querySelector(s);
+
+/* ============ 1. almacenamiento ============ */
+function lget(k, def){ try{ const v = localStorage.getItem("fz_" + k); return v == null ? def : JSON.parse(v); }catch(e){ return def; } }
+function lset(k, v){ try{ localStorage.setItem("fz_" + k, JSON.stringify(v)); }catch(e){} }
+function ldel(k){ try{ localStorage.removeItem("fz_" + k); }catch(e){} }
+function hoyISO(){ return new Date().toISOString(); }
+function num(s){ if(s == null) return 0; const v = parseFloat(String(s).replace(",", ".").trim()); return isFinite(v) && v > 0 ? v : 0; }
+function fmtNum(v){ return (Math.round(v * 10) / 10).toLocaleString("es-CL"); }
+function fmtFecha(iso){ const d = new Date(iso); return String(d.getDate()).padStart(2,"0") + "-" + String(d.getMonth()+1).padStart(2,"0"); }
+function fmtReloj(ms){ const neg = ms < 0; ms = Math.abs(ms); const s = Math.round(ms / 1000); return (neg ? "+" : "") + Math.floor(s/60) + ":" + String(s%60).padStart(2,"0"); }
+
+/* ============ 2. biblioteca de ejercicios ============ */
+const LIB = {
+press_banca:{n:"Press de banca con mancuernas",m:"Pectorales, tríceps, hombro anterior",patron:"empuje_horizontal",tipo:"mancuerna",img:"press_banca.jpg",
+  how:["Acuéstate en el banco con un pie firme a cada lado.","Mancuernas a la altura del pecho, muñecas rectas.","Baja controlado hasta sentir el estiramiento del pecho, codos a unos 45 grados del cuerpo.","Empuja hasta estirar los brazos, sin chocar las mancuernas arriba."],
+  cue:"Omóplatos atrás y abajo, baja al estiramiento, empuja sin rebotar.",
+  err:["Rebotar abajo en vez de pausar en el estiramiento","Codos abiertos a 90 grados del torso","Recorrido corto por usar más peso del que corresponde"]},
+remo_inclinado:{n:"Remo inclinado con mancuernas",m:"Dorsal, romboides, trapecio medio, bíceps",patron:"traccion_horizontal",tipo:"mancuerna",img:"remo_inclinado.jpg",
+  how:["De pie, mancuernas colgando, rodillas suaves.","Inclina el torso a unos 45 grados empujando la cadera atrás, espalda recta.","Rema llevando los codos hacia la cadera, mancuernas al ombligo.","Aprieta la espalda arriba un segundo y baja lento hasta estirar."],
+  cue:"Torso quieto como mesa, los codos van a los bolsillos.",
+  err:["Impulsarse con la espalda baja en cada repetición","Redondear la zona lumbar","Tirar hacia el pecho con los codos abiertos"]},
+press_hombro:{n:"Press de hombro sentado con mancuernas",m:"Hombro, tríceps",patron:"empuje_vertical",tipo:"mancuerna",img:"press_hombro.jpg",
+  how:["Sentado en el banco, respaldo casi vertical.","Mancuernas a la altura de las orejas, antebrazos verticales.","Aprieta la guata y empuja vertical hasta estirar los codos.","Baja controlado de vuelta a las orejas."],
+  cue:"Sube en línea recta, las costillas no se abren.",
+  err:["Arquear la espalda baja para empujar","Bajar a medias","Empujar hacia adelante en diagonal"]},
+dominada:{n:"Dominadas (o negativas de 5 segundos)",m:"Dorsal, bíceps, agarre",patron:"traccion_vertical",tipo:"peso_corporal",img:"dominada.jpg",
+  how:["Cuelga de la barra con agarre algo más ancho que los hombros.","Activa los hombros (saca las orejas de los hombros) antes de tirar.","Sube llevando el pecho a la barra, sin patalear.","Baja controlado hasta colgar por completo.","Si no sale ninguna: sube con salto o apoyo y baja contando 5 segundos. Esa negativa se anota como una repetición."],
+  cue:"Del colgado completo al pecho a la barra, cada repetición entera.",
+  err:["Medias repeticiones sin estirar abajo","Impulso con las piernas (kipping)","En las negativas, dejarse caer los últimos centímetros"]},
+laterales:{n:"Elevaciones laterales con mancuernas",m:"Deltoides lateral",patron:"aislado",tipo:"mancuerna",img:"laterales.jpg",
+  how:["De pie, mancuernas a los costados, codos apenas doblados.","Sube los brazos hasta la horizontal, como sirviendo dos jarras.","Pausa breve arriba.","Baja lento, resistiendo la caída."],
+  cue:"Sube el codo, no la mano, y llega solo hasta la horizontal.",
+  err:["Balancear el cuerpo para subir","Encoger el trapecio subiendo más allá del hombro","Bajar en caída libre"]},
+bulgara:{n:"Sentadilla búlgara",m:"Cuádriceps, glúteos",patron:"rodilla",tipo:"mancuerna",img:"bulgara.jpg",
+  how:["Empeine del pie de atrás sobre el banco, paso adelante de largo cómodo.","Mancuernas colgando a los costados (o sin peso al principio).","Baja vertical hasta que el muslo de adelante quede horizontal o más abajo.","Sube empujando con el talón de adelante.","Completa las repeticiones y cambia de pierna."],
+  cue:"La pierna de atrás solo equilibra, todo el trabajo es de la de adelante.",
+  err:["Paso muy corto (la rodilla sufre)","Rebotar abajo","Empujar con el pie de atrás"]},
+gemelo:{n:"Elevación de gemelo a una pierna",m:"Gemelo y sóleo",patron:"aislado",tipo:"peso_corporal",img:"gemelo.jpg",
+  how:["Párate con la punta de un pie en un escalón o disco, talón en el aire.","Afírmate de la pared con una mano, solo para el equilibrio.","Baja el talón hasta el estiramiento completo y pausa un segundo.","Sube lo más alto que puedas y pausa arriba.","Completa las repeticiones y cambia de pierna."],
+  cue:"Pausa abajo estirando, pausa arriba en punta, nada de rebotes.",
+  err:["Rebotar abajo","Recorrido corto","Ayudarse empujando con la mano"]},
+goblet:{n:"Sentadilla goblet con kettlebell",m:"Cuádriceps, glúteos, core",patron:"rodilla",tipo:"kettlebell",img:"goblet.jpg",
+  how:["Toma la kettlebell por los cuernos y pégala al pecho, codos abajo.","Pies al ancho de hombros, puntas levemente hacia afuera.","Baja doblando rodillas y cadera a la vez, torso erguido.","Llega tan abajo como puedas con los talones pegados al suelo.","Sube empujando el suelo con toda la planta."],
+  cue:"Pecho arriba, codos entre las rodillas, talones firmes.",
+  err:["Despegar los talones al bajar","Dejar que las rodillas se vayan hacia adentro","Redondear la espalda por mirar el suelo"]},
+plancha:{n:"Plancha frontal",m:"Core completo",patron:"core",tipo:"tiempo",img:"plancha.png",
+  how:["Apóyate en antebrazos y puntas de pies, codos bajo los hombros.","Cuerpo recto de la cabeza a los talones.","Aprieta guata y glúteos, respira normal.","Aguanta el tiempo indicado sin quebrar la línea."],
+  cue:"Costillas abajo, glúteos apretados: tabla, no hamaca.",
+  err:["Cadera caída o poto arriba","Aguantar la respiración","Cuello colgando"]},
+zancada:{n:"Zancada en retroceso con mancuernas",m:"Cuádriceps, glúteos",patron:"rodilla",tipo:"mancuerna",img:"zancada.jpg",
+  how:["De pie, mancuernas colgando a los costados.","Da un paso largo hacia atrás.","Baja la rodilla de atrás hasta casi tocar el suelo, torso erguido.","Vuelve empujando con el talón de adelante.","Alterna o completa una pierna y cambia."],
+  cue:"El paso es hacia atrás y el peso queda en el talón de adelante.",
+  err:["Paso corto y tambaleante","Impulsarse con la pierna de atrás","Torso inclinado hacia adelante"]},
+flex_pies:{n:"Flexiones con pies elevados",m:"Pectorales (énfasis superior), tríceps",patron:"empuje_horizontal",tipo:"peso_corporal",img:"flex_pies.png",
+  how:["Pies sobre el banco, manos en el suelo algo más anchas que los hombros.","Cuerpo en tabla de la cabeza a los talones.","Baja controlado hasta que el pecho casi toque el suelo.","Sube completo sin quebrar la cadera."],
+  cue:"Tabla rígida: el pecho baja al suelo, no la guata.",
+  err:["Cadera quebrada (poto arriba o guata caída)","Recorrido corto","Manos muy adelantadas respecto de los hombros"]},
+remo_una_mano:{n:"Remo a una mano con mancuerna",m:"Dorsal, romboides, bíceps",patron:"traccion_horizontal",tipo:"mancuerna",img:"remo_una_mano.png",
+  how:["Rodilla y mano del mismo lado apoyadas en el banco, espalda plana.","Mancuerna colgando del brazo libre.","Rema llevando el codo hacia la cadera, pegado al cuerpo.","Baja controlado hasta estirar del todo.","Completa las repeticiones y cambia de lado."],
+  cue:"El codo va a la cadera, no hacia afuera, y la espalda no gira.",
+  err:["Girar el torso para subir más peso","Remar hacia la axila con el codo abierto","Encoger el hombro"]},
+press_inclinado:{n:"Press inclinado con mancuernas",m:"Pectoral superior, hombro anterior, tríceps",patron:"empuje_horizontal",tipo:"mancuerna",img:"press_inclinado.png",
+  how:["Banco inclinado entre 30 y 45 grados.","Mancuernas al pecho alto, muñecas rectas.","Baja lento hasta sentir el estiramiento del pecho.","Empuja hasta casi juntar las mancuernas arriba."],
+  cue:"Baja hasta el estiramiento: el pecho trabaja abajo.",
+  err:["Rebotar abajo","Chocar las mancuernas arriba con impulso","Despegar los hombros del banco"]},
+face_pull:{n:"Face pull con banda",m:"Deltoides posterior, rotadores, trapecio medio",patron:"aislado",tipo:"banda",img:"face_pull.jpg",
+  how:["Ancla la banda a la altura de la cara (la barra de dominadas sirve).","Toma un extremo con cada mano, palmas enfrentadas.","Tira hacia la cara separando las manos, codos altos.","Termina con las manos a los lados de las orejas y vuelve controlado."],
+  cue:"Tira hacia las orejas con los codos altos, aprieta atrás de los hombros.",
+  err:["Tirar bajo, hacia el pecho (queda un remo)","Encoger el trapecio","Echar el torso hacia atrás"]},
+curl_inclinado:{n:"Curl en banco inclinado",m:"Bíceps (cabeza larga, en estiramiento)",patron:"aislado",tipo:"mancuerna",img:"curl_inclinado.jpg",
+  how:["Respaldo a unos 45 grados, siéntate y deja colgar los brazos por detrás del cuerpo.","Palmas hacia adelante, hombros pegados al respaldo.","Sube las mancuernas doblando solo el codo.","Baja lento hasta estirar el brazo por completo: ahí está el estímulo."],
+  cue:"El codo no viaja hacia adelante y la bajada estirada es el ejercicio.",
+  err:["Despegar los hombros del respaldo para ayudar","Cortar la bajada antes del estiramiento","Balancear las mancuernas"]},
+triceps:{n:"Extensión de tríceps sobre la cabeza",m:"Tríceps (cabeza larga)",patron:"aislado",tipo:"mancuerna",img:"triceps.jpg",
+  how:["Toma una mancuerna con las dos manos por debajo del disco superior.","Súbela sobre la cabeza, codos apuntando al techo.","Baja la mancuerna por detrás de la cabeza hasta sentir el estiramiento.","Estira los codos sin mover los brazos: solo se mueve el antebrazo."],
+  cue:"Codos al techo y quietos, baja hasta el estiramiento profundo.",
+  err:["Abrir los codos hacia los lados","Recorrido corto por miedo abajo","Arquear la espalda baja al estirar"]},
+rdl:{n:"Peso muerto rumano con mancuernas",m:"Isquiotibiales, glúteos, espalda baja",patron:"cadera",tipo:"mancuerna",img:"rdl.jpg",
+  how:["Mancuernas al frente de los muslos, rodillas apenas dobladas.","Empuja la cadera hacia atrás dejando bajar las mancuernas pegadas a las piernas.","Baja hasta sentir el tirón de los isquiotibiales, bajo la rodilla.","Vuelve apretando los glúteos, sin redondear la espalda."],
+  cue:"La cadera va hacia atrás, no hacia abajo, y las mancuernas rozan las piernas.",
+  err:["Doblar las rodillas y convertirlo en sentadilla","Redondear la espalda baja","Bajar más allá del estiramiento"]},
+hip_thrust:{n:"Hip thrust apoyado en el banco",m:"Glúteos, isquiotibiales",patron:"cadera",tipo:"mancuerna",img:"hip_thrust.jpg",
+  how:["Apoya la espalda alta (el borde de los omóplatos) en el banco, pies al ancho de caderas.","Si usas peso, cruza una mancuerna sobre la cadera.","Empuja con los talones y sube la cadera hasta quedar recto de rodillas a hombros.","Arriba: mentón al pecho y glúteos apretados un segundo.","Baja controlado, sin sentarte en el suelo entre repeticiones."],
+  cue:"Mentón al pecho, costillas abajo, el glúteo empuja hacia el techo.",
+  err:["Arquear la zona lumbar arriba en vez de apretar el glúteo","Empujar con la punta de los pies","Recorrido corto por exceso de peso"]},
+curl_femoral:{n:"Curl femoral unilateral con banda en banco",m:"Isquiotibiales (flexión de rodilla)",patron:"aislado",tipo:"banda",img:"curl_femoral.png",
+  how:["Ancla la banda a la pata del banco o a un mueble firme, a ras de suelo.","Recuéstate bocabajo en el banco y engancha la banda en un talón.","Acomódate hasta que la banda quede tensa con la pierna estirada.","Dobla la rodilla llevando el talón al glúteo y pausa arriba.","Vuelve lento hasta estirar del todo. Completa y cambia de pierna."],
+  cue:"El muslo no se despega del banco, solo la rodilla dobla.",
+  err:["Levantar la cadera para ayudar (arquea la lumbar)","Soltar la vuelta rápido en vez de frenarla","Banda floja con la pierna estirada: sin tensión no hay ejercicio"]},
+puente:{n:"Puente de glúteo a una pierna",m:"Glúteos, isquiotibiales",patron:"cadera",tipo:"peso_corporal",img:"puente.jpg",
+  how:["De espaldas en el suelo, un pie apoyado cerca del glúteo, la otra pierna estirada.","Brazos a los costados, apoyados.","Empuja con el talón apoyado y sube la cadera hasta alinear rodilla, cadera y hombro.","Aprieta el glúteo arriba un segundo y baja controlado.","Completa las repeticiones y cambia de pierna."],
+  cue:"El talón empuja, el glúteo sube y la cadera no rota.",
+  err:["Cadera rotada (un lado más alto que el otro)","Empujar con la zona lumbar en vez del glúteo","Rebotar contra el suelo"]},
+flex_deficit:{n:"Flexiones en déficit (manos sobre soportes)",m:"Pectorales, tríceps",patron:"empuje_horizontal",tipo:"peso_corporal",img:null,progresaDe:"flex_pies",
+  how:["Pon dos soportes firmes del mismo alto (libros gruesos o discos) donde van las manos.","Manos sobre los soportes, cuerpo en tabla de la cabeza a los talones.","Baja controlado hasta que el pecho quede por debajo del nivel de las manos: ese es el déficit.","Siente el estiramiento del pecho abajo y haz una pausa breve.","Sube completo sin perder la línea del cuerpo."],
+  cue:"El punto del ejercicio es el fondo: pecho más abajo que las manos, sin apuro.",
+  err:["No bajar más allá del nivel de las manos (queda una flexión normal)","Dejar caer la guata para llegar antes","Hombros encogidos hacia las orejas en el fondo"]},
+goblet_talones:{n:"Sentadilla goblet con talones elevados",m:"Cuádriceps (énfasis en profundidad), glúteos",patron:"rodilla",tipo:"kettlebell",img:null,progresaDe:"goblet",
+  how:["Apoya los talones en un libro grueso o dos discos (3 a 5 cm).","Kettlebell al pecho, pies al ancho de caderas.","Baja lento hasta el fondo, muslos contra pantorrillas si el cuerpo lo permite.","Mantén el torso lo más vertical posible, codos por dentro de las rodillas.","Sube sin rebotar, empujando con toda la planta."],
+  cue:"La elevación de talones existe para bajar más vertical: úsala y baja hasta el fondo.",
+  err:["Cortar el recorrido a la mitad (el sentido del ejercicio es el fondo)","Inclinar el torso adelante como sentadilla normal","Bajar rápido y rebotar abajo"]},
+
+/* ---- modo calistenia: el mismo programa con otro ejercicio en cada casilla ---- */
+flex_mesa:{n:"Flexiones con manos en la mesa",m:"Pectorales, tríceps",patron:"empuje_horizontal",tipo:"peso_corporal",img:null,
+  how:["Manos en el borde de una mesa firme, algo más anchas que los hombros.","Camina los pies hacia atrás hasta quedar en tabla.","Baja el pecho hasta la mesa, codos a unos 45 grados.","Sube completo sin quebrar la cadera."],
+  cue:"Mientras más alto el apoyo, más fácil: este es el primer peldaño.",
+  err:["Apoyarse en una mesa que se desliza","Cadera caída","Bajar a medias"]},
+flex_silla:{n:"Flexiones con manos en la silla",m:"Pectorales, tríceps",patron:"empuje_horizontal",tipo:"peso_corporal",img:null,progresaDe:"flex_mesa",
+  how:["Manos en el asiento de una silla firme contra la pared.","Pies atrás, cuerpo en tabla de la cabeza a los talones.","Baja el pecho al asiento, controlado.","Sube completo apretando el pecho arriba."],
+  cue:"Segundo peldaño: la silla es más baja que la mesa, pesa más.",
+  err:["Silla que se corre (ponla contra la pared)","Quebrar la cadera al subir","Codos abiertos a 90 grados"]},
+flex_suelo:{n:"Flexiones en el suelo",m:"Pectorales, tríceps, hombro anterior",patron:"empuje_horizontal",tipo:"peso_corporal",img:"flex_suelo.jpg",progresaDe:"flex_silla",
+  how:["Manos en el suelo algo más anchas que los hombros, bajo el pecho.","Cuerpo en tabla, glúteos apretados.","Baja hasta que el pecho casi toque el suelo.","Sube completo sin arquear la espalda."],
+  cue:"Tabla rígida de la cabeza a los talones, el pecho baja al suelo.",
+  err:["Cadera caída o poto arriba","Bajar solo la cabeza en vez del pecho","Codos abiertos"]},
+flex_arqueras:{n:"Flexiones arqueras",m:"Pectorales, tríceps (más carga en un lado)",patron:"empuje_horizontal",tipo:"peso_corporal",img:null,progresaDe:"flex_deficit",
+  how:["Manos en el suelo bastante más anchas que los hombros.","Baja cargando el peso sobre un brazo, doblando ese codo.","El otro brazo se va estirando hacia el lado, casi recto.","Baja hasta que el pecho quede cerca de la mano que trabaja.","Sube empujando con ese brazo y alterna el lado."],
+  cue:"Un brazo trabaja, el otro solo acompaña estirado.",
+  err:["Girar la cadera para ayudar","Doblar los dos codos por igual (queda una flexión ancha)","Forzar el hombro del brazo estirado"]},
+flex_pica:{n:"Flexiones en pica",m:"Hombro, tríceps",patron:"empuje_vertical",tipo:"peso_corporal",img:"flex_pica.jpg",
+  how:["Parte en tabla y camina los pies hacia las manos hasta formar una V invertida.","Cadera bien arriba, mirada hacia los pies.","Baja la coronilla hacia el suelo, entre las manos.","Sube estirando los codos, sin bajar la cadera."],
+  cue:"La cadera queda arriba todo el rato: si baja, se convierte en flexión.",
+  err:["Perder la V y quedar en flexión normal","Bajar la frente adelante en vez de entre las manos","Codos muy abiertos"]},
+flex_diamante:{n:"Flexiones diamante",m:"Tríceps, pectoral interno",patron:"empuje_horizontal",tipo:"peso_corporal",img:null,
+  how:["Manos juntas bajo el pecho, índices y pulgares formando un triángulo.","Cuerpo en tabla, glúteos apretados.","Baja el pecho hacia las manos con los codos pegados al cuerpo.","Sube estirando los codos del todo."],
+  cue:"Codos pegados al cuerpo: el tríceps hace el trabajo.",
+  err:["Abrir los codos (se convierte en flexión normal)","Bajar solo unos centímetros","Cadera caída"]},
+remo_invertido:{n:"Remo invertido en la barra baja",m:"Dorsal, romboides, bíceps",patron:"traccion_horizontal",tipo:"peso_corporal",img:"remo_invertido.jpg",
+  how:["Acuéstate bajo la barra baja y agárrala algo más ancho que los hombros.","Cuerpo recto de la cabeza a los talones, talones apoyados.","Tira llevando el pecho a la barra, codos hacia la cadera.","Baja controlado hasta estirar los brazos del todo.","Para hacerlo más difícil, camina los pies hacia adelante."],
+  cue:"Cuerpo en tabla, el pecho toca la barra.",
+  err:["Quebrar la cadera para llegar antes","No estirar abajo","Encoger los hombros al tirar"]},
+remo_invertido_sup:{n:"Remo invertido supino con pies elevados",m:"Dorsal, bíceps, romboides",patron:"traccion_horizontal",tipo:"peso_corporal",img:"remo_invertido_sup.jpg",
+  how:["Agarra la barra baja con las palmas hacia ti, al ancho de hombros.","Pon los talones sobre una silla, cuerpo recto y horizontal.","Tira hasta que el pecho toque la barra.","Baja lento hasta colgar con los brazos estirados."],
+  cue:"Pies arriba y palmas hacia ti: entra más bíceps y pesa más.",
+  err:["Cadera que se hunde","Recorrido corto","Tirar con el cuello adelantado"]},
+laterales_banda:{n:"Elevaciones laterales con banda",m:"Deltoides lateral",patron:"aislado",tipo:"banda",img:"laterales_banda.jpg",
+  how:["Párate sobre el centro de la banda, un extremo en cada mano.","Brazos a los costados, codos apenas doblados.","Sube los brazos hasta la horizontal, resistiendo la banda.","Baja lento, sin dejar que la banda te tire."],
+  cue:"Sube el codo hasta la horizontal y frena la bajada.",
+  err:["Dejar que la banda devuelva sola","Balancear el cuerpo","Subir más allá del hombro encogiendo el trapecio"]},
+curl_banda:{n:"Curl de bíceps con banda",m:"Bíceps",patron:"aislado",tipo:"banda",img:null,
+  how:["Párate sobre el centro de la banda, un extremo en cada mano, palmas al frente.","Codos pegados al cuerpo y quietos.","Sube las manos doblando solo el codo.","Baja lento hasta estirar del todo, sin soltar la tensión."],
+  cue:"Los codos no viajan, y la bajada se frena.",
+  err:["Balancear el torso para subir","Dejar que la banda tire el brazo abajo","Cortar el recorrido arriba y abajo"]},
+fondos_silla:{n:"Fondos en la silla",m:"Tríceps, pecho bajo, hombro anterior",patron:"empuje_vertical",tipo:"peso_corporal",img:"fondos_silla.png",
+  how:["Siéntate en el borde de una silla firme y agárrala a los lados de la cadera.","Desliza el poto hacia adelante hasta quedar colgando de los brazos.","Baja doblando los codos hacia atrás, hasta unos 90 grados.","Sube estirando los codos, sin ayudarte con las piernas.","Para hacerlo más fácil, dobla las rodillas y acerca los pies."],
+  cue:"Codos hacia atrás, no hacia los lados, y el pecho alto.",
+  err:["Bajar más allá de 90 grados (castiga el hombro)","Encoger los hombros hacia las orejas","Empujar con las piernas"]},
+bulgara_tempo:{n:"Sentadilla búlgara con tempo",m:"Cuádriceps, glúteos",patron:"rodilla",tipo:"peso_corporal",img:"bulgara_tempo.jpg",
+  how:["Empeine del pie de atrás sobre la silla, paso adelante de largo cómodo.","Baja contando 3 segundos, sin apurar.","Pausa 2 segundos abajo, con el muslo horizontal o más abajo.","Sube empujando con el talón de adelante.","Completa las repeticiones y cambia de pierna."],
+  cue:"Sin peso, el tempo es la carga: baja en 3, aguanta 2.",
+  err:["Bajar rápido y perder el sentido del ejercicio","Rebotar en el fondo","Paso demasiado corto"]},
+gemelo_rango:{n:"Gemelo a una pierna, rango completo",m:"Gemelo y sóleo",patron:"aislado",tipo:"peso_corporal",img:"gemelo_rango.jpg",
+  how:["Punta de un pie en un escalón, talón en el aire.","Baja el talón todo lo que dé y pausa un segundo abajo.","Sube lo más alto posible y pausa un segundo arriba.","Repite sin rebotar, y cambia de pierna."],
+  cue:"Sin peso extra, el rango y las pausas son la carga.",
+  err:["Rebotar abajo","Recorrido corto","Colgarse de la mano que da equilibrio"]},
+sentadilla_asistida:{n:"Sentadilla asistida a una pierna",m:"Cuádriceps, glúteos",patron:"rodilla",tipo:"peso_corporal",img:"sentadilla_asistida.jpg",
+  how:["Párate frente a la estructura y agárrate de un barrote a la altura del pecho.","Levanta una pierna estirada al frente.","Baja en una pierna, usando los brazos solo lo justo para no caerte.","Baja tan abajo como controles y sube empujando con el talón.","Completa las repeticiones y cambia de pierna."],
+  cue:"Los brazos equilibran, no levantan: la pierna hace el trabajo.",
+  err:["Tirar con los brazos para subir","Dejar que la rodilla se vaya hacia adentro","Despegar el talón del suelo"]},
+zancada_sp:{n:"Zancada en retroceso sin peso",m:"Cuádriceps, glúteos",patron:"rodilla",tipo:"peso_corporal",img:"zancada_sp.jpg",
+  how:["De pie, manos en la cadera.","Da un paso largo hacia atrás.","Baja la rodilla de atrás hasta casi tocar el suelo, torso erguido.","Vuelve empujando con el talón de adelante y alterna."],
+  cue:"Paso largo y peso en el talón de adelante.",
+  err:["Paso corto y tambaleante","Impulsarse con la pierna de atrás","Torso volcado hacia adelante"]},
+rdl_uni:{n:"Peso muerto rumano a una pierna",m:"Isquiotibiales, glúteos, equilibrio",patron:"cadera",tipo:"peso_corporal",img:"rdl_uni.jpg",
+  how:["De pie en una pierna, rodilla apenas doblada.","Baja el torso contando 4 segundos mientras la pierna libre sube hacia atrás.","Cadera y hombros mirando al suelo, sin abrirse hacia el lado.","Baja hasta sentir el tirón del isquiotibial y vuelve apretando el glúteo.","Completa las repeticiones y cambia de pierna."],
+  cue:"Cuerpo y pierna libre forman una sola línea que gira en la cadera.",
+  err:["Abrir la cadera hacia el lado","Redondear la espalda","Bajar rápido y perder el equilibrio"]},
+hip_thrust_uni:{n:"Hip thrust a una pierna en la silla",m:"Glúteos, isquiotibiales",patron:"cadera",tipo:"peso_corporal",img:"hip_thrust_uni.jpg",
+  how:["Apoya la espalda alta en el borde de una silla firme contra la pared.","Un pie en el suelo bajo la rodilla, la otra pierna estirada o con la rodilla al pecho.","Empuja con el talón y sube la cadera hasta quedar recto de rodilla a hombro.","Mentón al pecho, aprieta el glúteo un segundo arriba.","Baja controlado y cambia de pierna al terminar."],
+  cue:"Mentón al pecho, costillas abajo, empuja con el talón.",
+  err:["Arquear la lumbar arriba en vez de apretar el glúteo","Silla que se corre (contra la pared siempre)","Cadera que rota hacia el lado libre"]},
+curl_toalla:{n:"Curl femoral deslizante con toalla",m:"Isquiotibiales (flexión de rodilla)",patron:"aislado",tipo:"peso_corporal",img:null,
+  how:["Acuéstate de espaldas con los talones sobre una toalla, en piso liso.","Sube la cadera hasta alinear rodillas, cadera y hombros.","Sin bajar la cadera, estira las piernas deslizando los talones lejos.","Vuelve arrastrando los talones hacia el poto, doblando las rodillas.","Si es muy duro, hazlo con las dos piernas y vuelve con ayuda."],
+  cue:"La cadera se queda arriba todo el rato: si baja, se acabó el ejercicio.",
+  err:["Dejar caer la cadera al estirar","Ir tan lejos que se pierde el control","Hacerlo sobre alfombra (la toalla tiene que deslizar)"]}
+};
+/* sustituto de calistenia de cada casilla (sección 4.9 del brief). Las casillas
+   que no aparecen acá no cambian de ejercicio: ya son de peso corporal. */
+const SIN_PESO = {
+  press_banca:"flex_suelo", remo_inclinado:"remo_invertido", press_hombro:"flex_pica",
+  laterales:"laterales_banda", bulgara:"bulgara_tempo", gemelo:"gemelo_rango",
+  goblet:"sentadilla_asistida", goblet_talones:"sentadilla_asistida", zancada:"zancada_sp",
+  remo_una_mano:"remo_invertido_sup", press_inclinado:"flex_diamante",
+  curl_inclinado:"curl_banda", triceps:"fondos_silla", rdl:"rdl_uni",
+  hip_thrust:"hip_thrust_uni", curl_femoral:"curl_toalla"
+};
+Object.keys(SIN_PESO).forEach(k => { if(LIB[k]) LIB[k].sinPeso = SIN_PESO[k]; });
+/* la escalera de flexiones ya venía encadenada; falta cerrar el eslabón que
+   une el peldaño de suelo con el de pies elevados */
+LIB.flex_pies.progresaDe = "flex_suelo";
+const PATRONES = {empuje_horizontal:"Empuje horizontal",empuje_vertical:"Empuje vertical",traccion_vertical:"Tracción vertical",traccion_horizontal:"Tracción horizontal",rodilla:"Dominante de rodilla",cadera:"Dominante de cadera",core:"Core",aislado:"Aislado"};
+const TIPOS = {mancuerna:"Mancuernas",kettlebell:"Kettlebell",banda:"Banda",peso_corporal:"Peso corporal",tiempo:"Por tiempo"};
+
+/* créditos de las imágenes (los genera scripts/bajar-imagenes.py) */
+const CREDITOS = [
+["Press de banca con mancuernas","Benchpress Dumbbells","Everkinetic","CC BY-SA 3"],
+["Remo inclinado con mancuernas","Bent Over Rowing","Everkinetic","CC BY-SA 3"],
+["Press de hombro sentado con mancuernas","Shoulder Press, Dumbbells","Everkinetic","CC BY-SA 3"],
+["Dominadas (o negativas de 5 segundos)","Pull ups","Imobard","CC BY-SA 4"],
+["Elevaciones laterales con mancuernas","Lateral Raises","Everkinetic","CC BY-SA 3"],
+["Sentadilla búlgara","Bulgarian Squat with Dumbbells","AlucardEvil40","CC BY-SA 4"],
+["Elevación de gemelo a una pierna","Standing Calf Raises","clafal","CC BY-SA 4"],
+["Sentadilla goblet con kettlebell","Dumbbell Goblet Squat","philip","CC BY-SA 4"],
+["Plancha frontal","Plank","utkb","CC BY-SA 4"],
+["Zancada en retroceso con mancuernas","Reverse lunges","philip","CC BY-SA 4"],
+["Flexiones con pies elevados","Push-Ups / Decline","anon1337","CC BY-SA 4"],
+["Remo a una mano con mancuerna","Bent Over Dumbbell Rows","Franpol","CC BY-SA 4"],
+["Press inclinado con mancuernas","Incline Bench Press - Dumbbell","Everkinetic","CC BY-SA 3"],
+["Face pull con banda","Face pulls with yellow/green band","54str","CC BY-SA 4"],
+["Curl en banco inclinado","Seated W Curl","wger (autor no informado)","CC BY-SA 4"],
+["Extensión de tríceps sobre la cabeza","Triceps Overhead (Dumbbell)","wger (autor no informado)","CC BY-SA 4"],
+["Peso muerto rumano con mancuernas","Dumbbell Romanian Deadlift","AlucardEvil40","CC BY-SA 4"],
+["Hip thrust apoyado en el banco","Dumbbell Hip Thrust","AlucardEvil40","CC BY-SA 4"],
+["Curl femoral unilateral con banda en banco","Leg Curl","Franpol","CC BY-SA 4"],
+["Puente de glúteo a una pierna","Glute Bridge","wger (autor no informado)","CC BY-SA 4"],
+["Flexiones en el suelo","Push-Up","Settebello","CC BY-SA 4"],
+["Flexiones en pica","Pike Push Ups","wger (autor no informado)","CC BY-SA 4"],
+["Remo invertido en la barra baja","Inverted Rows","Gavru","CC BY-SA 4"],
+["Remo invertido supino con pies elevados","Inverted Rows","Gavru","CC BY-SA 4"],
+["Elevaciones laterales con banda","Lateral Raises","Everkinetic","CC BY-SA 3"],
+["Fondos en la silla","Dips Between Two Benches","Everkinetic","CC BY-SA 3"],
+["Sentadilla búlgara con tempo","Bulgarian Squat with Dumbbells","AlucardEvil40","CC BY-SA 4"],
+["Gemelo a una pierna, rango completo","Standing Calf Raises","clafal","CC BY-SA 4"],
+["Sentadilla asistida a una pierna","Pistol Squat","wakanda90","CC BY-SA 4"],
+["Zancada en retroceso sin peso","Reverse lunges","philip","CC BY-SA 4"],
+["Peso muerto rumano a una pierna","Single-Leg Deadlift with Dumbbell","Tierrasverdes","CC BY-SA 4"],
+["Hip thrust a una pierna en la silla","Dumbbell Hip Thrust","AlucardEvil40","CC BY-SA 4"]
+];
+
+/* ============ esquemas SVG propios ============
+   Para los ejercicios que el catálogo de wger no tiene, o donde su imagen no
+   muestra lo que define al ejercicio (la altura de las manos en la escalera de
+   flexiones, por ejemplo).
+
+   Un esquema se declara como geometría, no como SVG a mano: `fijo` son las
+   piezas quietas (suelo, apoyos) y `piezas` las que se mueven, cada una con su
+   pivote y su ángulo final. El motor arma el SVG y genera los @keyframes, así
+   agregar un esquema es describir un movimiento, no escribir animaciones.
+   Los pivotes van en coordenadas del lienzo 0 0 200 200: por eso ese viewBox
+   no se toca y el encuadre se hace con un <g> envolvente. */
+const SUELO = 172;
+function ln(a, b, c){ return '<line class="' + (c || "seg") + '" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>'; }
+function circ(p, r, c){ return '<circle class="' + (c || "seg") + '" cx="' + p[0] + '" cy="' + p[1] + '" r="' + r + '"/>'; }
+function suelo(x1, x2){ return ln([x1 || 15, SUELO], [x2 || 185, SUELO], "seg-suave"); }
+function apoyo(x, y, w){ return '<rect class="seg-suave" x="' + (x - w/2) + '" y="' + y + '" width="' + w + '" height="' + (SUELO - y) + '" rx="2"/>'; }
+/* ángulo, en grados, que hace bajar `caida` píxeles un punto que gira a `radio` */
+function angCaida(radio, caida){ return -Math.round(Math.asin(Math.min(0.95, caida / radio)) * 180 / Math.PI); }
+
+/* --- flexiones: un solo rig para toda la escalera ---
+   Lo único que cambia entre peldaños es a qué altura están las manos respecto
+   de los pies, que es exactamente lo que hace a uno más difícil que el otro. */
+function rigFlex(o){
+  const xMano = o.xMano || 58, xPie = 165;
+  const yMano = o.yMano, yPie = o.yPie == null ? SUELO - 6 : o.yPie;
+  const yHombro = yMano - 30, xHombro = xMano + 8;
+  const radio = Math.hypot(xPie - xHombro, yPie - yHombro);
+  const piezas = [
+    {id:"cuerpo", pivote:[xPie, yPie], ang:angCaida(radio, o.caida || 22),
+     d: ln([xPie, yPie], [xHombro, yHombro]) + ln([xPie, yPie], [xPie + 6, SUELO]) +
+        circ([xHombro - 17, yHombro - 8], 9)},
+    {id:"brazo", pivote:[xMano, yMano], ang:-14, escY:0.42,
+     d: '<path class="seg" vector-effect="non-scaling-stroke" d="M ' + xMano + " " + yMano +
+        " L " + (xMano + 3) + " " + (yMano - 14) + " L " + xHombro + " " + yHombro + '"/>' +
+        circ([xMano + 3, yMano - 14], 5, "acc-f") +
+        (o.segundoBrazo ? '<path class="acc-s" vector-effect="non-scaling-stroke" d="M ' + xHombro + " " + yHombro +
+          " L " + (xHombro + 42) + " " + (yMano - 2) + '"/>' : "")}
+  ];
+  const fijo = suelo() +
+    (o.alturaApoyo ? apoyo(xMano, yMano, 26) : "") +
+    (o.pieElevado ? apoyo(xPie, yPie, 30) : "");
+  /* la caja incluye la cabeza (lo más alto) y el pie (lo más bajo) */
+  return {fijo, piezas, caja:[13, yHombro - 19, 187, SUELO + 8]};
+}
+
+/* --- curl de bíceps con banda: solo gira el antebrazo ---
+   La banda va en la parte quieta, anclada bajo el pie: si rotara con el
+   antebrazo, su extremo se despegaría del suelo y quedaría flotando. */
+function rigCurlBanda(){
+  const pie = [96, SUELO], hombro = [100, 82], codo = [104, 118], mano = [101, 150];
+  return {
+    fijo: suelo(40, 165) +
+      '<path class="acc-s" vector-effect="non-scaling-stroke" d="M ' + pie[0] + " " + pie[1] +
+        " Q 90 " + (mano[1] - 12) + " " + mano[0] + " " + mano[1] + '"/>' +
+      ln([100, 60], pie, "seg") +                       // torso y pierna, de una
+      circ([99, 48], 9) +                               // cabeza
+      ln(hombro, codo, "seg"),                          // brazo, quieto
+    piezas: [
+      {id:"antebrazo", pivote:codo, ang:-118,
+       d: ln(codo, mano) + circ(codo, 5, "acc-f") + circ(mano, 4)}
+    ],
+    caja:[38, 37, 167, SUELO + 4]
+  };
+}
+
+/* --- curl femoral deslizante: tumbado, cadera arriba, el talón se acerca --- */
+function rigCurlToalla(){
+  const hombro = [42, 150], cadera = [104, 122], rodilla = [128, 128], talon = [162, 158];
+  return {
+    fijo: suelo(20, 185) +
+      circ([30, 148], 9) +                              // cabeza
+      ln(hombro, cadera, "seg") +                       // tronco elevado
+      ln(cadera, rodilla, "seg"),                       // muslo
+    piezas: [
+      {id:"canilla", pivote:rodilla, ang:-74,
+       d: ln(rodilla, talon) + circ(rodilla, 5, "acc-f") +
+          ln(talon, [talon[0] - 8, talon[1] + 8], "seg-fino")}
+    ],
+    caja:[18, 112, 187, SUELO + 4]
+  };
+}
+
+/* --- goblet con talones elevados: cadena tobillo, rodilla, cadera --- */
+function rigGoblet(){
+  return {
+    fijo: suelo(30, 175) +
+      '<path class="acc-f" d="M 86 172 L 104 172 L 104 161 Z"/>' +   // la cuña bajo los talones
+      ln([93, 160], [116, 169], "seg"),                              // pie
+    piezas: [
+      {id:"canilla", pivote:[100, 162], ang:26, d: ln([100, 162], [97, 121]) + circ([97, 121], 5, "acc-f"),
+       hijos:[
+        {id:"muslo", pivote:[97, 121], ang:-118, d: ln([97, 121], [94, 80]),
+         hijos:[
+          {id:"torso", pivote:[94, 80], ang:108,
+           d: ln([94, 80], [96, 44]) + circ([97, 32], 9) +
+              '<path class="seg-fino" d="M 95 50 L 84 62 L 88 71"/>' +
+              circ([88, 78], 6, "seg-fino") +
+              '<path class="seg-fino" d="M 84 72 Q 88 66 92 72"/>'}
+         ]}
+       ]}
+    ],
+    caja:[28, 21, 177, SUELO + 4]
+  };
+}
+
+/* qué esquema usa cada ejercicio. El encuadre no se pone a mano: se calcula
+   desde la caja que declara cada rig, así una figura no se sale del recuadro
+   por haber movido un número. */
+const ESQ = {
+  flex_mesa:     {rig:() => rigFlex({yMano:112, alturaApoyo:true, caida:18})},
+  flex_silla:    {rig:() => rigFlex({yMano:140, alturaApoyo:true, caida:20})},
+  flex_deficit:  {rig:() => rigFlex({yMano:158, alturaApoyo:true, caida:30})},
+  flex_arqueras: {rig:() => rigFlex({yMano:170, caida:26, segundoBrazo:true})},
+  flex_diamante: {rig:() => rigFlex({yMano:170, xMano:74, caida:24})},
+  curl_banda:    {rig:rigCurlBanda},
+  curl_toalla:   {rig:rigCurlToalla},
+  goblet_talones:{rig:rigGoblet}
+};
+/* encaja la caja del dibujo dentro de un lienzo de `ancho` x `alto`, con margen */
+function encuadre(caja, ancho, alto, margen){
+  const m = margen == null ? 6 : margen;
+  const w = caja[2] - caja[0], h = caja[3] - caja[1];
+  const zoom = Math.min((ancho - 2*m) / w, (alto - 2*m) / h);
+  return {zoom,
+    dx: (ancho - w * zoom) / 2 - caja[0] * zoom,
+    dy: (alto - h * zoom) / 2 - caja[1] * zoom};
+}
+
+/* Ojo con los dos formatos: el atributo transform de SVG va sin unidades y con
+   espacios, y el transform de CSS exige px y deg. Mezclarlos deja el keyframe
+   vacío y la animación quieta, sin error visible. */
+function trSVG(p){
+  return 'transform="translate(' + p.pivote[0] + " " + p.pivote[1] + ") rotate(" + p.ang + ")" +
+    (p.escY ? " scale(1 " + p.escY + ")" : "") +
+    " translate(" + (-p.pivote[0]) + " " + (-p.pivote[1]) + ')"';
+}
+function trCSS(p){
+  return "translate(" + p.pivote[0] + "px," + p.pivote[1] + "px) rotate(" + p.ang + "deg)" +
+    (p.escY ? " scale(1," + p.escY + ")" : "") +
+    " translate(" + (-p.pivote[0]) + "px," + (-p.pivote[1]) + "px)";
+}
+function piezasSVG(piezas, modo, clavePrefijo){
+  return piezas.map(p => {
+    const attr = modo === "anim" ? 'class="pz-' + clavePrefijo + "-" + p.id + '"'
+               : modo === "fin" ? trSVG(p) : "";
+    return "<g " + attr + ">" + p.d + piezasSVG(p.hijos || [], modo, clavePrefijo) + "</g>";
+  }).join("");
+}
+function rigSVG(def, modo, clave){
+  return def.fijo + piezasSVG(def.piezas, modo, clave);
+}
+/* los @keyframes se generan una sola vez, al arrancar */
+function cssEsquemas(){
+  let css = "";
+  const recorrer = (piezas, clave) => piezas.forEach(p => {
+    const n = "pz-" + clave + "-" + p.id;
+    css += "@keyframes kf-" + n + "{0%,14%,88%,100%{transform:none}" +
+      "46%,58%{transform:" + trCSS(p) + "}}" +
+      "." + n + "{animation:kf-" + n + " 2.5s ease-in-out infinite}";
+    recorrer(p.hijos || [], clave);
+  });
+  Object.keys(ESQ).forEach(k => recorrer(ESQ[k].rig().piezas, k));
+  return css;
+}
+function esquemaSVG(k){
+  const e = ESQ[k]; if(!e) return "";
+  const def = e.rig();
+  const caja = def.caja;
+  const prop = (caja[3] - caja[1]) / (caja[2] - caja[0]);
+  /* el lienzo animado va apaisado o cuadrado según la figura: una flexión es
+     ancha y baja, una sentadilla es alta y angosta */
+  const altoLienzo = Math.round(Math.max(96, Math.min(200, 200 * prop)));
+  const a = encuadre(caja, 200, altoLienzo);
+  /* el estático pone las dos poses lado a lado, con sitio abajo para el rótulo */
+  const altoPose = Math.round(Math.max(56, Math.min(120, 100 * prop)));
+  const p = encuadre(caja, 98, altoPose, 3);
+  const altoEst = altoPose + 22;
+  /* dos SVG hermanos, no dos capas del mismo: el animado necesita el lienzo
+     0 0 200 200 intacto para sus pivotes, y el estático se encuadra a su gusto */
+  return '<svg class="esq animado" viewBox="0 0 200 ' + altoLienzo + '" aria-hidden="true">' +
+      '<g transform="translate(' + a.dx.toFixed(1) + " " + a.dy.toFixed(1) + ") scale(" + a.zoom.toFixed(3) + ')">' +
+      rigSVG(def, "anim", k) + "</g></svg>" +
+    '<svg class="esq estatico" viewBox="0 0 200 ' + altoEst + '" aria-hidden="true">' +
+      '<g transform="translate(' + p.dx.toFixed(1) + " " + p.dy.toFixed(1) + ") scale(" + p.zoom.toFixed(3) + ')">' + rigSVG(def, "ini", k) + "</g>" +
+      '<g transform="translate(' + (p.dx + 101).toFixed(1) + " " + p.dy.toFixed(1) + ") scale(" + p.zoom.toFixed(3) + ')">' + rigSVG(def, "fin", k) + "</g>" +
+      '<text class="etq-esq" x="49" y="' + (altoEst - 6) + '">inicio</text>' +
+      '<text class="etq-esq" x="150" y="' + (altoEst - 6) + '">fin</text>' +
+    "</svg>";
+}
+
+/* ============ 3. programa ============ */
+const FASES = {
+  1:{rondas:2, rir:"3 a 4", nota:"Adaptación de tendones y técnica. No buscar el fallo."},
+  2:{rondas:3, rir:"2",     nota:"Empieza a contar el volumen."},
+  3:{rondas:3, rir:"0 a 1", nota:"Rest-pause en el cierre y variantes en estiramiento."}
+};
+const VARIANTES = {flex_pies:"flex_deficit", goblet:"goblet_talones"};
+const TRAMOS = [
+  {n:"Preparación", min:3},
+  {n:"Bloque 1", min:10},
+  {n:"Bloque 2", min:10},
+  {n:"Cierre", min:4}
+];
+const SESIONES = [
+ {id:"A", n:"Torso 1", dia:"lunes",
+  b1:[{k:"press_banca", r:[8,15]}, {k:"remo_inclinado", r:[10,20]}],
+  b2:[{k:"press_hombro", r:[10,15]}, {k:"dominada", max:true}],
+  cierre:{ej:[{k:"laterales", r:[15,25]}], rondas:2}},
+ {id:"B", n:"Pierna 1 · rodilla", dia:"martes",
+  b1:[{k:"bulgara", r:[10,15], lado:"por pierna"}, {k:"gemelo", r:[15,25]}],
+  b2:[{k:"goblet", r:[12,20]}, {k:"plancha", t:[30,45]}],
+  cierre:{ej:[{k:"zancada", r:[12,12], lado:"por pierna"}], rondas:2, opcional:true}},
+ {id:"C", n:"Torso 2", dia:"jueves",
+  b1:[{k:"flex_pies", r:[10,20]}, {k:"remo_una_mano", r:[12,20], lado:"por lado"}],
+  b2:[{k:"press_inclinado", r:[10,15]}, {k:"face_pull", r:[15,25]}],
+  cierre:{ej:[{k:"curl_inclinado", r:[10,20]}, {k:"triceps", r:[10,20]}], rondas:2, ss:true}},
+ {id:"D", n:"Pierna 2 · cadera", dia:"viernes o sábado",
+  b1:[{k:"rdl", r:[10,20]}, {k:"gemelo", r:[15,25]}],
+  b2:[{k:"hip_thrust", r:[12,20]}, {k:"curl_femoral", r:[15,25], lado:"por pierna"}],
+  cierre:{ej:[{k:"puente", r:[15,15], lado:"por lado"}], rondas:2}}
+];
+function sesionDe(id){ return SESIONES.find(s => s.id === id); }
+function faseActual(){ return lget("fase", 1); }
+function ejEfectivo(k){ return (faseActual() === 3 && VARIANTES[k]) ? VARIANTES[k] : k; }
+function rondasDe(tramo, ses){ return tramo === 3 ? ses.cierre.rondas : FASES[faseActual()].rondas; }
+function ejerciciosDeTramo(ses, tramo){
+  return tramo === 1 ? ses.b1 : tramo === 2 ? ses.b2 : tramo === 3 ? ses.cierre.ej : [];
+}
+
+/* ---- qué ejercicio ocupa cada casilla hoy ----
+   Las casillas se pueden cambiar por su sustituto de calistenia, de a una o
+   toda la sesión de golpe. El estado dura el día: mañana la sesión vuelve a
+   arrancar con mancuernas, porque el cambio es la excepción. Vive aparte de
+   `fz_sesion_activa` para que también funcione sin haber empezado la sesión. */
+function fechaCorta(d){ const x = d || new Date(); return x.getFullYear() + "-" + (x.getMonth()+1) + "-" + x.getDate(); }
+function casillasHoy(){
+  const c = lget("casillas", null);
+  if(!c || c.fecha !== fechaCorta()) return {fecha:fechaCorta(), ses:{}, sw:{}};
+  c.ses = c.ses || {}; c.sw = c.sw || {};
+  return c;
+}
+function guardarCasillas(c){ c.fecha = fechaCorta(); lset("casillas", c); }
+function cid(tramo, idx){ return tramo + "-" + idx; }
+/* el ejercicio "de fábrica" de una casilla, ya con la variante de fase 3 */
+function ejBase(ses, tramo, idx){
+  const item = ejerciciosDeTramo(ses, tramo)[idx];
+  return item ? ejEfectivo(item.k) : null;
+}
+/* el que corresponde según el interruptor de la sesión, sin cambios manuales */
+function ejSegunInterruptor(ses, tramo, idx){
+  const base = ejBase(ses, tramo, idx);
+  if(!base) return null;
+  return (casillasHoy().sw[ses.id] && LIB[base].sinPeso) ? LIB[base].sinPeso : base;
+}
+/* el que está puesto de verdad ahora */
+function ejActivo(ses, tramo, idx){
+  const base = ejBase(ses, tramo, idx);
+  if(!base) return null;
+  const ov = (casillasHoy().ses[ses.id] || {})[cid(tramo, idx)];
+  return (ov && LIB[ov]) ? ov : base;
+}
+function esManual(ses, tramo, idx){ return ejActivo(ses, tramo, idx) !== ejSegunInterruptor(ses, tramo, idx); }
+function cambiables(ses){
+  let n = 0;
+  [1,2,3].forEach(t => ejerciciosDeTramo(ses, t).forEach((it, i) => { if(LIB[ejBase(ses, t, i)].sinPeso) n++; }));
+  return n;
+}
+function nCambiadas(ses){
+  let n = 0;
+  [1,2,3].forEach(t => ejerciciosDeTramo(ses, t).forEach((it, i) => { if(ejActivo(ses, t, i) !== ejBase(ses, t, i)) n++; }));
+  return n;
+}
+function modoSesion(ses){
+  const n = nCambiadas(ses);
+  return n === 0 ? "normal" : (n >= cambiables(ses) ? "calistenia" : "mixto");
+}
+/* alterna una casilla suelta entre su versión con mancuernas y la de calistenia */
+function alternarCasilla(sid, tramo, idx){
+  const ses = sesionDe(sid);
+  const base = ejBase(ses, tramo, idx);
+  const alt = LIB[base].sinPeso;
+  if(!alt){ aviso("Esta casilla es la misma con o sin mancuernas."); return; }
+  const c = casillasHoy();
+  c.ses[sid] = c.ses[sid] || {};
+  const k = cid(tramo, idx);
+  const actual = ejActivo(ses, tramo, idx);
+  if(actual === base) c.ses[sid][k] = alt; else delete c.ses[sid][k];
+  guardarCasillas(c);
+  pintarHoy();
+}
+/* el interruptor de la sesión: manda sobre todas, incluidas las manuales */
+function alternarSesion(sid){
+  const ses = sesionDe(sid);
+  const c = casillasHoy();
+  const previo = JSON.stringify({ses:c.ses[sid] || {}, sw:!!c.sw[sid]});
+  const habiaManuales = [1,2,3].some(t => ejerciciosDeTramo(ses, t).some((it, i) => esManual(ses, t, i)));
+  const activar = !c.sw[sid];
+  c.sw[sid] = activar;
+  c.ses[sid] = {};
+  let n = 0;
+  [1,2,3].forEach(t => ejerciciosDeTramo(ses, t).forEach((it, i) => {
+    const base = ejBase(ses, t, i);
+    if(activar && LIB[base].sinPeso){ c.ses[sid][cid(t, i)] = LIB[base].sinPeso; n++; }
+  }));
+  guardarCasillas(c);
+  pintarHoy();
+  if(habiaManuales){
+    const cuantas = activar ? n : cambiables(ses);
+    aviso("Cambié las " + cuantas + ", toca deshacer si no era eso", () => {
+      const p = JSON.parse(previo);
+      const c2 = casillasHoy();
+      c2.ses[sid] = p.ses; c2.sw[sid] = p.sw;
+      guardarCasillas(c2); pintarHoy();
+    });
+  }
+}
+function volverAOriginal(sid){
+  const c = casillasHoy();
+  delete c.ses[sid]; delete c.sw[sid];
+  guardarCasillas(c);
+  pintarHoy();
+}
+
+/* celdas de una sesión en orden temporal: [{tramo, idx, k, item, ronda}] */
+function celdasSesion(ses){
+  const out = [];
+  [1, 2, 3].forEach(tr => {
+    const nR = rondasDe(tr, ses);
+    for(let r = 0; r < nR; r++)
+      ejerciciosDeTramo(ses, tr).forEach((item, idx) =>
+        out.push({tramo:tr, idx, k:ejActivo(ses, tr, idx), item, ronda:r}));
+  });
+  return out;
+}
+
+/* ============ registro (logs) ============ */
+let semana = lget("semana", 1);
+let sesionSel = null;   // id A..D
+let vista = "hoy";
+
+function logDe(sid, k, w){ return lget("log_" + sid + "_" + k + "_s" + (w || semana), null); }
+function setRonda(sid, k, i, val){
+  const key = "log_" + sid + "_" + k + "_s" + semana;
+  const log = lget(key, {fecha:hoyISO(), rondas:[]});
+  log.fecha = hoyISO();
+  while(log.rondas.length <= i) log.rondas.push({});
+  log.rondas[i] = val;
+  lset(key, log);
+  return log;
+}
+function rondaValida(r){ return !!r && (num(r.reps) > 0 || num(r.seg) > 0); }
+function sesionHecha(w, sid){ return lget("sesion_" + w + "_" + sid, null); }
+
+/* récords */
+function esTiempo(k){ return LIB[k].tipo === "tiempo"; }
+function chequearRecord(k, r){
+  const pr = lget("pr_" + k, null);
+  let esRec = false, nuevo = pr ? Object.assign({}, pr) : {};
+  if(esTiempo(k)){
+    const s = num(r.seg); if(!s) return false;
+    if(pr && s > (pr.seg || 0)) esRec = true;
+    if(!pr || s > (nuevo.seg || 0)) Object.assign(nuevo, {seg:s, semana, fecha:hoyISO()});
+  } else {
+    const kg = num(r.kg), reps = num(r.reps); if(!reps) return false;
+    if(kg > 0){
+      const vol = kg * reps;
+      if(pr && pr.volumen && vol > pr.volumen) esRec = true;
+      if(!pr || vol > (nuevo.volumen || 0)) Object.assign(nuevo, {kg, reps, volumen:vol, semana, fecha:hoyISO()});
+    } else {
+      if(pr && reps > (pr.reps || 0) && !pr.volumen) esRec = true;
+      if(!pr || (!nuevo.volumen && reps > (nuevo.reps || 0))) Object.assign(nuevo, {reps, semana, fecha:hoyISO()});
+    }
+  }
+  lset("pr_" + k, nuevo);
+  if(esRec) lset("nrecords", lget("nrecords", 0) + 1);
+  return esRec;
+}
+
+/* última vez y objetivo */
+function ultimaVez(sid, k){
+  const base = LIB[k].progresaDe || k;
+  const cadena = [k]; if(LIB[k].progresaDe) cadena.push(LIB[k].progresaDe);
+  if(VARIANTES[k]) cadena.push(VARIANTES[k]);
+  for(let w = semana - 1; w >= 1; w--){
+    for(const kk of cadena){
+      const log = logDe(sid, kk, w);
+      if(log && log.rondas.some(rondaValida)) return {w, k:kk, log};
+    }
+  }
+  return null;
+}
+function topeDe(item){ return item.t ? item.t[1] : (item.r ? item.r[1] : null); }
+/* `k` es el ejercicio que ocupa la casilla ahora, que puede no ser el del
+   programa si se cambió por su versión de calistenia */
+function textoObjetivo(sid, item, k){
+  const u = ultimaVez(sid, k);
+  const f = faseActual();
+  if(item.max){
+    if(!u) return "Máximas con buena técnica. Si no sale ninguna, negativas de 5 segundos (cada una cuenta como 1).";
+    const mejor = Math.max(...u.log.rondas.map(r => num(r.reps)));
+    return "La última vez: " + mejor + " en la mejor ronda. Iguala o suma una.";
+  }
+  if(item.t){
+    if(!u) return "Primera vez. Aguanta entre " + item.t[0] + " y " + item.t[1] + " s con buena forma.";
+    const mejor = Math.max(...u.log.rondas.map(r => num(r.seg)));
+    return "Objetivo: " + (mejor + 5) + " s (tu mejor marca más 5).";
+  }
+  if(!u) return "Primera vez. Elige un peso con el que llegues a " + item.r[0] + " reps con RIR " + FASES[f].rir + ".";
+  const tope = item.r[1];
+  const validas = u.log.rondas.filter(rondaValida);
+  const alTope = validas.length && validas.every(r => num(r.reps) >= tope);
+  if(!alTope) return "Objetivo: " + tope + " reps en todas las rondas antes de cambiar nada.";
+  let paso;
+  if(LIB[k].tipo === "peso_corporal" || LIB[k].tipo === "banda")
+    paso = "baja en 3 o 4 segundos con pausa de 2 abajo, y después sube de peldaño";
+  else if(f === 1) paso = "al pasar a la fase 2 se suma una ronda";
+  else if(f === 2) paso = VARIANTES[item.k] ? "en la fase 3 pasas a la variante más difícil" : "busca más rango de movimiento (más profundidad, más estiramiento)";
+  else paso = "más rango de movimiento; en el cierre, comprime con rest-pause";
+  return "Techo alcanzado. Listo para el siguiente paso: " + paso + ".";
+}
+function textoUltima(sid, item, k){
+  const u = ultimaVez(sid, k);
+  if(!u) return "";
+  const vals = u.log.rondas.filter(rondaValida).map(r =>
+    esTiempo(u.k) ? num(r.seg) + " s" : (num(r.kg) ? fmtNum(num(r.kg)) + " kg × " : "") + num(r.reps)).join(", ");
+  const nota = (u.k !== k && LIB[u.k]) ? " (" + LIB[u.k].n.toLowerCase() + ")" : "";
+  return "Última vez (sem " + u.w + nota + "): " + vals;
+}
+
+/* ============ 4. cronómetro de sesión ============ */
+/* Todo se calcula con marcas de tiempo (Date.now), nunca acumulando intervalos:
+   la pantalla apagada o el navegador en segundo plano no lo atrasan. */
+let tickInt = null;
+let wakeLock = null;
+let audioCtx = null;
+
+function sa(){ return lget("sesion_activa", null); }
+function saGuardar(s){ if(s) lset("sesion_activa", s); else ldel("sesion_activa"); }
+function saElapsed(s){
+  const pausadoExtra = s.pausadoEn ? (Date.now() - new Date(s.pausadoEn).getTime()) : 0;
+  return Date.now() - new Date(s.inicioISO).getTime() - (s.msPausados || 0) - pausadoExtra;
+}
+function tramoBudget(t){ return TRAMOS[t].min * 60000; }
+function tramoRestante(s){ return tramoBudget(s.tramo) - (saElapsed(s) - s.tramoIniMs); }
+
+function iniciarAudio(){
+  try{ if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){}
+}
+function beep(veces){
+  if(!lget("sonido", true) || !audioCtx) return;
+  try{
+    for(let i = 0; i < veces; i++){
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.frequency.value = 880; g.gain.value = 0.15;
+      const t0 = audioCtx.currentTime + i * 0.22;
+      o.start(t0); g.gain.setValueAtTime(0.15, t0);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.15);
+      o.stop(t0 + 0.16);
+    }
+  }catch(e){}
+}
+function vibrar(patron){ try{ if(navigator.vibrate) navigator.vibrate(patron); }catch(e){} }
+async function pedirWakeLock(){
+  try{ if("wakeLock" in navigator) wakeLock = await navigator.wakeLock.request("screen"); }catch(e){}
+}
+function soltarWakeLock(){ try{ if(wakeLock){ wakeLock.release(); wakeLock = null; } }catch(e){} }
+document.addEventListener("visibilitychange", () => {
+  if(!document.hidden && sa()){ pedirWakeLock(); tick(); }
+});
+
+function empezarSesion(){
+  const ses = sesionDe(sesionSel);
+  if(!ses) return;
+  const activa = sa();
+  if(activa && (activa.sesionId !== sesionSel || activa.semana !== semana)){
+    abrirModal("Hay una sesión activa",
+      "Quedó abierta la sesión " + activa.sesionId + " de la semana " + activa.semana + ". ¿La descartas para empezar esta?",
+      [["Descartarla y empezar", () => { saGuardar(null); empezarSesion(); cerrarModal(); }],
+       ["Volver", cerrarModal]]);
+    return;
+  }
+  iniciarAudio();
+  saGuardar({sesionId:sesionSel, semana, inicioISO:hoyISO(), msPausados:0, pausadoEn:null,
+    tramo:0, tramoIniMs:0, finDescansoISO:null, av60:false, av0:false,
+    estado:"trabajo", ronda:0, ejercicioIdx:0});
+  pedirWakeLock();
+  document.body.classList.add("con-sesion");
+  pintarHoy(); tick();
+}
+function avanzarTramo(s, aviso){
+  if(s.tramo >= 3) return;
+  s.tramo++; s.tramoIniMs = saElapsed(s); s.av60 = false; s.av0 = false;
+  if(aviso){ beep(2); vibrar([120, 80, 120]); }
+  saGuardar(s);
+}
+function saltarTramo(){
+  const s = sa(); if(!s) return;
+  iniciarAudio();
+  if(s.tramo >= 3){ aviso("Ya estás en el cierre. Cuando termines, toca Terminar sesión."); return; }
+  avanzarTramo(s, true); tick();
+}
+function pausarReanudar(){
+  const s = sa(); if(!s) return;
+  if(s.pausadoEn){
+    const ms = Date.now() - new Date(s.pausadoEn).getTime();
+    s.msPausados = (s.msPausados || 0) + ms;
+    if(s.finDescansoISO) s.finDescansoISO = new Date(new Date(s.finDescansoISO).getTime() + ms).toISOString();
+    s.pausadoEn = null;
+  } else {
+    s.pausadoEn = hoyISO();
+  }
+  saGuardar(s); tick();
+}
+function iniciarDescanso(seg){
+  const s = sa(); if(!s || s.pausadoEn) return;
+  s.finDescansoISO = new Date(Date.now() + seg * 1000).toISOString();
+  s.estado = "descanso";
+  saGuardar(s); tick();
+}
+function ajustarDescanso(seg){
+  const s = sa(); if(!s || !s.finDescansoISO) return;
+  s.finDescansoISO = new Date(new Date(s.finDescansoISO).getTime() + seg * 1000).toISOString();
+  saGuardar(s); tick();
+}
+function saltarDescanso(){
+  const s = sa(); if(!s || !s.finDescansoISO) return;
+  s.finDescansoISO = null; s.estado = "trabajo";
+  saGuardar(s); tick();
+}
+function toggleSonido(){
+  lset("sonido", !lget("sonido", true));
+  iniciarAudio(); tick();
+  aviso(lget("sonido", true) ? "Sonido activado" : "Sonido apagado");
+}
+
+/* siguiente celda por llenar de la sesión activa (para "qué viene") */
+function proximaCelda(ses){
+  const celdas = celdasSesion(ses);
+  for(const c of celdas){
+    const log = logDe(ses.id, c.k);
+    if(!log || !rondaValida(log.rondas[c.ronda])) return c;
+  }
+  return null;
+}
+
+function tick(){
+  const s = sa();
+  document.body.classList.toggle("con-sesion", !!s);
+  if(!s) return;
+  const ses = sesionDe(s.sesionId);
+  const el = saElapsed(s);
+  const rest = tramoRestante(s);
+
+  /* preparación avanza sola a los 3 minutos */
+  if(s.tramo === 0 && rest <= 0){ avanzarTramo(s, true); return tick(); }
+
+  /* fin de descanso */
+  if(s.finDescansoISO && !s.pausadoEn){
+    const dRest = new Date(s.finDescansoISO).getTime() - Date.now();
+    if(dRest <= 0){
+      s.finDescansoISO = null; s.estado = "trabajo"; saGuardar(s);
+      beep(1); vibrar(150);
+      /* si el bloque quedó completo, pasa solo al siguiente tramo */
+      const prox = proximaCelda(ses);
+      if(prox && prox.tramo > s.tramo && s.tramo > 0) avanzarTramo(s, true);
+    }
+  }
+
+  /* avisos de tramo (solo bloques y cierre) */
+  if(s.tramo > 0){
+    if(rest <= 60000 && rest > 0 && !s.av60){ s.av60 = true; saGuardar(s); }
+    if(rest <= 0 && !s.av0){ s.av0 = true; saGuardar(s); beep(2); vibrar([100, 60, 100]); }
+  }
+
+  /* ---- pintar barra ---- */
+  const enDescanso = !!s.finDescansoISO;
+  const prox = proximaCelda(ses);
+  $("#bTramo").textContent = TRAMOS[s.tramo].n + (s.pausadoEn ? " · en pausa" : "") +
+    " · total " + fmtReloj(el);
+  if(enDescanso){
+    const dRest = Math.max(0, new Date(s.finDescansoISO).getTime() - Date.now());
+    $("#bReloj").textContent = fmtReloj(dRest);
+    $("#bReloj").className = "barra-reloj descanso";
+    $("#bInfo").innerHTML = prox
+      ? "Sigue: <b>" + LIB[prox.k].n + "</b> <small>· ronda " + (prox.ronda + 1) + "</small>"
+      : "Descanso";
+  } else {
+    $("#bReloj").textContent = fmtReloj(rest);
+    $("#bReloj").className = "barra-reloj" + (rest < 0 ? " pasado" : "");
+    if(s.tramo === 0){
+      $("#bInfo").innerHTML = "Movilidad y series de aproximación";
+    } else if(prox && prox.tramo === s.tramo){
+      $("#bInfo").innerHTML = "<b>" + LIB[prox.k].n + "</b> <small>· ronda " + (prox.ronda + 1) + "</small>";
+    } else if(prox){
+      $("#bInfo").innerHTML = "<small>Bloque listo. Sigue:</small> <b>" + LIB[prox.k].n + "</b>";
+    } else {
+      $("#bInfo").innerHTML = "Todo registrado. Toca Terminar sesión.";
+    }
+  }
+  let msj = "";
+  if(s.tramo > 0 && rest < 0) msj = "Vas pasado. Cierra esta ronda y sigue al próximo tramo.";
+  else if(s.tramo > 0 && rest <= 60000) msj = "Queda 1 minuto. ¿Alcanza otra ronda?";
+  $("#bMsj").textContent = msj;
+  $("#btnPausa").textContent = s.pausadoEn ? "Seguir" : "Pausa";
+  $("#btnMas").disabled = $("#btnMenos").disabled = $("#btnSaltoD").disabled = !enDescanso;
+  $("#btnSonido").textContent = lget("sonido", true) ? "Son. ✓" : "Son. ✗";
+
+  /* barra segmentada de 30 minutos */
+  const segs = $("#bSegs");
+  if(!segs.childElementCount){
+    TRAMOS.forEach(t => {
+      const d = document.createElement("div");
+      d.className = "seg"; d.style.flex = String(t.min);
+      d.innerHTML = "<i></i>";
+      segs.appendChild(d);
+    });
+  }
+  let acum = 0;
+  TRAMOS.forEach((t, i) => {
+    const ini = acum; acum += t.min * 60000;
+    let frac;
+    if(i < s.tramo) frac = 1;
+    else if(i > s.tramo) frac = 0;
+    else frac = Math.min(1, Math.max(0, (el - ini) / (t.min * 60000)));
+    /* con saltos de tramo el tiempo global no calza con las fronteras: se pinta
+       por tramo actual, no por reloj global */
+    segs.children[i].firstElementChild.style.width = (frac * 100) + "%";
+  });
+}
+
+/* sesión colgada de hace más de 3 horas */
+function revisarSesionColgada(){
+  const s = sa(); if(!s) return;
+  if(Date.now() - new Date(s.inicioISO).getTime() > 3 * 3600000){
+    abrirModal("Quedó una sesión abierta",
+      "Sesión " + s.sesionId + " de la semana " + s.semana + ", empezada hace más de 3 horas. ¿Qué hacemos con ella?",
+      [["Cerrarla con lo registrado", () => { cerrarModal(); terminarSesionDe(s.semana, s.sesionId, true); }],
+       ["Descartarla", () => { saGuardar(null); cerrarModal(); document.body.classList.remove("con-sesion"); pintar(); }]]);
+  }
+}
+
+/* ============ registro desde la grilla ============ */
+function celdaCambio(sid, k, i){
+  const ses = sesionDe(sid);
+  const t = esTiempo(k);
+  let val;
+  if(t){
+    val = {seg: num(($("#g_" + sid + "_" + k + "_" + i) || {}).value)};
+  } else {
+    const kgIn = $("#k_" + sid + "_" + k + "_" + i), rpIn = $("#r_" + sid + "_" + k + "_" + i);
+    /* si no puso peso, hereda el de la ronda anterior o el de la última vez */
+    if(rpIn && num(rpIn.value) > 0 && kgIn && !num(kgIn.value)){
+      const her = kgHeredado(sid, k, i);
+      if(her){ kgIn.value = fmtNum(her); }
+    }
+    val = {kg: num((kgIn || {}).value), reps: num((rpIn || {}).value)};
+  }
+  if(!rondaValida(val)){ setRonda(sid, k, i, val); actualizarMeta(sid, k); return; }
+  const esRec = chequearRecord(k, val);
+  if(esRec) val.rec = 1;
+  else { const prev = (logDe(sid, k) || {rondas:[]}).rondas[i]; if(prev && prev.rec) val.rec = 1; }
+  setRonda(sid, k, i, val);
+  const dot = $("#rec_" + sid + "_" + k + "_" + i);
+  if(dot && val.rec){ dot.classList.add("si"); const lin = $("#recl_" + sid + "_" + k); if(lin){ lin.textContent = "● récord"; lin.classList.add("si"); } }
+  actualizarMeta(sid, k);
+  abrirCeldaSiguiente(sid, k, i);
+  /* el descanso arranca solo al anotar, si la sesión está corriendo */
+  const s = sa();
+  if(s && s.sesionId === sid && s.semana === semana && !s.pausadoEn){
+    /* si anotó algo de un tramo posterior, el cronómetro lo sigue */
+    const prox = proximaCelda(ses);
+    const celda = celdasSesion(ses).find(c => c.k === k && !rondaValida((logDe(sid, c.k) || {rondas:[]}).rondas[c.ronda]));
+    const tramoDe = celdasSesion(ses).filter(c => c.k === k).map(c => c.tramo)[0] || 1;
+    if(s.tramo === 0) avanzarTramo(s, false);
+    const s2 = sa();
+    if(tramoDe > s2.tramo){ s2.tramo = tramoDe; s2.tramoIniMs = saElapsed(s2); s2.av60 = false; s2.av0 = false; saGuardar(s2); }
+    iniciarDescanso(60);
+  }
+  actualizarBotonTerminar(sid);
+}
+/* Las rondas se abren de a una para que la grilla no sea un muro de casillas
+   vacías. Hay que abrir la siguiente en el sitio, sin repintar la lista: si se
+   repinta mientras se escribe, se pierde el foco y el teclado se cierra. */
+function abrirCeldaSiguiente(sid, k, i){
+  const cont = $("#celdas_" + sid + "_" + k);
+  if(!cont) return;
+  const nR = cont.children.length;
+  const sig = cont.children[i + 1];
+  if(!sig || sig.querySelector("input")) return;
+  sig.outerHTML = celdaHTML(sid, k, i + 1, nR);
+}
+function kgHeredado(sid, k, i){
+  const log = logDe(sid, k);
+  if(log) for(let j = i - 1; j >= 0; j--) if(log.rondas[j] && num(log.rondas[j].kg)) return num(log.rondas[j].kg);
+  const u = ultimaVez(sid, k);
+  if(u){ const con = u.log.rondas.filter(r => num(r.kg)); if(con.length) return num(con[con.length - 1].kg); }
+  return 0;
+}
+function actualizarMeta(sid, k){
+  const el = $("#meta_" + sid + "_" + k);
+  if(!el) return;
+  const ses = sesionDe(sid);
+  const celda = celdasSesion(ses).find(c => c.k === k);
+  if(celda) el.innerHTML = metaHTML(sid, celda.item, k);
+}
+function actualizarBotonTerminar(sid){
+  const b = $("#btnTerminar"); if(!b) return;
+  const n = seriesValidas(sid).length;
+  b.disabled = n === 0 || !!sesionHecha(semana, sid);
+}
+function seriesValidas(sid){
+  const ses = sesionDe(sid);
+  const out = [];
+  celdasSesion(ses).forEach(c => {
+    const log = logDe(sid, c.k);
+    const r = log && log.rondas[c.ronda];
+    if(rondaValida(r)) out.push({c, r});
+  });
+  return out;
+}
+
+/* ============ 6. refuerzo: racha, logros, cierre ============ */
+function ordenSesion(w, sid){ return (w - 1) * 4 + SESIONES.findIndex(s => s.id === sid); }
+function todasLasSesiones(){
+  const out = [];
+  for(let w = 1; w <= 12; w++) SESIONES.forEach(s => {
+    const dato = sesionHecha(w, s.id);
+    out.push({w, sid:s.id, hecha:!!dato, fecha:dato ? new Date(dato.fecha) : null});
+  });
+  return out;
+}
+function calcRacha(){
+  const todas = todasLasSesiones();
+  let ultimo = -1;
+  todas.forEach((s, i) => { if(s.hecha) ultimo = i; });
+  if(ultimo < 0) return {n:0, pausa:false};
+  let n = 0, salto = false, prevFecha = null;
+  for(let i = 0; i <= ultimo; i++){
+    const s = todas[i];
+    if(s.hecha){
+      if(salto){
+        if(prevFecha && (s.fecha - prevFecha) / 86400000 <= 10) n++;
+        else n = 1;
+        salto = false;
+      } else n++;
+      prevFecha = s.fecha;
+    } else {
+      if(salto){ n = 0; salto = false; } else salto = true;
+    }
+  }
+  /* pausa: la sesión abierta hoy viene después de un hueco sin cerrar */
+  const primeraPend = todas.findIndex(s => !s.hecha);
+  const pausa = n > 0 && primeraPend >= 0 && primeraPend < ordenSesion(semana, sesionSel || "A");
+  return {n, pausa};
+}
+const LOGROS = [
+ {id:"arranque", n:"Primera sesión", c:"Terminar la primera sesión", t:x => x.nSes >= 1},
+ {id:"semana_llena", n:"Cuatro de cuatro", c:"Terminar las 4 sesiones de una misma semana", t:x => x.semanaLlena},
+ {id:"fase_uno", n:"Base construida", c:"Terminar las 16 sesiones de la fase 1", t:x => x.f1},
+ {id:"racha_8", n:"Ocho seguidas", c:"8 sesiones consecutivas sin saltar ninguna", t:x => x.racha >= 8},
+ {id:"sesiones_25", n:"Veinticinco", c:"25 sesiones terminadas", t:x => x.nSes >= 25},
+ {id:"sesiones_50", n:"Cincuenta", c:"50 sesiones terminadas", t:x => x.nSes >= 50},
+ {id:"primer_record", n:"Primer récord", c:"Superar por primera vez una marca propia", t:x => x.nRec >= 1},
+ {id:"records_10", n:"Diez récords", c:"Acumular 10 récords", t:x => x.nRec >= 10},
+ {id:"techo", n:"Tope de ventana", c:"Llegar al tope del rango en todas las rondas de un ejercicio", t:x => x.techo},
+ {id:"bloque_cerrado", n:"Bloque completo", c:"Terminar las 48 sesiones del programa", t:x => x.nSes >= 48}
+];
+function statsLogros(sid){
+  const todas = todasLasSesiones();
+  const nSes = todas.filter(s => s.hecha).length;
+  const semanaLlena = SESIONES.every(s => sesionHecha(semana, s.id));
+  const f1 = (() => { let c = 0; for(let w = 1; w <= 4; w++) SESIONES.forEach(s => { if(sesionHecha(w, s.id)) c++; }); return c >= 16; })();
+  let techo = false;
+  if(sid){
+    const ses = sesionDe(sid);
+    const vistas = new Set();
+    celdasSesion(ses).forEach(celda => {
+      if(vistas.has(celda.k)) return;
+      vistas.add(celda.k);
+      const item = celda.item, k = celda.k;
+      const tope = topeDe(item); if(!tope) return;
+      const log = logDe(sid, k);
+      const nR = celdasSesion(ses).filter(c => c.k === k).length;
+      if(log){
+        const vals = log.rondas.slice(0, nR).filter(rondaValida);
+        if(vals.length >= nR && vals.every(r => (item.t ? num(r.seg) : num(r.reps)) >= tope)) techo = true;
+      }
+    });
+  }
+  return {nSes, semanaLlena, f1, racha:calcRacha().n, nRec:lget("nrecords", 0), techo};
+}
+function fraseCierre(nSes){
+  const f = [
+    "Sesión " + nSes + " de 48. Registrada.",
+    "Nada espectacular, pero fuiste. Eso es lo que cuenta.",
+    "Otra celda pintada. El mapa se va llenando.",
+    "Lo difícil era partir. Ya está hecho.",
+    "Media hora bien gastada.",
+    "El plan decía hoy. Se cumplió hoy.",
+    "Un ladrillo más. Así se construye el bloque.",
+    "Hecho. El resto del día corre solo.",
+    "Constancia sobre intensidad. Vas bien.",
+    "El cuerpo toma nota, aunque todavía no se note.",
+    "Sesión cerrada. La próxima ya tiene menos misterio.",
+    "No fue perfecta y no importa. Cuenta igual.",
+    "Volver a entrenar era esto: aparecer y anotar.",
+    "Sin épica. Con registro."
+  ];
+  if(nSes > 24) f.push("Vas más de la mitad del bloque.");
+  if(SESIONES.every(s => sesionHecha(semana, s.id))) f.push("Cuatro de cuatro esta semana.");
+  return f[Math.floor(Math.random() * f.length)];
+}
+
+function terminarSesion(){ terminarSesionDe(semana, sesionSel, false); }
+function terminarSesionDe(w, sid, recuperada){
+  if(sesionHecha(w, sid)) return;
+  const guardW = semana; semana = w;   // los helpers usan la semana global
+  const ses = sesionDe(sid);
+  const validas = seriesValidas(sid);
+  if(!validas.length){ semana = guardW; aviso("No hay ninguna serie anotada todavía."); return; }
+  const s = sa();
+  let duracionReal = null;
+  if(s && s.sesionId === sid && s.semana === w) duracionReal = Math.round(saElapsed(s) / 60000);
+  /* rondas completas: todas las celdas de esa ronda del tramo con registro */
+  let rondasCompletadas = 0;
+  [1, 2, 3].forEach(tr => {
+    const nR = rondasDe(tr, ses);
+    for(let r = 0; r < nR; r++){
+      const completa = ejerciciosDeTramo(ses, tr).every((item, i) => {
+        const log = logDe(sid, ejActivo(ses, tr, i));
+        return log && rondaValida(log.rondas[r]);
+      });
+      if(completa) rondasCompletadas++;
+    }
+  });
+  const tonelaje = validas.reduce((a, v) => a + (num(v.r.kg) * num(v.r.reps)), 0);
+  const cierreVacio = !ses.cierre.ej.some((item, i) => {
+    const log = logDe(sid, ejActivo(ses, 3, i));
+    return log && log.rondas.some(rondaValida);
+  });
+  const recordsHoy = validas.filter(v => v.r.rec).length;
+  lset("sesion_" + w + "_" + sid, {
+    fecha:hoyISO(), duracionReal, rondasCompletadas,
+    seriesTotales:validas.length, tonelaje, cierreOmitido:cierreVacio,
+    modo:modoSesion(ses)   /* la sesión vale igual: el modo solo sirve para reconocerla después */
+  });
+  if(s && s.sesionId === sid && s.semana === w){ saGuardar(null); soltarWakeLock(); }
+  /* logros */
+  const st = statsLogros(sid);
+  const logros = lget("logros", {});
+  const nuevos = [];
+  LOGROS.forEach(l => { if(!logros[l.id] && l.t(st)){ logros[l.id] = hoyISO(); nuevos.push(l); } });
+  lset("logros", logros);
+  semana = guardW;
+  vibrar(120);
+  if(!recuperada) mostrarCierre(w, sid, st, nuevos, validas.length, recordsHoy, duracionReal);
+  else pintar();
+  document.body.classList.remove("con-sesion");
+}
+function mostrarCierre(w, sid, st, nuevos, nSeries, nRecs, dur){
+  const mapa = mapaHTML(w, sid);
+  $("#cierreInt").innerHTML =
+    '<div class="etq">Sesión terminada · Semana ' + w + " · " + sid + "</div>" +
+    '<div class="cierre-frase">' + fraseCierre(st.nSes) + "</div>" +
+    mapa +
+    '<div class="cierre-datos">' +
+      '<div class="kpi"><div class="etq">Sesiones</div><div class="num">' + st.nSes + '<small> de 48</small></div></div>' +
+      '<div class="kpi"><div class="etq">Series hoy</div><div class="num">' + nSeries + "</div></div>" +
+      (nRecs ? '<div class="kpi"><div class="etq">Récords hoy</div><div class="num" style="color:var(--marca)">' + nRecs + "</div></div>" : "") +
+    "</div>" +
+    (dur ? '<div class="aviso-suave">Duración real: ' + dur + " min</div>" : "") +
+    nuevos.map(l => '<div class="logro-nuevo"><div class="etq">Logro desbloqueado</div><b>' + l.n + "</b></div>").join("") +
+    '<button class="btn-grande btn-acento" onclick="cerrarCierre()">Listo</button>';
+  $("#cierre").classList.add("abierto");
+}
+function cerrarCierre(){ $("#cierre").classList.remove("abierto"); sesionSel = null; pintar(); }
+
+/* ============ modal y toast ============ */
+function abrirModal(titulo, texto, botones){
+  $("#modalCaja").innerHTML = "<h3>" + titulo + "</h3><p>" + texto + "</p>" +
+    botones.map((b, i) => '<button class="btn-grande ' + (i === 0 ? "btn-acento" : "btn-borde") + '" id="mbtn' + i + '">' + b[0] + "</button>").join("");
+  botones.forEach((b, i) => { $("#mbtn" + i).onclick = b[1]; });
+  $("#modal").classList.add("abierto");
+}
+function cerrarModal(){ $("#modal").classList.remove("abierto"); }
+let toastT = null, toastAccion = null;
+function aviso(txt, accion){
+  const t = $("#toast");
+  toastAccion = accion || null;
+  t.innerHTML = txt + (accion ? ' <button class="toast-btn" onclick="deshacerToast()">Deshacer</button>' : "");
+  t.classList.add("abierto");
+  clearTimeout(toastT);
+  toastT = setTimeout(() => { t.classList.remove("abierto"); toastAccion = null; }, accion ? 6000 : 2600);
+}
+function deshacerToast(){
+  if(toastAccion) toastAccion();
+  toastAccion = null;
+  $("#toast").classList.remove("abierto");
+}
+
+/* ============ 5. vistas ============ */
+function irVista(v){ vista = v; pintar(); window.scrollTo(0, 0); }
+function pintar(){
+  ["hoy", "progreso", "ejercicios", "guia"].forEach(v => $("#nav_" + v).classList.toggle("sel", v === vista));
+  if(vista === "hoy") pintarHoy();
+  else if(vista === "progreso") pintarProgreso();
+  else if(vista === "ejercicios") pintarEjercicios();
+  else pintarGuia();
+}
+function cambiarSemana(d){
+  semana = Math.min(12, Math.max(1, semana + d));
+  lset("semana", semana);
+  sesionSel = null;
+  pintarHoy();
+}
+function elegirSesion(id){ sesionSel = id; pintarHoy(); }
+function sesionSugerida(){
+  const pend = SESIONES.find(s => !sesionHecha(semana, s.id));
+  return pend ? pend.id : SESIONES[0].id;
+}
+
+function minimapaHTML(){
+  let h = '<div class="minimapa">';
+  for(let w = 1; w <= 12; w++) SESIONES.forEach(s => {
+    const aqui = w === semana && s.id === (sesionSel || "");
+    h += '<i class="' + (sesionHecha(w, s.id) ? "ok" : "") + (aqui ? " aqui" : "") + '"></i>';
+  });
+  return h + "</div>";
+}
+function mapaHTML(wNueva, sidNueva){
+  let h = '<div class="mapa"><span></span>' + SESIONES.map(s => '<span class="cab-col">' + s.id + "</span>").join("");
+  for(let w = 1; w <= 12; w++){
+    h += '<span class="rot">S' + w + "</span>";
+    SESIONES.forEach(s => {
+      const ok = sesionHecha(w, s.id);
+      const nueva = wNueva === w && sidNueva === s.id;
+      const aqui = !wNueva && w === semana && s.id === sesionSugerida();
+      /* la marca solo sirve para reconocerla después: cuenta exactamente igual */
+      const sm = ok && ok.modo && ok.modo !== "normal";
+      h += '<div class="celda-mapa' + (ok ? " ok" : "") + (nueva ? " nueva" : "") + (aqui ? " aqui" : "") +
+        (sm ? " sinpeso" : "") + '"' + (sm ? ' title="sin mancuernas"' : "") + "></div>";
+    });
+  }
+  return h + "</div>";
+}
+
+function visualHTML(k){
+  const e = LIB[k];
+  if(e.img){
+    /* sin loading="lazy": dentro de un <details> cerrado la imagen queda a 0x0
+       y el observador de lazy loading no la carga nunca. Son archivos locales
+       de menos de 80 KB y el service worker los cachea. */
+    return '<div class="visual"><img src="media/ejercicios/' + e.img + '" alt="" onerror="imgFallo(this,\'' + k + '\')" onload="this.dataset.ok=1"></div>' +
+      '<div class="procedencia" id="proc_' + k + '">Imagen: wger, CC BY-SA</div>';
+  }
+  const svg = esquemaSVG(k);
+  if(svg) return '<div class="visual">' + svg + '</div><div class="procedencia">Esquema propio</div>';
+  return "";
+}
+function imgFallo(img, k){
+  const svg = esquemaSVG(k);
+  const cont = img.parentElement;
+  if(!cont) return;
+  if(svg){ cont.innerHTML = svg; const p = $("#proc_" + k); if(p) p.textContent = "Esquema propio"; }
+  else { cont.remove(); const p = $("#proc_" + k); if(p) p.remove(); }
+}
+/* Red de seguridad: una <img> puede quedarse colgada sin disparar error (pasa
+   sin conexión, cuando la petición no falla sino que nunca responde). A los
+   3 segundos se reintenta por fetch, que sí pasa por el service worker y
+   responde desde el caché; si tampoco hay, cae al esquema o al botón de video. */
+function vigilarImagenes(){
+  document.querySelectorAll(".visual img").forEach(img => {
+    if(img.dataset.vigilada) return;
+    img.dataset.vigilada = "1";
+    setTimeout(() => {
+      if(img.dataset.ok || (img.complete && img.naturalWidth > 0) || !img.isConnected) return;
+      const k = (img.getAttribute("onerror") || "").match(/'([^']+)'/);
+      const clave = k ? k[1] : null;
+      fetch(img.getAttribute("src"))
+        .then(r => r.ok ? r.blob() : Promise.reject())
+        .then(b => { img.src = URL.createObjectURL(b); })
+        .catch(() => { if(clave) imgFallo(img, clave); });
+    }, 3000);
+  });
+}
+function fichaHTML(k){
+  const e = LIB[k];
+  const video = "https://www.youtube.com/results?search_query=" + encodeURIComponent(e.n + " técnica correcta");
+  return '<div class="ficha">' + visualHTML(k) +
+    "<ol>" + e.how.map(p => "<li>" + p + "</li>").join("") + "</ol>" +
+    '<div class="cue">' + e.cue + "</div>" +
+    '<div class="errores"><span class="etq">Errores que arruinan el ejercicio</span><ul>' +
+      e.err.map(x => "<li>" + x + "</li>").join("") + "</ul></div>" +
+    '<a class="btn-video" href="' + video + '" target="_blank" rel="noopener">▶ Ver técnica en YouTube</a>' +
+    (e.progresaDe && LIB[e.progresaDe] ? '<div class="aviso-suave" style="margin-top:8px">Progresión de: ' + LIB[e.progresaDe].n + " (comparten historial)</div>" : "") +
+    "</div>";
+}
+function comoSeHace(k){
+  return '<details class="como" ontoggle="vigilarImagenes()"><summary>Cómo se hace</summary>' + fichaHTML(k) + "</details>";
+}
+
+function celdaHTML(sid, k, i, nRondas){
+  const log = logDe(sid, k);
+  const r = log ? log.rondas[i] : null;
+  const t = esTiempo(k);
+  const primeraVacia = (() => {
+    if(log) for(let j = 0; j < nRondas; j++) if(!rondaValida(log.rondas[j])) return j;
+    return log ? nRondas : 0;
+  })();
+  const activa = rondaValida(r) || i <= primeraVacia;
+  if(!activa) return '<div class="celda"><span class="punto">·</span></div>';
+  const rec = '<span class="rec-dot' + (r && r.rec ? " si" : "") + '" id="rec_' + sid + "_" + k + "_" + i + '"></span>';
+  if(t){
+    return '<div class="celda">' + rec +
+      '<input class="seg" id="g_' + sid + "_" + k + "_" + i + '" inputmode="numeric" enterkeyhint="done" placeholder="·" value="' + (r && num(r.seg) ? num(r.seg) : "") + '" onchange="celdaCambio(\'' + sid + "','" + k + "'," + i + ')"><span class="u">s</span></div>';
+  }
+  return '<div class="celda">' + rec +
+    '<input class="reps" id="r_' + sid + "_" + k + "_" + i + '" inputmode="numeric" enterkeyhint="done" placeholder="·" value="' + (r && num(r.reps) ? num(r.reps) : "") + '" onchange="celdaCambio(\'' + sid + "','" + k + "'," + i + ')">' +
+    '<input class="kg" id="k_' + sid + "_" + k + "_" + i + '" inputmode="decimal" enterkeyhint="done" placeholder="kg" value="' + (r && num(r.kg) ? fmtNum(num(r.kg)) : "") + '" onchange="celdaCambio(\'' + sid + "','" + k + "'," + i + ')"></div>';
+}
+function metaHTML(sid, item, k){
+  const u = textoUltima(sid, item, k);
+  const log = logDe(sid, k);
+  const hayRec = log && log.rondas.some(r => r && r.rec);
+  return (u ? "<div>" + u + "</div>" : "") +
+    "<div><b>Objetivo:</b> " + textoObjetivo(sid, item, k).replace(/^Objetivo: /, "") + "</div>" +
+    '<span class="rec-linea' + (hayRec ? " si" : "") + '" id="recl_' + sid + "_" + k + '">● récord</span>';
+}
+function ejercicioHTML(sid, ses, tramo, pos, numero, nRondas){
+  const item = ejerciciosDeTramo(ses, tramo)[pos];
+  const k = ejActivo(ses, tramo, pos);
+  const base = ejBase(ses, tramo, pos);
+  const e = LIB[k];
+  const rango = item.max ? "máximas" :
+    item.t ? item.t[0] + " a " + item.t[1] + " s" :
+    item.r[0] + (item.r[1] > item.r[0] ? " a " + item.r[1] : "") + " reps" + (item.lado ? " " + item.lado : "");
+  let celdas = "";
+  for(let i = 0; i < nRondas; i++) celdas += celdaHTML(sid, k, i, nRondas);
+  const idCeldas = "celdas_" + sid + "_" + k;
+  const puedeCambiar = !!LIB[base].sinPeso;
+  const btn = puedeCambiar
+    ? '<button class="btn-swap' + (esManual(ses, tramo, pos) ? " manual" : "") +
+      '" onclick="alternarCasilla(\'' + sid + "'," + tramo + "," + pos + ')" aria-label="cambiar ejercicio">⇄</button>'
+    : "";
+  return '<div class="ej">' +
+    '<div class="ej-fila"><div class="ej-nombre"><b>' + numero + " · " + e.n + "</b>" +
+    '<span class="rango">' + rango + "</span></div>" +
+    '<div class="celdas" id="' + idCeldas + '">' + celdas + "</div></div>" +
+    '<div class="ej-pie">' + comoSeHace(k) + btn + "</div>" +
+    '<div class="meta-ej" id="meta_' + sid + "_" + k + '">' + metaHTML(sid, item, k) + "</div></div>";
+}
+function interruptorHTML(ses){
+  const c = casillasHoy();
+  const on = !!c.sw[ses.id];
+  const cambiadas = nCambiadas(ses);
+  return '<div class="fila-sw">' +
+    '<button class="sw' + (on ? " on" : "") + '" onclick="alternarSesion(\'' + ses.id + '\')" role="switch" aria-checked="' + on + '">' +
+      '<span class="sw-riel"><span class="sw-bolita"></span></span>Sin mancuernas</button>' +
+    (cambiadas ? '<button class="link-reset" onclick="volverAOriginal(\'' + ses.id + '\')">Volver a la sesión original</button>' : "") +
+    "</div>";
+}
+function bloqueHTML(sid, ses, tramo){
+  const nR = rondasDe(tramo, ses);
+  const ejs = ejerciciosDeTramo(ses, tramo);
+  const cab = tramo === 3
+    ? "Cierre · 4 min" + (ses.cierre.opcional ? "" : "")
+    : "Bloque " + tramo + " · 10 min · par alternado";
+  const chips =
+    (tramo === 3 && ses.cierre.opcional ? ' <span class="chip">opcional si el reloj aprieta</span>' : "") +
+    (tramo === 3 && ses.cierre.ss ? ' <span class="chip acc">superserie</span>' : "") +
+    (tramo === 3 && faseActual() === 3 ? ' <span class="chip acc">rest-pause</span>' : "");
+  let cabR = '<div class="cab-rondas">';
+  for(let i = 0; i < nR; i++) cabR += '<span class="etq">R' + (i + 1) + "</span>";
+  cabR += "</div>";
+  let idx = tramo === 1 ? 1 : tramo === 2 ? 3 : 5;
+  return '<div class="tarjeta">' +
+    '<div class="tarjeta-cab"><span class="etq">' + cab + "</span><span>" + chips + "</span></div>" + cabR +
+    ejs.map((item, i) => ejercicioHTML(sid, ses, tramo, i, idx + i, nR)).join("") +
+    (tramo === 3 && faseActual() === 3 ? '<div class="aviso-suave" style="margin-top:6px">Rest-pause: llega al fallo, pausa 15 segundos y sigue hasta completar la cifra. Todo cuenta como una serie.</div>' : "") +
+    "</div>";
+}
+
+function pintarHoy(){
+  const f = faseActual();
+  if(!sesionSel) sesionSel = sesionSugerida();
+  const ses = sesionDe(sesionSel);
+  const hecha = sesionHecha(semana, sesionSel);
+  const racha = calcRacha();
+  const ultima = todasLasSesiones().filter(s => s.hecha).pop();
+  const ausente = ultima && (Date.now() - ultima.fecha.getTime()) / 86400000 > 10;
+
+  let h = '<div class="fila-marca"><span class="marca">FIERRO</span>' + minimapaHTML() + "</div>";
+  h += '<div class="fila-semana">' +
+    '<button class="btn-flecha" onclick="cambiarSemana(-1)" aria-label="semana anterior">◀</button>' +
+    '<div class="sem-centro"><div class="sem-titulo">Semana ' + semana + ' de 12</div>' +
+    '<div class="etq">Fase ' + f + " · rondas " + FASES[f].rondas + " · RIR " + FASES[f].rir + "</div></div>" +
+    '<button class="btn-flecha" onclick="cambiarSemana(1)" aria-label="semana siguiente">▶</button></div>';
+
+  h += '<div class="pills">' + SESIONES.map(s =>
+    '<button class="pill' + (s.id === sesionSel ? " sel" : "") + (sesionHecha(semana, s.id) ? " ok" : "") +
+    '" onclick="elegirSesion(\'' + s.id + '\')"><b>' + s.id + "</b><small>" + s.n + "</small></button>").join("") + "</div>";
+  h += interruptorHTML(ses);
+
+  if(ausente && !sa()){
+    h += '<div class="tarjeta"><span class="etq">De vuelta</span><p style="font-size:13.5px;margin-top:4px">El bloque quedó esperando en la semana ' +
+      (Math.floor(ordenSesion(ultima.w, ultima.sid) / 4) + 1) + ". Retoma donde ibas, sin drama. La racha se recupera terminando la próxima sesión.</p></div>";
+  }
+  if(racha.pausa){
+    h += '<div class="tarjeta"><span class="etq">Racha en pausa</span><p style="font-size:13.5px;margin-top:4px">Quedó una sesión pendiente más atrás. La racha se recupera si terminas la siguiente sesión dentro de 10 días.</p></div>';
+  }
+  h += criteriosHTML();
+
+  /* botón de sesión */
+  const s = sa();
+  if(hecha){
+    h += '<div class="tarjeta" style="border-color:var(--acento)"><span class="etq" style="color:var(--acento)">Sesión terminada</span>' +
+      '<div style="font-size:13.5px;margin-top:4px">' + (hecha.seriesTotales || 0) + " series · " +
+      (hecha.duracionReal ? hecha.duracionReal + " min · " : "") + fmtFecha(hecha.fecha) + "</div></div>";
+  } else if(!s || s.sesionId !== sesionSel || s.semana !== semana){
+    h += '<button class="btn-grande btn-acento" style="margin-bottom:12px" onclick="empezarSesion()">Empezar sesión · 30 min</button>';
+  }
+
+  h += '<div class="tarjeta"><div class="tarjeta-cab"><span class="etq">Preparación · 3 min</span></div>' +
+    '<div class="aviso-suave">Movilidad de hombros y cadera, más una o dos series de aproximación livianas del primer par. El cronómetro avanza solo al bloque 1.</div></div>';
+
+  h += bloqueHTML(sesionSel, ses, 1);
+  h += bloqueHTML(sesionSel, ses, 2);
+  h += bloqueHTML(sesionSel, ses, 3);
+
+  h += '<button class="btn-grande btn-acento" id="btnTerminar" onclick="terminarSesion()"' +
+    (hecha ? " disabled" : "") + ">" + (hecha ? "Sesión terminada ✓" : "Terminar sesión") + "</button>";
+
+  $("#app").innerHTML = h;
+  actualizarBotonTerminar(sesionSel);
+  tick();
+}
+
+/* criterios de cambio de fase */
+function criteriosHTML(){
+  const f = faseActual();
+  if(f >= 3) return "";
+  const decisiones = lget("criterios", {});
+  const semanaLlena = SESIONES.every(s => sesionHecha(semana, s.id));
+  const finDeFase = semanaLlena || semana === 12;
+  if(!finDeFase || decisiones["s" + semana]) return "";
+  /* se muestra al cerrar una semana completa, típicamente la última de la fase */
+  return '<div class="tarjeta"><span class="etq">Semana completa · cambio de fase</span>' +
+    '<p style="font-size:13.5px;margin:6px 0 10px">Para pasar a la fase ' + (f + 1) + ' confirma los tres criterios: agujetas resueltas en menos de 48 horas, sin molestia articular ni tendinosa, y techo del rango alcanzado en la mayoría de los ejercicios. Si alguno falla, repite la fase: la racha no se toca.</p>' +
+    '<button class="btn-grande btn-acento" style="min-height:48px;margin-bottom:8px" onclick="decidirFase(true)">Cumplo los tres · fase ' + (f + 1) + "</button>" +
+    '<button class="btn-grande btn-borde" style="min-height:48px" onclick="decidirFase(false)">Todavía no · repito fase ' + f + "</button></div>";
+}
+function decidirFase(avanza){
+  const dec = lget("criterios", {});
+  dec["s" + semana] = avanza ? "avanza" : "repite";
+  lset("criterios", dec);
+  if(avanza) lset("fase", Math.min(3, faseActual() + 1));
+  aviso(avanza ? "Fase " + faseActual() + " activada." : "Fase " + faseActual() + " se repite. Bien pensado.");
+  pintarHoy();
+}
+
+/* ---------- progreso ---------- */
+let curvaSel = null;
+function pintarProgreso(){
+  const todas = todasLasSesiones().filter(s => s.hecha);
+  const nSes = todas.length;
+  let h = '<div class="fila-marca"><span class="marca">FIERRO</span></div>';
+  if(!nSes){
+    h += '<div class="tarjeta"><p style="font-size:14px">Acá va a aparecer tu bloque. Termina la primera sesión para pintar la primera celda.</p></div>';
+    h += '<div class="tarjeta">' + mapaHTML() + "</div>";
+    $("#app").innerHTML = h; return;
+  }
+  const series = todas.reduce((a, s) => a + (sesionHecha(s.w, s.sid).seriesTotales || 0), 0);
+  const ton = todas.reduce((a, s) => a + (sesionHecha(s.w, s.sid).tonelaje || 0), 0);
+  const racha = calcRacha();
+  h += '<div class="tarjeta"><div class="tarjeta-cab"><span class="etq">Mapa del bloque</span><span class="etq">' + nSes + " de 48</span></div>" + mapaHTML() + "</div>";
+  h += '<div class="kpis">' +
+    '<div class="kpi"><div class="etq">Sesiones</div><div class="num">' + nSes + "</div></div>" +
+    '<div class="kpi"><div class="etq">Series completadas</div><div class="num">' + series + "</div></div>" +
+    '<div class="kpi"><div class="etq">Tonelaje total</div><div class="num">' + fmtNum(Math.round(ton)) + "<small> kg</small></div></div>" +
+    '<div class="kpi"><div class="etq">Racha' + (racha.pausa ? " · en pausa" : "") + '</div><div class="num">' + racha.n + "</div></div></div>";
+
+  /* curva por ejercicio */
+  /* los del programa siempre, más cualquiera con registro: si entrenó en
+     calistenia, esos ejercicios también tienen curva propia */
+  const claves = [];
+  SESIONES.forEach(s => [].concat(s.b1, s.b2, s.cierre.ej).forEach(it => { if(!claves.includes(it.k)) claves.push(it.k); }));
+  Object.keys(LIB).forEach(k => {
+    if(claves.includes(k)) return;
+    const hay = SESIONES.some(s => { for(let w = 1; w <= 12; w++) if(logDe(s.id, k, w)) return true; return false; });
+    if(hay) claves.push(k);
+  });
+  if(!curvaSel || !claves.includes(curvaSel)) curvaSel = claves[0];
+  h += '<div class="tarjeta"><div class="tarjeta-cab"><span class="etq">Curva por ejercicio</span></div>' +
+    '<select onchange="verCurva(this.value)">' +
+    claves.map(k => '<option value="' + k + '"' + (k === curvaSel ? " selected" : "") + ">" + LIB[k].n + "</option>").join("") +
+    "</select><div id='curvaCont'>" + curvaHTML(curvaSel) + "</div></div>";
+
+  /* barras últimas 8 semanas */
+  const wIni = Math.max(1, semana - 7);
+  h += '<div class="tarjeta"><span class="etq">Sesiones por semana</span><div class="barras8">';
+  for(let w = wIni; w <= Math.min(12, wIni + 7); w++){
+    const n = SESIONES.filter(s => sesionHecha(w, s.id)).length;
+    h += '<div class="col"><div class="palo' + (n ? "" : " cero") + '" style="height:' + (n ? n * 25 : 3) + '%"></div><small>S' + w + "</small></div>";
+  }
+  h += "</div></div>";
+
+  /* logros */
+  const logros = lget("logros", {});
+  h += '<div class="tarjeta"><span class="etq">Logros</span><div class="logros" style="margin-top:8px">' +
+    LOGROS.map(l => '<div class="logro ' + (logros[l.id] ? "si" : "no") + '"><b>' + l.n + "</b><small>" +
+      (logros[l.id] ? "Desbloqueado el " + fmtFecha(logros[l.id]) : l.c) + "</small></div>").join("") + "</div></div>";
+
+  /* récords */
+  const recs = Object.keys(LIB).filter(k => lget("pr_" + k, null));
+  if(recs.length){
+    h += '<div class="tarjeta"><span class="etq">Récords por ejercicio</span><div class="lista-rec" style="margin-top:6px">' +
+      recs.map(k => {
+        const p = lget("pr_" + k, {});
+        const v = esTiempo(k) ? (p.seg || 0) + " s" :
+          p.volumen ? fmtNum(p.kg) + " kg × " + p.reps : (p.reps || 0) + " reps";
+        return "<div><span>" + LIB[k].n + "</span><b>" + v + " <span style='color:var(--suave);font-weight:600'>· sem " + (p.semana || "?") + "</span></b></div>";
+      }).join("") + "</div></div>";
+  }
+  $("#app").innerHTML = h;
+}
+function verCurva(k){ curvaSel = k; const c = $("#curvaCont"); if(c) c.innerHTML = curvaHTML(k); }
+/* La cadena completa a la que pertenece un ejercicio, de la versión más fácil a
+   la más difícil: la escalera de flexiones entera, o el par con su variante de
+   fase 3. Se recorre hacia atrás y hacia adelante para que la línea de progreso
+   no se corte, se entre por donde se entre. */
+function cadenaDe(k){
+  let raiz = k;
+  for(let i = 0; i < 8 && LIB[raiz].progresaDe; i++) raiz = LIB[raiz].progresaDe;
+  const cadena = [raiz];
+  for(let i = 0; i < 8; i++){
+    const sig = Object.keys(LIB).find(x => LIB[x].progresaDe === cadena[cadena.length - 1]);
+    if(!sig) break;
+    cadena.push(sig);
+  }
+  return cadena;
+}
+function curvaHTML(kBase){
+  /* mejor ronda (reps o segundos) por semana, encadenando las progresiones */
+  const cadena = cadenaDe(kBase);
+  const puntos = [];
+  for(let w = 1; w <= 12; w++){
+    let mejor = 0, esl = 0;
+    SESIONES.forEach(ses => {
+      cadena.forEach((kk, iCad) => {
+        const log = logDe(ses.id, kk, w);
+        if(log) log.rondas.forEach(r => {
+          const v = esTiempo(kk) ? num(r.seg) : num(r.reps);
+          if(v > mejor){ mejor = v; esl = iCad; }
+        });
+      });
+    });
+    if(mejor > 0) puntos.push({w, v:mejor, esl});
+  }
+  /* la línea vertical marca la semana en que subió de eslabón, no la posición
+     dentro de la cadena: entrar directo por el peldaño 3 no es un cambio */
+  let semCambio = null;
+  for(let i = 1; i < puntos.length; i++)
+    if(puntos[i].esl > puntos[i - 1].esl && semCambio == null) semCambio = puntos[i].w;
+  if(!puntos.length) return '<div class="curva-nota">Sin registros todavía. La curva parte con la primera sesión que anotes.</div>';
+  const maxV = Math.max(...puntos.map(p => p.v)) + 2;
+  const X = w => 16 + (w - 1) * (308 / 11);
+  const Y = v => 92 - (v / maxV) * 78;
+  let svg = '<svg class="curva-svg" viewBox="0 0 340 112">';
+  svg += '<line x1="14" y1="92" x2="326" y2="92" stroke="var(--linea)" stroke-width="1"/>';
+  for(let w = 1; w <= 12; w++) svg += '<text x="' + X(w) + '" y="104" text-anchor="middle" font-size="8" fill="var(--suave)">' + w + "</text>";
+  if(semCambio != null) svg += '<line x1="' + X(semCambio) + '" y1="8" x2="' + X(semCambio) + '" y2="92" stroke="var(--marca)" stroke-width="1" stroke-dasharray="3 3"/>';
+  if(puntos.length > 1)
+    svg += '<polyline fill="none" stroke="var(--acento)" stroke-width="2" points="' +
+      puntos.map(p => X(p.w) + "," + Y(p.v)).join(" ") + '"/>';
+  puntos.forEach(p => {
+    svg += '<circle cx="' + X(p.w) + '" cy="' + Y(p.v) + '" r="3.5" fill="var(--acento)"/>';
+    svg += '<text x="' + X(p.w) + '" y="' + (Y(p.v) - 7) + '" text-anchor="middle" font-size="9" font-weight="700" fill="var(--tinta)">' + p.v + "</text>";
+  });
+  svg += "</svg>";
+  const uni = esTiempo(kBase) ? "segundos" : "repeticiones";
+  const ultimoEsl = puntos[puntos.length - 1].esl;
+  const sigue = cadena[ultimoEsl + 1] ? LIB[cadena[ultimoEsl + 1]].n.toLowerCase() : null;
+  return svg + '<div class="curva-nota">Mejor ronda de cada semana, en ' + uni + "." +
+    (semCambio != null ? " La línea ámbar marca la semana en que pasaste a la versión más difícil." : "") +
+    (sigue ? " Cuando pases a " + sigue + ", la curva sigue acá misma." : "") + "</div>";
+}
+
+/* ---------- ejercicios ---------- */
+let filtroEj = "";
+function pintarEjercicios(){
+  let h = '<div class="fila-marca"><span class="marca">FIERRO</span></div>' +
+    '<input class="buscador" placeholder="Buscar por nombre o músculo" value="' + filtroEj + '" oninput="buscarEj(this.value)">' +
+    '<div id="listaEj">' + listaEjHTML() + "</div>";
+  $("#app").innerHTML = h;
+}
+function normalizar(s){ return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+function buscarEj(v){ filtroEj = v; $("#listaEj").innerHTML = listaEjHTML(); }
+/* uno busca "espalda" y las fichas dicen "dorsal": sin esto el buscador queda
+   pidiendo el nombre técnico del músculo */
+const SINONIMOS = {
+  espalda:["dorsal","romboides","trapecio"], pecho:["pectoral"], pectorales:["pectoral"],
+  pierna:["cuadriceps","isquiotibiales","gluteos"], piernas:["cuadriceps","isquiotibiales","gluteos"],
+  cuadriceps:["cuadriceps"], isquios:["isquiotibiales"], femoral:["isquiotibiales"],
+  brazo:["biceps","triceps"], brazos:["biceps","triceps"],
+  hombro:["hombro","deltoides"], hombros:["hombro","deltoides"],
+  gemelos:["gemelo"], pantorrilla:["gemelo"], poto:["gluteos"], abdomen:["core"], guata:["core"]
+};
+function listaEjHTML(){
+  const q = normalizar(filtroEj.trim());
+  const alternativas = q ? [q].concat(SINONIMOS[q] || []) : [];
+  const claves = Object.keys(LIB).filter(k => {
+    if(!q) return true;
+    const e = LIB[k];
+    const texto = normalizar(e.n) + " " + normalizar(e.m);
+    return alternativas.some(a => texto.includes(a));
+  });
+  if(!claves.length) return '<div class="tarjeta aviso-suave">Nada con ese nombre. Prueba por músculo: espalda, glúteo, tríceps...</div>';
+  return claves.map(k => {
+    const e = LIB[k];
+    return '<div class="tarjeta"><b style="font-size:15px">' + e.n + "</b>" +
+      '<div class="aviso-suave" style="margin:2px 0 4px">' + e.m + "</div>" +
+      '<span class="chip">' + (PATRONES[e.patron] || e.patron) + '</span> <span class="chip">' + (TIPOS[e.tipo] || e.tipo) + "</span>" +
+      comoSeHace(k) + "</div>";
+  }).join("");
+}
+
+/* ---------- guía ---------- */
+function pintarGuia(){
+  const h = '<div class="fila-marca"><span class="marca">FIERRO</span></div><div class="guia">' +
+  '<div class="tarjeta">' +
+  "<h3 style='margin-top:0'>Qué es el RIR</h3>" +
+  "<p>RIR son las repeticiones que te quedaban en el estanque al terminar la serie. Se estima, no se mide: la referencia es si podrías haber hecho más con buena técnica.</p>" +
+  "<table><tr><th>RIR</th><th>Qué significa</th></tr>" +
+  "<tr><td class='num'>3</td><td>Podía hacer 3 más</td></tr>" +
+  "<tr><td class='num'>2</td><td>Podía hacer 2 más</td></tr>" +
+  "<tr><td class='num'>1</td><td>Quedaba una, apenas</td></tr>" +
+  "<tr><td class='num'>0</td><td>No salía otra con buena técnica</td></tr></table>" +
+  "<h3>El rango de movimiento</h3>" +
+  "<p>Rango completo es recorrer el movimiento entero, y acá se busca en particular la posición estirada (el pecho abajo en el press, el brazo colgando en el curl). Con cargas livianas, el estiramiento bajo tensión es la parte que más estímulo entrega.</p>" +
+  "<h3>Por qué llegar cerca del fallo</h3>" +
+  "<p>Con poco peso, las series solo cuentan de verdad cuando se acercan al fallo: las últimas repeticiones son las que reclutan todo. Por eso en las fases 2 y 3 el RIR baja. En la fase 1 justamente no: los tendones y la técnica necesitan semanas de adaptación antes de exigirlos, y buscar el fallo ahí solo compra lesiones.</p>" +
+  "<h3>Cómo progresar sin agregar kilos</h3>" +
+  "<p>Siempre en este orden: primero subir repeticiones hasta el techo del rango, después sumar una ronda (pasa solo al cambiar de fase), después la variante más difícil (más rango, unilateral, pies más altos), y al final comprimir con rest-pause, solo en el cierre y solo en fase 3.</p>" +
+  "<h3>Los tres criterios para cambiar de fase</h3>" +
+  "<p>1) Agujetas resueltas en menos de 48 horas. 2) Sin molestia articular ni tendinosa. 3) Techo del rango alcanzado en la mayoría de los ejercicios. Los tres a la vez. Si alguno falla, se repite la fase y no pasa nada: la racha sigue.</p>" +
+  "<h3>Los bloques por tiempo</h3>" +
+  "<p>Cada bloque tiene un presupuesto de 10 minutos que ordena la sesión: orienta, no obliga. Si el tiempo se acaba a mitad de una ronda, la ronda se termina igual y listo. Nadie audita los 30 minutos.</p>" +
+  "<h3>Sin mancuernas</h3>" +
+  "<p>El interruptor de arriba cambia los cinco ejercicios del día por su versión con el peso del cuerpo, la barra y las bandas. Es el mismo programa: mismos bloques, mismas rondas, mismo cronómetro, y la sesión cuenta igual en el mapa y en la racha. El botón ⇄ de cada tarjeta cambia una sola casilla, para cuando el hombro no quiere press pero el resto sí.</p>" +
+  "<p>La progresión ahí va en este orden: primero repeticiones hasta el techo, después tempo (bajar en 3 o 4 segundos con 2 de pausa abajo), después palanca (unilateral, pies más altos, más déficit, manos más juntas), y al final una ronda más. La escalera de flexiones va de manos en la mesa a manos en la silla, al suelo, pies en la silla, en déficit y arqueras: cada peldaño continúa la curva del anterior.</p>" +
+  "<p style='border-top:1px solid var(--linea);padding-top:10px;margin-top:14px'>Si aparece dolor articular o tendinoso que no se va, esta app no reemplaza a un kinesiólogo.</p>" +
+  "</div>" +
+
+  '<div class="tarjeta"><h3 style="margin-top:0">Créditos de las imágenes</h3>' +
+  '<p>Las demostraciones vienen del catálogo abierto de <a href="https://wger.de" target="_blank" rel="noopener">wger</a>, con licencia Creative Commons BY-SA. Los ejercicios que el catálogo no tiene usan esquemas propios.</p>' +
+  '<details class="como"><summary>Ver la lista completa</summary><ul class="creditos-lista" style="margin-top:8px;padding-left:18px">' +
+  CREDITOS.map(c => "<li>" + c[0] + ": «" + c[1] + "», " + c[2] + ", " + c[3] + "</li>").join("") +
+  "<li>Esquema propio: " + Object.keys(ESQ).map(k => LIB[k].n.toLowerCase()).join(", ") + "</li>" +
+  "</ul></details></div>" +
+
+  '<div class="tarjeta"><h3 style="margin-top:0">Tu registro</h3>' +
+  '<p>Todo vive en este teléfono, en el navegador. Exporta de vez en cuando por si acaso.</p>' +
+  '<button class="btn-grande btn-borde" style="margin-bottom:8px" onclick="exportar()">Exportar mi registro</button>' +
+  '<button class="btn-grande btn-borde" style="color:#B3261E" onclick="borrarTodo()">Borrar todo</button></div>' +
+  "</div>";
+  $("#app").innerHTML = h;
+}
+
+/* exportar y borrar */
+function exportar(){
+  let txt = "FIERRO · registro de entrenamiento\nExportado el " + fmtFecha(hoyISO()) + "\n";
+  for(let w = 1; w <= 12; w++){
+    let bloque = "";
+    SESIONES.forEach(ses => {
+      const dato = sesionHecha(w, ses.id);
+      let lineas = "";
+      /* por casilla se exporta lo que haya de cualquiera de sus versiones:
+         la del programa, la variante de fase 3 y la de calistenia */
+      [].concat(ses.b1, ses.b2, ses.cierre.ej).forEach(item => {
+        const vars = [item.k, VARIANTES[item.k], SIN_PESO[item.k],
+                      VARIANTES[item.k] ? SIN_PESO[VARIANTES[item.k]] : null];
+        [...new Set(vars.filter(Boolean))].forEach(kk => {
+          const log = logDe(ses.id, kk, w);
+          if(!log) return;
+          const vals = log.rondas.filter(rondaValida).map(r =>
+            esTiempo(kk) ? num(r.seg) + " s" : (num(r.kg) ? fmtNum(num(r.kg)) + " kg x " : "") + num(r.reps) + (r.rec ? "*" : "")).join(", ");
+          if(vals) lineas += "    " + LIB[kk].n + ": " + vals + "\n";
+        });
+      });
+      if(dato || lineas){
+        bloque += "  Sesión " + ses.id + " (" + ses.n + ")" +
+          (dato ? " · terminada el " + fmtFecha(dato.fecha) +
+            (dato.duracionReal ? " · " + dato.duracionReal + " min" : "") +
+            " · " + (dato.seriesTotales || 0) + " series · " + fmtNum(Math.round(dato.tonelaje || 0)) + " kg" +
+            (dato.modo && dato.modo !== "normal" ? " · sin mancuernas" : "")
+          : " · sin terminar") + "\n" + lineas;
+      }
+    });
+    if(bloque) txt += "\nSEMANA " + w + "\n" + bloque;
+  }
+  const recs = Object.keys(LIB).filter(k => lget("pr_" + k, null));
+  if(recs.length){
+    txt += "\nRÉCORDS (* = serie récord)\n";
+    recs.forEach(k => {
+      const p = lget("pr_" + k, {});
+      txt += "  " + LIB[k].n + ": " + (esTiempo(k) ? (p.seg || 0) + " s" : p.volumen ? fmtNum(p.kg) + " kg x " + p.reps : (p.reps || 0) + " reps") + " (semana " + (p.semana || "?") + ")\n";
+    });
+  }
+  const logros = lget("logros", {});
+  const conL = LOGROS.filter(l => logros[l.id]);
+  if(conL.length){
+    txt += "\nLOGROS\n" + conL.map(l => "  " + l.n + " (" + fmtFecha(logros[l.id]) + ")").join("\n") + "\n";
+  }
+  if(navigator.share){ navigator.share({text:txt}).catch(() => copiar(txt)); }
+  else copiar(txt);
+}
+function copiar(txt){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(() => aviso("Registro copiado al portapapeles."), () => aviso("No se pudo copiar."));
+  } else aviso("Este navegador no deja copiar directo.");
+}
+function borrarTodo(){
+  abrirModal("Borrar todo", "Se borra el registro completo: sesiones, récords y logros. No hay vuelta.",
+    [["Cancelar", cerrarModal],
+     ["Sí, borrar todo", () => {
+        cerrarModal();
+        abrirModal("¿Seguro?", "Última confirmación. Después de esto no queda nada.",
+          [["Cancelar", cerrarModal],
+           ["Borrar definitivamente", () => {
+              const claves = [];
+              for(let i = 0; i < localStorage.length; i++){
+                const k = localStorage.key(i);
+                if(k && k.startsWith("fz_")) claves.push(k);
+              }
+              claves.forEach(k => localStorage.removeItem(k));
+              cerrarModal(); semana = 1; sesionSel = null; curvaSel = null;
+              document.body.classList.remove("con-sesion");
+              aviso("Borrado. Empezamos de cero.");
+              pintar();
+           }]]);
+     }]]);
+}
+
+/* ============ arranque ============ */
+function init(){
+  const est = document.createElement("style");
+  est.textContent = cssEsquemas();
+  document.head.appendChild(est);
+  if(lget("fase", null) == null) lset("fase", 1);
+  document.body.classList.toggle("con-sesion", !!sa());
+  pintar();
+  revisarSesionColgada();
+  if(tickInt) clearInterval(tickInt);
+  tickInt = setInterval(tick, 500);
+  if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+}
+init();
+</script>
+</body>
+</html>

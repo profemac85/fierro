@@ -1,0 +1,6 @@
+# caché del catálogo de wger que baja scripts/bajar-imagenes.py (3300 nombres,
+# se vuelve a bajar solo si hace falta)
+scripts/_catalogo_wger.json
+
+# artefacto de python al importar el script en pruebas
+scripts/__pycache__/

@@ -1,0 +1,235 @@
+{
+  "encontrados": {
+    "press_banca": {
+      "archivo": "press_banca.jpg",
+      "wger": "Benchpress Dumbbells",
+      "autor": "Everkinetic",
+      "licencia": "CC-BY-SA 3",
+      "url": "https://wger.de/media/exercise-images/97/Dumbbell-bench-press-1.png"
+    },
+    "remo_inclinado": {
+      "archivo": "remo_inclinado.jpg",
+      "wger": "Bent Over Rowing",
+      "autor": "Everkinetic",
+      "licencia": "CC-BY-SA 3",
+      "url": "https://wger.de/media/exercise-images/109/Barbell-rear-delt-row-1.png"
+    },
+    "press_hombro": {
+      "archivo": "press_hombro.jpg",
+      "wger": "Shoulder Press, Dumbbells",
+      "autor": "Everkinetic",
+      "licencia": "CC-BY-SA 3",
+      "url": "https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png"
+    },
+    "dominada": {
+      "archivo": "dominada.jpg",
+      "wger": "Pull ups",
+      "autor": "Imobard",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/475/b0554016-16fd-4dbe-be47-a2a17d16ae0e.jpg"
+    },
+    "laterales": {
+      "archivo": "laterales.jpg",
+      "wger": "Lateral Raises",
+      "autor": "Everkinetic",
+      "licencia": "CC-BY-SA 3",
+      "url": "https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png"
+    },
+    "bulgara": {
+      "archivo": "bulgara.jpg",
+      "wger": "Bulgarian Squat with Dumbbells",
+      "autor": "AlucardEvil40",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1706/0c5243cc-2539-4005-aee0-d3a8c5d3a32c.jfif"
+    },
+    "gemelo": {
+      "archivo": "gemelo.jpg",
+      "wger": "Standing Calf Raises",
+      "autor": "clafal",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/622/9a429bd0-afd3-4ad0-8043-e9beec901c81.jpeg"
+    },
+    "goblet": {
+      "archivo": "goblet.jpg",
+      "wger": "Dumbbell Goblet Squat",
+      "autor": "philip",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/203/1c052351-2af0-4227-aeb0-244008e4b0a8.jpeg"
+    },
+    "plancha": {
+      "archivo": "plancha.png",
+      "wger": "Plank",
+      "autor": "utkb",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/458/b7bd9c28-9f1d-4647-bd17-ab6a3adf5770.png"
+    },
+    "zancada": {
+      "archivo": "zancada.jpg",
+      "wger": "Reverse lunges",
+      "autor": "philip",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif"
+    },
+    "flex_pies": {
+      "archivo": "flex_pies.png",
+      "wger": "Push-Ups | Decline",
+      "autor": "anon1337",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1112/81f40bee-4adf-4317-8476-1a87706e3031.png"
+    },
+    "remo_una_mano": {
+      "archivo": "remo_una_mano.png",
+      "wger": "Bent Over Dumbbell Rows",
+      "autor": "Franpol",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/81/a751a438-ae2d-4751-8d61-cef0e9292174.png"
+    },
+    "press_inclinado": {
+      "archivo": "press_inclinado.png",
+      "wger": "Incline Bench Press - Dumbbell",
+      "autor": "Everkinetic",
+      "licencia": "CC-BY-SA 3",
+      "url": "https://wger.de/media/exercise-images/16/Incline-press-1.png"
+    },
+    "face_pull": {
+      "archivo": "face_pull.jpg",
+      "wger": "Face pulls with yellow/green band",
+      "autor": "54str",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1732/d13b9adb-968e-4f73-95e6-b16690bcf616.jpg"
+    },
+    "curl_inclinado": {
+      "archivo": "curl_inclinado.jpg",
+      "wger": "Seated W Curl",
+      "autor": "autor no informado",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1448/2184e68c-32b5-413f-a7c1-4a2d1bb98c35.png"
+    },
+    "triceps": {
+      "archivo": "triceps.jpg",
+      "wger": "Triceps Overhead (Dumbbell)",
+      "autor": "autor no informado",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1336/ebf88217-df26-4ef7-94cb-f0c2220c6abe.webp"
+    },
+    "rdl": {
+      "archivo": "rdl.jpg",
+      "wger": "Dumbbell Romanian Deadlift",
+      "autor": "AlucardEvil40",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1652/0306c8c0-70cc-45d4-92de-6fa72ceaa834.webp"
+    },
+    "hip_thrust": {
+      "archivo": "hip_thrust.jpg",
+      "wger": "Dumbbell Hip Thrust",
+      "autor": "AlucardEvil40",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1642/a81ad922-caf5-47f8-99b4-640cb0717436.webp"
+    },
+    "curl_femoral": {
+      "archivo": "curl_femoral.png",
+      "wger": "Leg Curl",
+      "autor": "Franpol",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/364/b318dde9-f5f2-489f-940a-cd864affb9e3.png"
+    },
+    "puente": {
+      "archivo": "puente.jpg",
+      "wger": "Glute Bridge",
+      "autor": "autor no informado",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/265/7528acb4-b2cc-4b75-b6ae-d514cbd4f78b.png"
+    },
+    "flex_suelo": {
+      "archivo": "flex_suelo.jpg",
+      "wger": "Push-Up",
+      "autor": "Settebello",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1551/a6a9e561-3965-45c6-9f2b-ee671e1a3a45.png"
+    },
+    "flex_pica": {
+      "archivo": "flex_pica.jpg",
+      "wger": "Pike Push Ups",
+      "autor": "autor no informado",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/454/447f3c17-405f-46e0-b138-65c2a8caaab0.png"
+    },
+    "remo_invertido": {
+      "archivo": "remo_invertido.jpg",
+      "wger": "Inverted Rows",
+      "autor": "Gavru",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1198/864906ac-4ac7-4e52-a886-c6bb97950a9f.jpg"
+    },
+    "remo_invertido_sup": {
+      "archivo": "remo_invertido_sup.jpg",
+      "wger": "Inverted Rows",
+      "autor": "Gavru",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1198/864906ac-4ac7-4e52-a886-c6bb97950a9f.jpg"
+    },
+    "laterales_banda": {
+      "archivo": "laterales_banda.jpg",
+      "wger": "Lateral Raises",
+      "autor": "Everkinetic",
+      "licencia": "CC-BY-SA 3",
+      "url": "https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png"
+    },
+    "fondos_silla": {
+      "archivo": "fondos_silla.png",
+      "wger": "Dips Between Two Benches",
+      "autor": "Everkinetic",
+      "licencia": "CC-BY-SA 3",
+      "url": "https://wger.de/media/exercise-images/83/Bench-dips-1.png"
+    },
+    "bulgara_tempo": {
+      "archivo": "bulgara_tempo.jpg",
+      "wger": "Bulgarian Squat with Dumbbells",
+      "autor": "AlucardEvil40",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1706/0c5243cc-2539-4005-aee0-d3a8c5d3a32c.jfif"
+    },
+    "gemelo_rango": {
+      "archivo": "gemelo_rango.jpg",
+      "wger": "Standing Calf Raises",
+      "autor": "clafal",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/622/9a429bd0-afd3-4ad0-8043-e9beec901c81.jpeg"
+    },
+    "sentadilla_asistida": {
+      "archivo": "sentadilla_asistida.jpg",
+      "wger": "Pistol Squat",
+      "autor": "wakanda90",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/456/3b681e59-377b-40db-9113-ca5873ce084b.jpg"
+    },
+    "zancada_sp": {
+      "archivo": "zancada_sp.jpg",
+      "wger": "Reverse lunges",
+      "autor": "philip",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/999/d0931eb3-8db0-4049-bb08-aa4036072056.jfif"
+    },
+    "rdl_uni": {
+      "archivo": "rdl_uni.jpg",
+      "wger": "Single-Leg Deadlift with Dumbbell",
+      "autor": "Tierrasverdes",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1736/aa724cc5-c485-4f3e-9d2a-0c6ae4baefbe.png"
+    },
+    "hip_thrust_uni": {
+      "archivo": "hip_thrust_uni.jpg",
+      "wger": "Dumbbell Hip Thrust",
+      "autor": "AlucardEvil40",
+      "licencia": "CC-BY-SA 4",
+      "url": "https://wger.de/media/exercise-images/1642/a81ad922-caf5-47f8-99b4-640cb0717436.webp"
+    }
+  },
+  "faltantes": [
+    "flex_deficit",
+    "goblet_talones",
+    "flex_arqueras",
+    "flex_diamante",
+    "curl_banda"
+  ]
+}

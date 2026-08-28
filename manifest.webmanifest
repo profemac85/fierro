@@ -1,0 +1,14 @@
+{
+  "name": "Fierro",
+  "short_name": "Fierro",
+  "description": "Programa de fuerza en casa, 12 semanas",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E6E7E2",
+  "theme_color": "#E6E7E2",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
