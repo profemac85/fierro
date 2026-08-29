@@ -38,7 +38,7 @@ correr(){   # $1 = harness, $2 = prueba
     cat "$T/out.txt"; echo "FALLO en $2"; exit 1
   fi
 }
-for prueba in 01-biblioteca 02-logica 04-calistenia; do correr harness "$prueba"; done
+for prueba in 01-biblioteca 02-logica 04-calistenia 06-fases; do correr harness "$prueba"; done
 correr harness-reloj 03-cronometro
 correr harness-reloj 05-playback
 

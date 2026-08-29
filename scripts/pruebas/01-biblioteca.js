@@ -35,7 +35,7 @@ Object.keys(ESQ).forEach(k=>{
   ok(svg.includes("inicio")&&svg.includes("fin"), k+": la version sin movimiento rotula las dos poses");
 });
 
-lset("fase",2);
+ponerFase(2);
 const cuenta={};
 SESIONES.forEach(s=>celdasSesion(s).forEach(c=>{cuenta[c.k]=(cuenta[c.k]||0)+1}));
 ok(cuenta.gemelo===6,"gemelo 6 series/semana, hay "+cuenta.gemelo);
@@ -50,7 +50,7 @@ ok(isquio===11,"isquio y gluteo 11 series, hay "+isquio);
 ok(cuadri===8,"cuadriceps 8 series, hay "+cuadri);
 console.log("volumen fase 2:", JSON.stringify(cuenta));
 console.log("celdas/sesion fase 2:", SESIONES.map(s=>s.id+"="+celdasSesion(s).length).join(" "));
-lset("fase",1);
+ponerFase(1);
 console.log("celdas/sesion fase 1:", SESIONES.map(s=>s.id+"="+celdasSesion(s).length).join(" "));
 console.log(f? "*** "+f+" FALLAS ***":"biblioteca y volumen: todo verde");
 process.exit(f?1:0);

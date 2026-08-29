@@ -897,7 +897,35 @@ function textoAproximacion(ses){
       "No se anota y no cuenta como serie."};
 }
 function sesionDe(id){ return SESIONES.find(s => s.id === id); }
-function faseActual(){ return lget("fase", 1); }
+/* La fase sale de la semana: 1 a 4 fase 1, 5 a 8 fase 2, 9 a 12 fase 3. Lo que
+   se guarda no es la fase sino los cortes, o sea en qué semana empieza cada una,
+   porque lo excepcional es repetir una fase, no avanzar. Guardar la fase a secas
+   la dejaba congelada en 1 mientras las semanas corrían. */
+const CORTES_POR_DEFECTO = {f2:5, f3:9};
+function cortesFase(){
+  const c = lget("cortes", null);
+  if(!c || !c.f2 || !c.f3) return Object.assign({}, CORTES_POR_DEFECTO);
+  return {f2:c.f2, f3:Math.max(c.f3, c.f2 + 1)};
+}
+function faseDe(w){
+  const c = cortesFase();
+  return w >= c.f3 ? 3 : w >= c.f2 ? 2 : 1;
+}
+function faseActual(){ return faseDe(semana); }
+/* repetir una fase corre el corte de las que vienen: si la fase 1 se estira una
+   semana, la 2 y la 3 empiezan una semana después */
+function repetirFase(){
+  const c = cortesFase();
+  const f = faseActual();
+  if(f === 1){ c.f2 += 1; c.f3 += 1; }
+  else if(f === 2){ c.f3 += 1; }
+  lset("cortes", c);
+}
+/* la última semana de una fase, que es cuando toca decidir si se pasa o se repite */
+function esUltimaDeFase(w){
+  const c = cortesFase();
+  return w === c.f2 - 1 || w === c.f3 - 1;
+}
 function ejEfectivo(k){ return (faseActual() === 3 && VARIANTES[k]) ? VARIANTES[k] : k; }
 function rondasDe(tramo, ses){ return tramo === 3 ? ses.cierre.rondas : FASES[faseActual()].rondas; }
 function ejerciciosDeTramo(ses, tramo){
@@ -2172,26 +2200,28 @@ function pintarHoy(){
   tick();
 }
 
-/* criterios de cambio de fase */
+/* criterios de cambio de fase. Aparece en la última semana de la fase, se haya
+   completado o no: si exigiera la semana entera, quien no la cierra nunca vería
+   la opción de repetir. */
 function criteriosHTML(){
   const f = faseActual();
-  if(f >= 3) return "";
+  if(f >= 3 || !esUltimaDeFase(semana)) return "";
   const decisiones = lget("criterios", {});
-  const semanaLlena = SESIONES.every(s => sesionHecha(semana, s.id));
-  const finDeFase = semanaLlena || semana === 12;
-  if(!finDeFase || decisiones["s" + semana]) return "";
-  /* se muestra al cerrar una semana completa, típicamente la última de la fase */
-  return '<div class="tarjeta"><span class="etq">Semana completa · cambio de fase</span>' +
-    '<p style="font-size:13.5px;margin:6px 0 10px">Para pasar a la fase ' + (f + 1) + ' confirma los tres criterios: agujetas resueltas en menos de 48 horas, sin molestia articular ni tendinosa, y techo del rango alcanzado en la mayoría de los ejercicios. Si alguno falla, repite la fase: la racha no se toca.</p>' +
-    '<button class="btn-grande btn-acento" style="min-height:48px;margin-bottom:8px" onclick="decidirFase(true)">Cumplo los tres · fase ' + (f + 1) + "</button>" +
-    '<button class="btn-grande btn-borde" style="min-height:48px" onclick="decidirFase(false)">Todavía no · repito fase ' + f + "</button></div>";
+  if(decisiones["s" + semana]) return "";
+  return '<div class="tarjeta"><span class="etq">Última semana de la fase ' + f + "</span>" +
+    '<p style="font-size:13.5px;margin:6px 0 10px">La próxima semana entra la fase ' + (f + 1) +
+    ' (' + FASES[f + 1].rondas + ' rondas, RIR ' + FASES[f + 1].rir + '). Para pasar tienen que darse los tres: agujetas resueltas en menos de 48 horas, sin molestia articular ni tendinosa, y llegando al techo del rango en la mayoría de los ejercicios. Si alguno falla, repites esta fase una semana más y la racha no se toca.</p>' +
+    '<button class="btn-grande btn-acento" style="min-height:48px;margin-bottom:8px" onclick="decidirFase(true)">Se dan los tres · paso a la fase ' + (f + 1) + "</button>" +
+    '<button class="btn-grande btn-borde" style="min-height:48px" onclick="decidirFase(false)">Todavía no · repito la fase ' + f + "</button></div>";
 }
 function decidirFase(avanza){
+  const f = faseActual();
   const dec = lget("criterios", {});
   dec["s" + semana] = avanza ? "avanza" : "repite";
   lset("criterios", dec);
-  if(avanza) lset("fase", Math.min(3, faseActual() + 1));
-  aviso(avanza ? "Fase " + faseActual() + " activada." : "Fase " + faseActual() + " se repite. Bien pensado.");
+  if(!avanza) repetirFase();
+  aviso(avanza ? "Listo: la próxima semana entra la fase " + (f + 1) + "."
+               : "La fase " + f + " se estira una semana más. Bien pensado.");
   pintarHoy();
 }
 
@@ -2483,7 +2513,9 @@ function init(){
   const est = document.createElement("style");
   est.textContent = cssEsquemas();
   document.head.appendChild(est);
-  if(lget("fase", null) == null) lset("fase", 1);
+  /* la fase ya no se guarda: se deriva de la semana (ver faseDe). Se limpia la
+     clave vieja para que nadie la lea creyendo que manda. */
+  ldel("fase");
   document.body.classList.toggle("con-sesion", !!sa());
   pintar();
   revisarSesionColgada();

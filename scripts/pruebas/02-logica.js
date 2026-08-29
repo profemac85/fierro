@@ -1,5 +1,5 @@
 let f=0; const ok=(c,m)=>{ if(!c){f++;console.log("FALLA:",m)} else console.log("ok:",m) };
-lset("fase",2);
+ponerFase(2);
 ok(chequearRecord("press_banca",{kg:10,reps:12})===false,"primera serie no es record");
 ok(chequearRecord("press_banca",{kg:10,reps:13})===true,"10x13 supera 10x12");
 ok(chequearRecord("dominada",{kg:0,reps:5})===false,"dominada linea base");
@@ -14,15 +14,15 @@ setRonda("A","press_hombro",0,{kg:8,reps:10}); setRonda("A","press_hombro",1,{kg
 setRonda("A","dominada",0,{kg:0,reps:4});
 cambiarSemana(1);
 ok(ultimaVez("B","goblet")?.w===1,"ultimaVez encuentra la semana 1");
-lset("fase",3);
+ponerFase(3);
 const u=ultimaVez("B","goblet_talones");
 ok(u&&u.k==="goblet","fase 3: la variante hereda el historial");
-lset("fase",2);
+ponerFase(2);
 ok(textoObjetivo("D",sesionDe("D").b1[0],"rdl").includes("20 reps"),"objetivo al techo");
 ok(textoObjetivo("B",sesionDe("B").b2[0],"goblet").includes("Techo alcanzado"),"techo alcanzado");
 ok(textoObjetivo("B",sesionDe("B").b2[1],"plancha").includes("35 s"),"tiempo: mejor mas 5");
 ok(textoObjetivo("A",sesionDe("A").b2[1],"dominada").includes("mejor ronda"),"dominadas con historial");
-lset("fase",1);
+ponerFase(1);
 terminarSesionDe(1,"A",true);
 const d=sesionHecha(1,"A");
 ok(d&&d.seriesTotales===7,"seriesTotales 7, fue "+d?.seriesTotales);

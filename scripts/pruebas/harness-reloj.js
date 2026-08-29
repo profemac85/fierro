@@ -11,3 +11,11 @@ const RealDate=Date;
 global.Date=class extends RealDate{ constructor(...a){ return a.length? new RealDate(...a) : new RealDate(ahora) } static now(){ return ahora } };
 global.avanzar=m=>{ ahora+=m*60000 };
 global.ahoraMs=()=>ahora;
+
+/* la fase ya no se guarda: se deriva de la semana. Para las pruebas se fuerza
+   moviendo los cortes, así cualquier semana cae en la fase pedida. */
+global.ponerFase = f => {
+  if(f===1) localStorage.setItem("fz_cortes", JSON.stringify({f2:99,f3:99}));
+  else if(f===2) localStorage.setItem("fz_cortes", JSON.stringify({f2:1,f3:99}));
+  else localStorage.setItem("fz_cortes", JSON.stringify({f2:1,f3:1}));
+};

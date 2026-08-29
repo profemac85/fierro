@@ -1,5 +1,5 @@
 let f=0; const ok=(c,m)=>{ if(!c){f++;console.log("FALLA:",m)} else console.log("ok:",m) };
-lset("fase",1); semana=1; lset("semana",1);
+ponerFase(1); semana=1; lset("semana",1);
 const A=sesionDe("A");
 
 // --- la secuencia de pasos ---

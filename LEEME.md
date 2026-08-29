@@ -72,8 +72,12 @@ Notas de diseño:
   el programa tiene remos y press vertical.
 - La ficha de dominadas incluye las negativas de 5 segundos como parte del
   mismo ejercicio (una negativa se anota como una repetición).
-- `fz_fase` se guarda aparte de la semana: la fase solo avanza cuando el
-  usuario confirma los tres criterios en la tarjeta de cambio de fase.
+- La fase **se deriva de la semana** (`faseDe`): 1 a 4 fase 1, 5 a 8 fase 2,
+  9 a 12 fase 3. Lo que se guarda en `fz_cortes` es en qué semana empieza cada
+  fase, porque lo excepcional es repetir, no avanzar. Guardar la fase a secas
+  (la clave `fz_fase`, ya en desuso) la dejaba congelada en 1 mientras las
+  semanas corrían. La tarjeta de los tres criterios sale en la última semana de
+  cada fase, y "repito" corre los cortes una semana.
 - Los esquemas SVG se declaran como geometría, no como SVG a mano: cada rig
   devuelve `{fijo, piezas, caja}` y el motor arma el dibujo, calcula el encuadre
   (`encuadre()`) y genera los `@keyframes` (`cssEsquemas()`). Agregar un esquema

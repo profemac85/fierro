@@ -4,3 +4,11 @@ const el=()=>({classList:{add(){},remove(){},toggle(){}},style:{},set innerHTML(
 global.document={querySelector:()=>el(),querySelectorAll:()=>[],addEventListener(){},body:{classList:{add(){},remove(){},toggle(){}}},createElement:()=>el(),head:{appendChild(){}}};
 global.window={scrollTo(){},AudioContext:null}; global.navigator={}; global.location={protocol:"file:"};
 global.setInterval=()=>0; global.clearInterval=()=>{};
+
+/* la fase ya no se guarda: se deriva de la semana. Para las pruebas se fuerza
+   moviendo los cortes, así cualquier semana cae en la fase pedida. */
+global.ponerFase = f => {
+  if(f===1) localStorage.setItem("fz_cortes", JSON.stringify({f2:99,f3:99}));
+  else if(f===2) localStorage.setItem("fz_cortes", JSON.stringify({f2:1,f3:99}));
+  else localStorage.setItem("fz_cortes", JSON.stringify({f2:1,f3:1}));
+};

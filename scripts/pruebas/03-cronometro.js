@@ -1,5 +1,5 @@
 let f=0; const ok=(c,m)=>{ if(!c){f++;console.log("FALLA:",m)} else console.log("ok:",m) };
-lset("fase",2); semana=1; sesionSel="A";
+ponerFase(2); semana=1; sesionSel="A";
 empezarSesion();
 let s=sa();
 ok(s&&s.tramo===0,"arranca en preparacion");
