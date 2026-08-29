@@ -1,8 +1,8 @@
 const store={};
 global.localStorage={getItem:k=>k in store?store[k]:null,setItem:(k,v)=>{store[k]=String(v)},removeItem:k=>{delete store[k]},key:i=>Object.keys(store)[i],get length(){return Object.keys(store).length}};
-const capt={};
-const el=(id)=>({classList:{add(){},remove(){},toggle(){}},style:{},set innerHTML(v){capt[id]=v},get innerHTML(){return capt[id]||""},set textContent(v){capt[id]=v},get textContent(){return capt[id]||""},appendChild(){},children:[{firstElementChild:{style:{}}},{firstElementChild:{style:{}}},{firstElementChild:{style:{}}},{firstElementChild:{style:{}}}],childElementCount:4,firstElementChild:{style:{}},onclick:null,disabled:false,value:"",className:"",dataset:{}});
-global.capt=capt;
+const capt={}; const valores={};
+const el=(id)=>({classList:{add(){},remove(){},toggle(){}},style:{},set innerHTML(v){capt[id]=v},get innerHTML(){return capt[id]||""},set textContent(v){capt[id]=v},get textContent(){return capt[id]||""},appendChild(){},focus(){},select(){},blur(){},querySelector(){return null},getAnimations(){return[]},children:[{firstElementChild:{style:{}}},{firstElementChild:{style:{}}},{firstElementChild:{style:{}}},{firstElementChild:{style:{}}}],childElementCount:4,firstElementChild:{style:{}},onclick:null,disabled:false,get value(){return valores[id]||""},set value(v){valores[id]=v},className:"",dataset:{}});
+global.capt=capt; global.valores=valores;
 global.document={querySelector:s=>el(s.replace('#','')),querySelectorAll:()=>[],addEventListener(){},body:{classList:{add(){},remove(){},toggle(){}}},createElement:()=>el('x'),head:{appendChild(){}}};
 global.window={scrollTo(){},AudioContext:null}; global.navigator={}; global.location={protocol:"file:"};
 global.setInterval=()=>0; global.clearInterval=()=>{};

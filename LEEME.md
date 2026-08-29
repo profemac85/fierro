@@ -17,10 +17,35 @@ Todo está en `index.html`. Buscar estos rótulos:
 | Programa (sesiones A a D, fases, tramos) | `const SESIONES`, `FASES`, `TRAMOS` |
 | Qué ejercicio ocupa cada casilla hoy | `casillasHoy`, `ejActivo`, `alternarCasilla`, `alternarSesion` |
 | Cronómetro de sesión | sección `4. cronómetro de sesión` (`sa()`, `tick()`) |
+| Sesión guiada (playback) | `pasosSesion`, `pintarPlayback`, `pbCheck`, `pbIr` |
+| Movilidad y aproximación | `const MOVILIDAD`, `textoAproximacion` |
 | Regla de progresión | `textoObjetivo` |
 | Racha y logros | `calcRacha`, `const LOGROS` |
 | Frases de cierre | `fraseCierre` |
 | Vistas | `pintarHoy`, `pintarProgreso`, `pintarEjercicios`, `pintarGuia` |
+
+## La sesión guiada
+
+Al apretar "Empezar sesión" la vista Hoy deja de ser una lista y pasa a conducir
+paso a paso. La secuencia sale de `pasosSesion()`, que es la preparación más las
+celdas que ya calcula `celdasSesion()`: el orden viene del programa y no hay una
+segunda fuente de verdad que se pueda desincronizar.
+
+- El paso actual vive en `fz_sesion_activa.idx`, así que cerrar la app a mitad
+  de sesión y volver retoma en el mismo ejercicio. Una sesión empezada antes de
+  que existiera el playback no tiene `idx`: `pasoActual()` lo deriva de la
+  primera serie sin registrar.
+- El check anota lo que sugiere `valorSugerido()` (lo que hizo la vez pasada, no
+  el tope del rango) y abre el descanso con el campo de repeticiones enfocado
+  para corregirlo. El foco se pide dentro del mismo gesto del toque, que es la
+  única forma de que iOS abra el teclado.
+- El reloj de la serie es un referente, no un plazo: al llegar a cero no suena
+  nada y sigue contando en ámbar. La única cuenta regresiva de verdad es la de
+  los ejercicios por tiempo, donde el tiempo es el ejercicio.
+- `sincronizarTramo()` mueve el tramo del cronómetro solo hacia adelante: volver
+  atrás a corregir una serie no devuelve el tiempo ya transcurrido.
+- "Ver lista" (`verLista`) devuelve la vista de siempre para corregir cualquier
+  serie, con un botón para volver al playback.
 
 ## Los dos modos
 

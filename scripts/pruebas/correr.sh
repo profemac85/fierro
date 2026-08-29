@@ -40,6 +40,7 @@ correr(){   # $1 = harness, $2 = prueba
 }
 for prueba in 01-biblioteca 02-logica 04-calistenia; do correr harness "$prueba"; done
 correr harness-reloj 03-cronometro
+correr harness-reloj 05-playback
 
 rm -rf "$T"
 echo "todo verde"

@@ -8,7 +8,14 @@ ok(s.tramo===1,"a los 3 min pasa solo al bloque 1");
 ok(Math.abs(tramoRestante(s)-600000)<15000,"bloque 1 con 10 min");
 setRonda("A","press_banca",0,{kg:10,reps:12}); iniciarDescanso(60);
 s=sa(); ok(s.estado==="descanso","anotar arranca el descanso");
-tick(); ok((capt.bInfo||"").includes("Remo inclinado"),"muestra que viene");
+tick();
+// en playback el "que viene" lo muestra la pantalla grande, con imagen y todo;
+// la barra de abajo queda para lo que la pantalla no dice (el tramo)
+ok((capt.app||"").includes("Remo inclinado"),"en playback, la pantalla muestra que viene");
+ok((capt.bInfo||"").includes("quedan del"),"y la barra muestra cuanto le queda al tramo");
+verLista=true; tick();
+ok((capt.bInfo||"").includes("Remo inclinado"),"en modo lista, la barra muestra que viene");
+verLista=false; tick();
 ajustarDescanso(30); ok(Math.abs(new Date(sa().finDescansoISO).getTime()-ahoraMs()-90000)<50,"+30 s");
 ajustarDescanso(-30);
 const e0=saElapsed(sa()); avanzar(5); tick();
