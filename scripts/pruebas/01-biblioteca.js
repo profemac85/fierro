@@ -1,6 +1,6 @@
 let f=0; const ok=(c,m)=>{ if(!c){f++;console.log("FALLA:",m)} };
 const claves=Object.keys(LIB);
-ok(claves.length===40,"40 ejercicios (20 del programa, 2 variantes de fase 3, 18 de calistenia), hay "+claves.length);
+ok(claves.length===47,"47 ejercicios (programa, variantes de fase 3 y sustitutos sin equipamiento), hay "+claves.length);
 ok(claves.every(k=>LIB[k].how&&LIB[k].cue&&LIB[k].err&&LIB[k].n&&LIB[k].m&&LIB[k].patron&&LIB[k].tipo),"todas las fichas completas");
 ok(claves.every(k=>LIB[k].how.length>=4&&LIB[k].how.length<=5),"how entre 4 y 5 pasos");
 ok(claves.every(k=>LIB[k].img||esquemaSVG(k)),"todos tienen visual");

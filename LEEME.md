@@ -12,7 +12,7 @@ Todo está en `index.html`. Buscar estos rótulos:
 |---|---|
 | Colores (paleta hormigón y tinta) | `:root` al inicio del `<style>` |
 | Biblioteca de ejercicios (40 fichas) | `const LIB` |
-| Sustituto de calistenia de cada casilla | `const SIN_PESO` |
+| Sustituto sin equipamiento de cada casilla | `const SIN_PESO` |
 | Esquemas SVG propios | `rigFlex`, `rigCurlBanda`, `rigCurlToalla`, `rigGoblet`, `const ESQ` |
 | Programa (sesiones A a D, fases, tramos) | `const SESIONES`, `FASES`, `TRAMOS` |
 | Qué ejercicio ocupa cada casilla hoy | `casillasHoy`, `ejActivo`, `alternarCasilla`, `alternarSesion` |
@@ -50,17 +50,25 @@ segunda fuente de verdad que se pueda desincronizar.
 ## Los dos modos
 
 Cada ejercicio del programa lleva en su ficha un campo `sinPeso` con la clave de
-su sustituto de calistenia. El interruptor "Sin mancuernas" cambia las cinco
-casillas del día; el botón ⇄ de cada tarjeta cambia una sola y la marca con un
-punto. Lo que cambia es **solo qué ejercicio ocupa la casilla**: bloques,
-rondas, tiempos y rangos de repeticiones no se tocan.
+su sustituto **sin equipamiento**. El interruptor "Sin equipamiento" cambia
+todas las casillas del día; el botón ⇄ de cada tarjeta cambia una sola y la
+marca con un punto. Lo que cambia es **solo qué ejercicio ocupa la casilla**:
+bloques, rondas, tiempos y rangos de repeticiones no se tocan.
+
+La regla del modo es estricta: **nada de mancuernas, kettlebell, bandas ni barra
+de dominadas**. Sí valen la silla, la mesa, la pared y una toalla, que hay en
+cualquier casa. Por eso el remo bajo la mesa es la pieza clave del modo: sin él
+la espalda se queda sin ningún tirón de verdad. Hay una prueba que verifica que
+ningún sustituto pida equipo, ni por su `tipo` ni por el texto de su ficha.
 
 - El estado vive en `fz_casillas`, con la fecha del día: mañana la sesión vuelve
-  a arrancar con mancuernas. Se guarda aparte de `fz_sesion_activa` para que
-  también funcione sin haber empezado la sesión.
+  a arrancar con el programa normal. Se guarda aparte de `fz_sesion_activa` para
+  que también funcione sin haber empezado la sesión.
 - Las rondas se guardan **bajo la clave del ejercicio que se hizo de verdad**.
   Por eso cambiar una casilla con series ya anotadas no reasigna nada: lo viejo
   queda donde estaba y lo nuevo arranca vacío.
+- **Dos casillas de la misma sesión no pueden compartir sustituto**, porque los
+  registros se guardan por ejercicio y uno pisaría al otro. Hay una prueba.
 - La sesión cuenta exactamente igual: pinta su celda, suma a la racha y a los
   logros. `fz_sesion_*` guarda `modo` (`normal`, `mixto` o `calistenia`) solo
   para poder reconocerla después; la celda del mapa lleva un rayado discreto.

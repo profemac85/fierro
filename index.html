@@ -583,17 +583,55 @@ hip_thrust_uni:{n:"Hip thrust a una pierna en la silla",m:"Glúteos, isquiotibia
 curl_toalla:{n:"Curl femoral deslizante con toalla",m:"Isquiotibiales (flexión de rodilla)",patron:"aislado",tipo:"peso_corporal",img:null,
   how:["Acuéstate de espaldas con los talones sobre una toalla, en piso liso.","Sube la cadera hasta alinear rodillas, cadera y hombros.","Sin bajar la cadera, estira las piernas deslizando los talones lejos.","Vuelve arrastrando los talones hacia el poto, doblando las rodillas.","Si es muy duro, hazlo con las dos piernas y vuelve con ayuda."],
   cue:"La cadera se queda arriba todo el rato: si baja, se acabó el ejercicio.",
-  err:["Dejar caer la cadera al estirar","Ir tan lejos que se pierde el control","Hacerlo sobre alfombra (la toalla tiene que deslizar)"]}
+  err:["Dejar caer la cadera al estirar","Ir tan lejos que se pierde el control","Hacerlo sobre alfombra (la toalla tiene que deslizar)"]},
+
+/* ---- sustitutos sin equipamiento ----
+   Solo el cuerpo y lo que hay en cualquier casa: una silla, una mesa, la pared,
+   una toalla. Nada de mancuernas, kettlebell, bandas ni barra de dominadas. El
+   remo bajo la mesa es la pieza clave: sin él la espalda se queda sin ningún
+   tirón de verdad y la rutina queda coja. */
+remo_mesa:{n:"Remo bajo la mesa",m:"Dorsal, romboides, bíceps",patron:"traccion_horizontal",tipo:"peso_corporal",img:null,sinEquipo:1,
+  how:["Busca una mesa firme y pesada, de las que no se levantan. Comprueba que aguanta antes de colgarte.","Acuéstate de espaldas debajo, a la altura del borde.","Agarra el borde con las dos manos, un poco más anchas que los hombros.","Cuerpo recto de la cabeza a los talones, tira hasta que el pecho toque el borde.","Baja controlada hasta estirar los brazos. Si es muy fácil, dobla menos las rodillas."],
+  cue:"Cuerpo en tabla y el pecho al borde de la mesa.",
+  err:["Usar una mesa liviana que se levanta","Quebrar la cadera para llegar antes","No estirar los brazos abajo"]},
+remo_mesa_supino:{n:"Remo supino bajo la mesa",m:"Dorsal, bíceps, romboides",patron:"traccion_horizontal",tipo:"peso_corporal",img:null,sinEquipo:1,
+  how:["Misma mesa firme, acostada de espaldas debajo del borde.","Agarra el borde con las palmas hacia ti, al ancho de los hombros.","Cuerpo recto, talones apoyados.","Tira llevando el pecho al borde, codos pegados al cuerpo.","Baja lenta hasta estirar del todo."],
+  cue:"Palmas hacia ti y codos pegados: acá entra fuerte el bíceps.",
+  err:["Mesa que se mueve","Recorrido corto","Separar los codos del cuerpo"]},
+laterales_iso:{n:"Elevaciones laterales con autorresistencia",m:"Deltoides lateral",patron:"aislado",tipo:"peso_corporal",img:null,sinEquipo:1,
+  how:["De pie, brazos a los costados.","Pon la mano contraria encima del antebrazo que va a subir, haciendo fuerza hacia abajo.","Sube el brazo a la horizontal empujando contra esa resistencia, contando tres segundos.","Baja igual de lento, resistiendo con la otra mano.","Completa las repeticiones y cambia de brazo."],
+  cue:"Tú pones el peso: si sube fácil, aprieta más con la otra mano.",
+  err:["No hacer fuerza real con la mano que resiste","Subir más allá del hombro","Balancear el cuerpo"]},
+angel_suelo:{n:"Ángel invertido en el suelo",m:"Deltoides posterior, trapecio medio, rotadores",patron:"aislado",tipo:"peso_corporal",img:null,sinEquipo:1,
+  how:["Bocabajo en el suelo, frente apoyada, brazos estirados sobre la cabeza.","Despega los brazos y el pecho unos centímetros del suelo.","Sin dejarlos caer, llévalos en arco hasta la cadera, como haciendo un ángel de nieve al revés.","Vuelve por el mismo camino hasta arriba, siempre despegados.","Si te cuesta, dobla los codos y acorta el recorrido."],
+  cue:"Los brazos no tocan el suelo en todo el recorrido.",
+  err:["Arrastrar los brazos por el suelo","Arquear la espalda baja para subir más","Ir rápido: acá lo lento es lo que trabaja"]},
+curl_iso:{n:"Curl con autorresistencia",m:"Bíceps",patron:"aislado",tipo:"peso_corporal",img:null,sinEquipo:1,
+  how:["De pie, un brazo con la palma hacia arriba y el codo pegado al cuerpo.","Pon la mano contraria encima, empujando hacia abajo.","Sube doblando el codo contra esa resistencia, contando tres segundos.","Baja igual de lento, sin soltar la fuerza de la mano de arriba.","Completa las repeticiones y cambia de brazo."],
+  cue:"El codo no se despega del costado y la bajada se frena.",
+  err:["Aflojar la mano que resiste","Balancear el torso","Cortar el recorrido arriba o abajo"]},
+abduccion_tumbada:{n:"Elevación lateral de pierna tumbada",m:"Glúteo medio",patron:"aislado",tipo:"peso_corporal",img:null,sinEquipo:1,
+  how:["Acuéstate de lado, bien alineada, la cabeza apoyada en el brazo de abajo.","La pierna de abajo doblada, la de arriba estirada.","Sube la pierna de arriba sin dejar que la cadera se vaya hacia atrás.","Pausa un segundo arriba y baja lento, sin apoyarla del todo.","Completa las repeticiones y cambia de lado."],
+  cue:"La cadera mira al frente todo el rato: si rota, deja de trabajar el glúteo medio.",
+  err:["Rotar la cadera hacia atrás para subir más","Subir con impulso","Descansar la pierna abajo entre repeticiones"]},
+sentadilla_silla:{n:"Sentadilla a una pierna con apoyo en la silla",m:"Cuádriceps, glúteos",patron:"rodilla",tipo:"peso_corporal",img:null,sinEquipo:1,
+  how:["Párate frente a una silla firme contra la pared y apoya una o dos manos en el respaldo.","Levanta una pierna estirada al frente.","Baja en una pierna, usando las manos solo lo justo para no perder el equilibrio.","Baja tan abajo como controles y sube empujando con el talón.","Completa las repeticiones y cambia de pierna."],
+  cue:"Las manos equilibran, no levantan: la pierna hace el trabajo.",
+  err:["Tirar con los brazos para subir","Dejar que la rodilla se vaya hacia adentro","Despegar el talón del suelo"]}
 };
-/* sustituto de calistenia de cada casilla (sección 4.9 del brief). Las casillas
-   que no aparecen acá no cambian de ejercicio: ya son de peso corporal. */
+/* Sustituto de cada casilla cuando se entrena sin equipamiento. La regla es
+   estricta: nada de mancuernas, kettlebell, bandas ni barra de dominadas. Sí
+   valen la silla, la mesa, la pared y una toalla, que hay en cualquier casa.
+   Dos casillas de la misma sesión no pueden compartir sustituto: los registros
+   se guardan por ejercicio y se pisarían entre ellos. */
 const SIN_PESO = {
-  press_banca:"flex_suelo", remo_inclinado:"remo_invertido", press_hombro:"flex_pica",
-  laterales:"laterales_banda", bulgara:"bulgara_tempo", gemelo:"gemelo_rango",
-  goblet:"sentadilla_asistida", goblet_talones:"sentadilla_asistida", zancada:"zancada_sp",
-  remo_una_mano:"remo_invertido_sup", press_inclinado:"flex_diamante",
-  curl_inclinado:"curl_banda", triceps:"fondos_silla", rdl:"rdl_uni",
-  hip_thrust:"hip_thrust_uni", curl_femoral:"curl_toalla"
+  press_banca:"flex_suelo", remo_inclinado:"remo_mesa", press_hombro:"flex_pica",
+  dominada:"remo_mesa_supino", laterales:"laterales_iso", bulgara:"bulgara_tempo",
+  gemelo:"gemelo_rango", goblet:"sentadilla_silla", goblet_talones:"sentadilla_silla",
+  zancada:"zancada_sp", flex_pies:"flex_suelo", remo_una_mano:"remo_mesa",
+  press_inclinado:"flex_diamante", face_pull:"angel_suelo", curl_inclinado:"curl_iso",
+  triceps:"fondos_silla", rdl:"rdl_uni", hip_thrust:"hip_thrust_uni",
+  curl_femoral:"curl_toalla", puente:"puente"
 };
 Object.keys(SIN_PESO).forEach(k => { if(LIB[k]) LIB[k].sinPeso = SIN_PESO[k]; });
 /* la escalera de flexiones ya venía encadenada; falta cerrar el eslabón que
@@ -743,6 +781,117 @@ function rigGoblet(){
   };
 }
 
+/* ---- esquemas de los sustitutos sin equipamiento ----
+   Movimientos simples de peso corporal, que es donde el dibujo de líneas
+   funciona: una cadena que rota o un miembro que se acorta. */
+function _mesa(x1, x2, y){
+  return '<rect class="seg-suave" x="' + x1 + '" y="' + y + '" width="' + (x2 - x1) + '" height="6" rx="2"/>' +
+    ln([x1 + 10, y + 6], [x1 + 10, SUELO], "seg-suave") +
+    ln([x2 - 10, y + 6], [x2 - 10, SUELO], "seg-suave");
+}
+function _tramo(id, pivote, punta, escY, extra){
+  return {id:id, pivote:pivote, ang:0, escY:escY,
+    d:'<path class="seg" vector-effect="non-scaling-stroke" d="M ' + pivote[0] + ' ' + pivote[1] +
+      ' L ' + punta[0] + ' ' + punta[1] + '"/>' + circ(pivote, 5, "acc-f") + (extra || "")};
+}
+/* remo bajo la mesa: tumbada boca arriba, los brazos se acortan y el pecho sube */
+function rigRemoMesa(){
+  const mesaY = 112, hombro = [96, 150], mano = [96, mesaY + 6];
+  return {
+    fijo: suelo(20, 186) + _mesa(48, 160, mesaY) +
+      ln(hombro, [162, 158], "seg") +                      // cuerpo recto
+      ln([162, 158], [168, SUELO - 2], "seg-fino") +       // talones
+      circ([84, 152], 9),
+    piezas: [_tramo("brazos", mano, hombro, 0.55)],
+    caja:[16, mesaY - 14, 190, SUELO + 4]
+  };
+}
+/* ángel invertido: bocabajo, los brazos barren en arco sin tocar el suelo */
+function rigAngel(){
+  const hI = [88, 132], hD = [112, 132], mI = [70, 96], mD = [130, 96];
+  return {
+    fijo: suelo(24, 180) +
+      '<rect class="seg" x="88" y="128" width="24" height="34" rx="10"/>' +   // tronco bocabajo
+      circ([100, 116], 9) +
+      ln([92, 162], [88, SUELO - 2], "seg") + ln([108, 162], [112, SUELO - 2], "seg"),
+    piezas: [
+      {id:"brazoI", pivote:hI, ang:-64, d: ln(hI, mI) + circ(mI, 4, "acc-f")},
+      {id:"brazoD", pivote:hD, ang:64,  d: ln(hD, mD) + circ(mD, 4, "acc-f")}
+    ],
+    caja:[20, 84, 180, SUELO + 4]
+  };
+}
+/* curl con autorresistencia: el antebrazo sube contra la otra mano */
+function rigCurlIso(){
+  const codo = [110, 116], mano = [108, 150];
+  return {
+    fijo: suelo(60, 140) +
+      ln([100, 66], [100, 122], "seg") +
+      ln([100, 122], [90, SUELO - 2], "seg") + ln([100, 122], [110, SUELO - 2], "seg") +
+      circ([100, 54], 9) +
+      ln([100, 78], codo, "seg") +                         // brazo pegado al costado
+      '<path class="acc-s" vector-effect="non-scaling-stroke" d="M 74 96 L 100 128"/>', // la mano que resiste
+    piezas: [{id:"antebrazo", pivote:codo, ang:-118,
+              d: ln(codo, mano) + circ(codo, 5, "acc-f") + circ(mano, 4, "seg-fino")}],
+    caja:[52, 40, 156, SUELO + 4]
+  };
+}
+/* elevación lateral de pierna: de lado, la cadera mira al frente */
+function rigAbdTumbada(){
+  const cadera = [112, 140], pie = [172, 140];
+  return {
+    fijo: suelo(20, 190) +
+      ln([56, 146], cadera, "seg") +                       // tronco de lado
+      circ([46, 142], 9) +
+      ln(cadera, [150, 162], "seg-fino") + ln([150, 162], [128, SUELO - 2], "seg-fino"), // pierna de abajo doblada
+    piezas: [{id:"pierna", pivote:cadera, ang:-34,
+              d: ln(cadera, pie) + circ(cadera, 5, "acc-f")}],
+    caja:[16, 112, 194, SUELO + 4]
+  };
+}
+/* sentadilla a una pierna con la silla de apoyo */
+function rigSentadillaSilla(){
+  const pie = [104, SUELO - 2], rodilla = [102, 126], cadera = [108, 88];
+  return {
+    fijo: suelo(26, 184) +
+      '<rect class="seg-suave" x="40" y="130" width="44" height="6" rx="2"/>' +
+      ln([46, 136], [46, SUELO], "seg-suave") + ln([78, 136], [78, SUELO], "seg-suave") +
+      ln([44, 130], [44, 86], "seg-suave"),                // respaldo
+    piezas: [
+      {id:"canilla", pivote:pie, ang:14, d: ln(pie, rodilla) + circ(rodilla, 5, "acc-f"),
+       hijos:[
+        {id:"muslo", pivote:rodilla, ang:-80, d: ln(rodilla, cadera),
+         hijos:[
+          {id:"torso", pivote:cadera, ang:72,
+           d: ln(cadera, [110, 54]) + circ([111, 42], 9) +
+              ln([110, 62], [64, 88], "seg-fino") +        // brazo al respaldo
+              ln(cadera, [148, 104], "seg-fino")}          // pierna libre al frente
+        ]}
+      ]}
+    ],
+    caja:[22, 30, 188, SUELO + 4]
+  };
+}
+
+/* elevaciones laterales con autorresistencia: la otra mano hace de peso */
+function rigLateralesIso(){
+  const hI = [88, 78], hD = [112, 78], mI = [88, 114], mD = [112, 114];
+  return {
+    fijo: suelo(56, 144) +
+      ln([100, 68], [100, 124], "seg") +
+      ln([100, 124], [90, SUELO - 2], "seg") + ln([100, 124], [110, SUELO - 2], "seg") +
+      circ([100, 56], 9),
+    piezas: [
+      {id:"brazoI", pivote:hI, ang:78,
+       d: ln(hI, mI) + circ(hI, 4, "acc-f") +
+          '<path class="acc-s" vector-effect="non-scaling-stroke" d="M ' + (mI[0] - 10) + ' ' + (mI[1] - 12) +
+          ' L ' + mI[0] + ' ' + mI[1] + '"/>'},
+      {id:"brazoD", pivote:hD, ang:-78, d: ln(hD, mD) + circ(hD, 4, "acc-f")}
+    ],
+    caja:[30, 42, 170, SUELO + 4]
+  };
+}
+
 /* qué esquema usa cada ejercicio. El encuadre no se pone a mano: se calcula
    desde la caja que declara cada rig, así una figura no se sale del recuadro
    por haber movido un número. */
@@ -754,7 +903,15 @@ const ESQ = {
   flex_diamante: {rig:() => rigFlex({yMano:170, xMano:74, caida:24})},
   curl_banda:    {rig:rigCurlBanda},
   curl_toalla:   {rig:rigCurlToalla},
-  goblet_talones:{rig:rigGoblet}
+  goblet_talones:{rig:rigGoblet},
+  /* sustitutos sin equipamiento */
+  remo_mesa:        {rig:rigRemoMesa},
+  remo_mesa_supino: {rig:rigRemoMesa},
+  angel_suelo:      {rig:rigAngel},
+  curl_iso:         {rig:rigCurlIso},
+  abduccion_tumbada:{rig:rigAbdTumbada},
+  sentadilla_silla: {rig:rigSentadillaSilla},
+  laterales_iso:    {rig:rigLateralesIso}
 };
 /* encaja la caja del dibujo dentro de un lienzo de `ancho` x `alto`, con margen */
 function encuadre(caja, ancho, alto, margen){
@@ -1729,7 +1886,7 @@ function mapaHTML(wNueva, sidNueva){
       /* la marca solo sirve para reconocerla después: cuenta exactamente igual */
       const sm = ok && ok.modo && ok.modo !== "normal";
       h += '<div class="celda-mapa' + (ok ? " ok" : "") + (nueva ? " nueva" : "") + (aqui ? " aqui" : "") +
-        (sm ? " sinpeso" : "") + '"' + (sm ? ' title="sin mancuernas"' : "") + "></div>";
+        (sm ? " sinpeso" : "") + '"' + (sm ? ' title="sin equipamiento"' : "") + "></div>";
     });
   }
   return h + "</div>";
@@ -1846,7 +2003,7 @@ function interruptorHTML(ses){
   const cambiadas = nCambiadas(ses);
   return '<div class="fila-sw">' +
     '<button class="sw' + (on ? " on" : "") + '" onclick="alternarSesion(\'' + ses.id + '\')" role="switch" aria-checked="' + on + '">' +
-      '<span class="sw-riel"><span class="sw-bolita"></span></span>Sin mancuernas</button>' +
+      '<span class="sw-riel"><span class="sw-bolita"></span></span>Sin equipamiento</button>' +
     (cambiadas ? '<button class="link-reset" onclick="volverAOriginal(\'' + ses.id + '\')">Volver a la sesión original</button>' : "") +
     "</div>";
 }
@@ -2412,7 +2569,7 @@ function pintarGuia(){
   "<p>1) Agujetas resueltas en menos de 48 horas. 2) Sin molestia articular ni tendinosa. 3) Techo del rango alcanzado en la mayoría de los ejercicios. Los tres a la vez. Si alguno falla, se repite la fase y no pasa nada: la racha sigue.</p>" +
   "<h3>Los bloques por tiempo</h3>" +
   "<p>Cada bloque tiene un presupuesto de 10 minutos que ordena la sesión: orienta, no obliga. Si el tiempo se acaba a mitad de una ronda, la ronda se termina igual y listo. Nadie audita los 30 minutos.</p>" +
-  "<h3>Sin mancuernas</h3>" +
+  "<h3>Sin equipamiento</h3>" +
   "<p>El interruptor de arriba cambia los cinco ejercicios del día por su versión con el peso del cuerpo, la barra y las bandas. Es el mismo programa: mismos bloques, mismas rondas, mismo cronómetro, y la sesión cuenta igual en el mapa y en la racha. El botón ⇄ de cada tarjeta cambia una sola casilla, para cuando el hombro no quiere press pero el resto sí.</p>" +
   "<p>La progresión ahí va en este orden: primero repeticiones hasta el techo, después tempo (bajar en 3 o 4 segundos con 2 de pausa abajo), después palanca (unilateral, pies más altos, más déficit, manos más juntas), y al final una ronda más. La escalera de flexiones va de manos en la mesa a manos en la silla, al suelo, pies en la silla, en déficit y arqueras: cada peldaño continúa la curva del anterior.</p>" +
   "<p style='border-top:1px solid var(--linea);padding-top:10px;margin-top:14px'>Si aparece dolor articular o tendinoso que no se va, esta app no reemplaza a un kinesiólogo.</p>" +
@@ -2459,7 +2616,7 @@ function exportar(){
           (dato ? " · terminada el " + fmtFecha(dato.fecha) +
             (dato.duracionReal ? " · " + dato.duracionReal + " min" : "") +
             " · " + (dato.seriesTotales || 0) + " series · " + fmtNum(Math.round(dato.tonelaje || 0)) + " kg" +
-            (dato.modo && dato.modo !== "normal" ? " · sin mancuernas" : "")
+            (dato.modo && dato.modo !== "normal" ? " · sin equipamiento" : "")
           : " · sin terminar") + "\n" + lineas;
       }
     });

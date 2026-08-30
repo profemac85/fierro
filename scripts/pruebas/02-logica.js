@@ -40,7 +40,7 @@ lset("sesion_2_A",{fecha:dia(12)}); ok(calcRacha().n===4,"salto recuperado en 10
 lset("sesion_2_A",{fecha:dia(2)});  ok(calcRacha().n===1,"salto recuperado tarde reinicia");
 lset("sesion_3_A",{fecha:dia(1)});  ok(calcRacha().n===1,"dos huecos reinician");
 ok(curvaHTML("goblet").includes("circle"),"curva con puntos");
-ok(listaEjHTML().split('class="tarjeta"').length-1===40,"buscador vacio lista los 40");
+ok(listaEjHTML().split('class="tarjeta"').length-1===47,"buscador vacio lista los 47");
 filtroEj="espalda"; ok(listaEjHTML().includes("Remo"),"buscar espalda encuentra los remos");
 filtroEj="";
 console.log(f? "\n*** "+f+" FALLAS ***":"\nlogica: todo verde");
