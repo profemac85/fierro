@@ -5,25 +5,20 @@
      subida a Netlify no llegaría nunca al teléfono.
    - todo lo demás (imágenes, icono, manifest): cache-first, que es lo que
      hace que funcione en modo avión. */
-const VERSION = "fierro-v1";
+const VERSION = "fierro-v2";
 const NUCLEO = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icon.svg"
 ];
+/* solo las imágenes que usa la rutina v2 (las demás quedan en la carpeta
+   por si vuelven, pero no se precachean) */
 const MEDIA = [
-  "bulgara.jpg", "bulgara_tempo.jpg", "curl_femoral.png",
-  "curl_inclinado.jpg", "dominada.jpg", "face_pull.jpg",
-  "flex_pica.jpg", "flex_pies.png", "flex_suelo.jpg",
-  "fondos_silla.png", "gemelo.jpg", "gemelo_rango.jpg",
-  "goblet.jpg", "hip_thrust.jpg", "hip_thrust_uni.jpg",
-  "laterales.jpg", "laterales_banda.jpg", "plancha.png",
-  "press_banca.jpg", "press_hombro.jpg", "press_inclinado.png",
-  "puente.jpg", "rdl.jpg", "rdl_uni.jpg",
-  "remo_inclinado.jpg", "remo_invertido.jpg", "remo_invertido_sup.jpg",
-  "remo_una_mano.png", "sentadilla_asistida.jpg", "triceps.jpg",
-  "zancada.jpg", "zancada_sp.jpg"
+  "bulgara.jpg", "curl_femoral.png", "dominada.jpg", "face_pull.jpg",
+  "flex_pies.png", "goblet.jpg", "hip_thrust.jpg", "laterales.jpg",
+  "press_banca.jpg", "press_hombro.jpg", "rdl.jpg", "remo_invertido.jpg",
+  "triceps.jpg"
 ].map(f => "./media/ejercicios/" + f);
 
 self.addEventListener("install", e => {

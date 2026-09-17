@@ -1,7 +1,6 @@
 #!/bin/bash
 # Pruebas de Fierro. No hay framework: se extrae el JS del index.html, se le
 # antepone un harness que finge localStorage y DOM, y se corre con node.
-# El harness del cronómetro además falsea Date para simular pantalla apagada.
 #
 #   bash scripts/pruebas/correr.sh
 set -e
@@ -27,20 +26,18 @@ node --check "$T/fierro.js"
 echo "sintaxis ok"
 
 P=scripts/pruebas
-# ojo: nada de `node ... | tail`, que se traga el codigo de salida y deja
+# ojo: nada de \`node ... | tail\`, que se traga el código de salida y deja
 # pasar una suite con fallas. Se guarda la salida y se muestra el final.
-correr(){   # $1 = harness, $2 = prueba
-  echo "--- $2 ---"
-  cat "$P/$1.js" "$T/fierro.js" "$P/$2.js" > "$T/s.js"
+correr(){   # $1 = prueba
+  echo "--- $1 ---"
+  cat "$P/harness.js" "$T/fierro.js" "$P/$1.js" > "$T/s.js"
   if node "$T/s.js" > "$T/out.txt" 2>&1; then
     tail -3 "$T/out.txt"
   else
-    cat "$T/out.txt"; echo "FALLO en $2"; exit 1
+    cat "$T/out.txt"; echo "FALLO en $1"; exit 1
   fi
 }
-for prueba in 01-biblioteca 02-logica 04-calistenia 06-fases; do correr harness "$prueba"; done
-correr harness-reloj 03-cronometro
-correr harness-reloj 05-playback
+for prueba in 01-biblioteca 02-logica 03-sesion 04-migracion 05-importar; do correr "$prueba"; done
 
 rm -rf "$T"
 echo "todo verde"
