@@ -214,6 +214,9 @@ body.con-descanso #barra{display:block}
 .barra-tit{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--suave)}
 .barra-info{font-size:14px;font-weight:800;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .barra-reloj{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--acento);min-width:74px;text-align:right}
+/* en el descanso de la lista, el reloj es lo único que importa: grande */
+body.con-descanso:not(.en-playback) .barra-reloj{font-size:46px;min-width:120px}
+body.con-descanso:not(.en-playback) .barra-int{padding:10px 12px}
 .barra-reloj.pasado{color:var(--marca)}
 .barra-ctl{display:flex;gap:4px}
 .barra-ctl button{min-width:44px;min-height:44px;border:1px solid var(--linea);border-radius:7px;background:var(--fondo);
@@ -230,7 +233,7 @@ body.en-playback main{padding-top:8px;padding-bottom:210px}
 .pb-link:disabled{color:var(--linea)}
 /* el reloj manda: es lo primero que se ve */
 .pb-reloj{font-size:62px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;text-align:center;letter-spacing:-.02em}
-.pb-reloj.descanso{color:var(--acento)}
+.pb-reloj.descanso{color:var(--acento);font-size:88px}
 .pb-reloj.pasado{color:var(--marca)}
 .pb-etq{display:block;text-align:center;margin:2px 0 12px}
 .pb-caja{background:var(--tarjeta);border:1px solid var(--linea);border-radius:10px;padding:14px}
@@ -309,6 +312,13 @@ nav button span{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform
 .dia-celda .d{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave)}
 .dia-celda .n{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums;margin:1px 0}
 .dia-celda.hoy{outline:1px solid var(--acento);border-color:var(--acento)}
+.dia-celda.con-ses{cursor:pointer;background:var(--tarjeta)}
+.dia-celda.sel{background:var(--acento-tenue);border-color:var(--acento)}
+.serie.hecha-fija{gap:8px;flex-wrap:wrap;padding:6px 0}
+.s-val{font-size:15px;font-variant-numeric:tabular-nums}
+.s-val small{font-size:10px;color:var(--suave);font-weight:700}
+.s-niv{font-size:12px;font-weight:700;color:var(--acento)}
+.s-nota{font-size:11px;color:var(--suave);font-weight:600}
 .dia-celda .m{display:flex;justify-content:center;gap:2px;flex-wrap:wrap}
 .marca-ses{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;border-radius:5px;
   font-size:10px;font-weight:800;padding:0 4px;background:var(--acento);color:var(--blanco)}
@@ -603,7 +613,7 @@ function sembrar(e){
 /* versión de las reglas de migración. Si el teléfono migró con reglas
    anteriores (sin modo por fecha, sin kilos → nivel), las sesiones de origen v1
    se vuelven a traducir desde las claves fz_*, que siguen intactas. */
-const MIGRACION_V1 = 2;
+const MIGRACION_V1 = 3;
 function cargar(){
   const crudo = leerCrudo(CLAVE);
   if(crudo){
@@ -684,6 +694,11 @@ function migrarDesdeV1(){
           if(out.nivel != null) out.kg = 0;
         }
         if(V1_CON_CARGA.includes(kv1) && kg === 0) out.incompleta = 1;
+        /* "Dominadas (o negativas de 5 segundos)" mezclaba dos ejercicios. En
+           el hotel no había banda, así que esas series (10, 5 el 12-09) no se
+           sabe qué fueron: quedan con nivel desconocido, fuera de Avances y
+           de las sugerencias, pero visibles en el detalle de la sesión. */
+        if(kv1 === "dominada" && modoSesion === "gym"){ out.nivel = null; out.incompleta = 1; out.nota = "nivel desconocido"; }
         return out;
       });
       if(!series.length) return;
@@ -764,7 +779,7 @@ function exportarTexto(){
       const x = ej(id); if(!x) return;
       const niv = s.reg[id].find(r => r.nivel != null);
       txt += "  " + x.n + (niv ? " (" + nombreNivel(id, niv.nivel).toLowerCase() + ")" : "") + ": " +
-        s.reg[id].map(r => fmtSerie(id, r) + (r.desc ? " d" + r.desc + "s" : "") + (r.incompleta ? " (sin peso anotado)" : "")).join(", ") + "\n";
+        s.reg[id].map(r => fmtSerie(id, r) + (r.desc ? " d" + r.desc + "s" : "") + (r.incompleta ? " (" + (r.nota || "sin peso anotado") + ")" : "")).join(", ") + "\n";
     });
   });
   const niv = Object.keys(DB.niveles).filter(id => escaleraDe(id));
@@ -2745,13 +2760,15 @@ function pintarSemana(){
   for(let i = 0; i < 7; i++){
     const f = sumarDias(lunes, i);
     const ses = DB.sesiones.filter(s => s.fecha === f);
-    h += '<div class="dia-celda' + (f === hoy ? " hoy" : "") + '"><div class="d">' + nombres[i] + '</div><div class="n">' + deFecha(f).getDate() + '</div><div class="m">' +
+    const tag = ses.length ? "button" : "div";
+    h += "<" + tag + ' class="dia-celda' + (f === hoy ? " hoy" : "") + (ses.length ? " con-ses" : "") + (diaVisto === f ? " sel" : "") + '"' +
+      (ses.length ? ' onclick="verDia(\'' + f + '\')"' : "") + '><div class="d">' + nombres[i] + '</div><div class="n">' + deFecha(f).getDate() + '</div><div class="m">' +
       ses.map(s => '<span class="marca-ses' + (s.modo === "gym" ? " gym" : "") + (s.adhoc ? " adhoc" : "") + '" title="' + esc(tituloSesion(s)) + '">' + (s.adhoc ? (diaQueAvanza(s) || "+") : s.dia) + "</span>").join("") +
-      "</div></div>";
+      "</div></" + tag + ">";
   }
   h += "</div>";
   const nSem = DB.sesiones.filter(s => s.fecha >= lunes && s.fecha <= dom).length;
-  h += '<div class="aviso-suave" style="margin-top:8px">' + nSem + (nSem === 1 ? " sesión" : " sesiones") + " · azul casa, ámbar gimnasio, gris ad hoc extra. Cardio aparte:</div>";
+  h += '<div class="aviso-suave" style="margin-top:8px">' + nSem + (nSem === 1 ? " sesión" : " sesiones") + " · azul casa, ámbar gimnasio, gris ad hoc extra. Toca un día para ver la sesión completa. Cardio aparte:</div>";
   const c = DB.cardio[lunes] || 0;
   h += '<div class="cardio-fila"><span class="etq">Cardio esta semana</span>' + [0, 1, 2, 3].map(n =>
     '<button class="' + (c === n ? "sel" : "") + '" onclick="ponerCardio(\'' + lunes + "'," + n + ')">' + n + "</button>").join("") + "</div></div>";
@@ -2770,6 +2787,10 @@ function pintarSemana(){
     const masViejo = Math.max(...pl.map(x => diasEntre(x.desde, hoy)));
     h += '<div class="aviso"><b>' + pl.length + " ejercicio" + (pl.length === 1 ? "" : "s") + " en pausa</b> desde hace " + masViejo + " días: " +
       pl.map(x => esc(ej(x.id) ? ej(x.id).n : x.id) + (x.motivo ? " (" + esc(x.motivo) + ")" : "")).join(", ") + ".</div>";
+  }
+  /* el día elegido: la sesión tal como se ve en HOY, pero con todo completado */
+  if(diasEntre(lunes, diaVisto || "1970-01-01") >= 0 && diasEntre(diaVisto || "1970-01-01", dom) >= 0){
+    DB.sesiones.filter(s => s.fecha === diaVisto).forEach(s => { h += sesionCompletadaHTML(s); });
   }
   /* cuánto toma cada día de la rotación, por modo: el dato para decidir si el día B cabe un martes */
   const filasDur = DIAS.map(d => {
@@ -2798,6 +2819,48 @@ function pintarSemana(){
   $("#app").innerHTML = h;
 }
 function ponerCardio(lunes, n){ DB.cardio[lunes] = n; guardar(); pintarSemana(); }
+let diaVisto = null;
+function verDia(f){
+  diaVisto = diaVisto === f ? null : f;
+  pintarSemana();
+  const el = $("#sesionCompletada");
+  if(el && el.scrollIntoView && diaVisto) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+/* una sesión guardada, con la misma forma que HOY: tarjeta por ejercicio con
+   sus series, nivel, RIR y descanso real, solo que ya no se edita */
+function sesionCompletadaHTML(s){
+  const nS = Object.keys(s.reg).reduce((a, id) => a + s.reg[id].length, 0);
+  const recs = Object.keys(s.reg).reduce((a, id) => a + s.reg[id].filter(r => r.rec).length, 0);
+  let h = '<div id="sesionCompletada"></div><div class="tarjeta"><div class="tarjeta-cab"><span class="etq">' + esc(tituloSesion(s)) + '</span><span class="etq">' + nombreModo(s.modo) + "</span></div>" +
+    '<div class="fila-tiempo"><div><span class="etq">' + fmtFechaLarga(s.fecha) + "</span><b>" + (s.duracion ? fmtMin(s.duracion) : "sin tiempo") + "</b>" +
+    '<span class="aviso-suave"> · ' + nS + " series · " + fmtNum(Math.round(tonelajeSesion(s))) + " kg" + (recs ? " · " + recs + " récord" + (recs === 1 ? "" : "s") : "") + (s.origen === "v1" ? " · registrada en la v1" : "") + "</span></div>" +
+    '<button class="link" onclick="verDia(\'' + s.fecha + '\')">cerrar</button></div></div>';
+  const cas = casillasDe(s, s.modo);
+  const orden = cas.map(c => c.id).filter(id => s.reg[id]);
+  Object.keys(s.reg).forEach(id => { if(!orden.includes(id)) orden.push(id); });
+  orden.forEach((id, n) => {
+    const x = ej(id); if(!x) return;
+    const c = cas.find(k => k.id === id);
+    const ser = s.reg[id], prog = progDe(id, s.modo);
+    const niv = ser.find(r => r.nivel != null);
+    const tReal = tiempoRealEjSesion(id, s);
+    h += '<div class="ej"><div class="ej-cab"><div class="ej-num">' + (n + 1) + '</div><div class="ej-tit"><b>' + esc(x.n) + "</b>" +
+      '<div class="sub">' + esc(x.g) + (c ? " · " + prescripcion(c, s.modo) : "") + (tReal ? " · " + fmtMin(tReal) + " real" : "") + "</div></div></div>" +
+      (niv ? '<div class="nivel-linea"><span class="nivel-chip"><small>nivel ' + niv.nivel + "</small>" + esc(nombreNivel(id, niv.nivel)) + "</span></div>" : "") +
+      '<div class="series">' + ser.map((r, i) =>
+        '<div class="serie hecha-fija"><span class="s-n">' + (i + 1) + "</span>" +
+        (prog === "nivel" && r.nivel != null ? '<span class="s-val s-niv">' + esc(nombreNivel(id, r.nivel)) + "</span>" : "") +
+        (num(r.kg) > 0 ? '<span class="s-val">' + fmtNum(num(r.kg)) + " <small>kg</small></span>" : "") +
+        '<span class="s-val"><b>' + num(r.reps) + "</b> <small>" + (prog === "tiempo" ? "s" : (x.unidad || "reps")) + "</small></span>" +
+        (r.incompleta ? '<span class="s-nota">' + esc(r.nota || "sin peso anotado") + "</span>" : "") +
+        (r.rir != null ? '<span class="s-nota">RIR ' + r.rir + "</span>" : "") +
+        (r.desc != null ? '<span class="s-nota">descanso ' + r.desc + " s</span>" : "") +
+        '<span class="s-rec' + (r.rec ? " si" : "") + '"></span></div>').join("") + "</div>" +
+      '<div class="ej-pie"><button class="btn-porque" id="bporque_' + id + '" onclick="alternarPorque(\'' + id + '\')">▸ ¿Por qué este ejercicio?</button></div>' +
+      '<div class="fund-panel" id="porque_' + id + '" hidden>' + fundamentoHTML(id) + "</div></div>";
+  });
+  return h;
+}
 
 /* ---------- AVANCES ---------- */
 function pintarAvances(){
@@ -2874,7 +2937,7 @@ function detalleSesionHTML(s){
     const hist = historial(id, x.legado ? undefined : s.modo).map(e => Object.assign({}, e, {series:e.series.filter(r => !r.incompleta)})).filter(e => e.series.length);
     const idx = hist.findIndex(e => e.sesion === s);
     h += '<div class="detalle-ej"><div class="detalle-ej-cab"><b>' + esc(x.n) + "</b>" + (nivelSer ? ' <span class="chip acc">' + esc(nombreNivel(id, nivelSer.nivel)) + "</span>" : "") + "</div>" +
-      '<div class="detalle-series">' + ser.map(r => '<span class="' + (r.rec ? "rec" : "") + '">' + fmtSerie(id, r) + (r.incompleta ? " <small>sin peso</small>" : "") + (r.rir != null ? " <small>RIR " + r.rir + "</small>" : "") + (r.desc != null ? " <small>d" + r.desc + "</small>" : "") + "</span>").join(" · ") + "</div>" +
+      '<div class="detalle-series">' + ser.map(r => '<span class="' + (r.rec ? "rec" : "") + '">' + fmtSerie(id, r) + (r.incompleta ? " <small>" + esc(r.nota || "sin peso") + "</small>" : "") + (r.rir != null ? " <small>RIR " + r.rir + "</small>" : "") + (r.desc != null ? " <small>d" + r.desc + "</small>" : "") + "</span>").join(" · ") + "</div>" +
       (hist.length >= 2 ? sparklineHTML(id, hist, prog, idx) : '<div class="aviso-suave">Única sesión con este ejercicio' + (hist.length ? "" : " (series sin peso anotado)") + ".</div>") + "</div>";
   });
   return h + "</div>";

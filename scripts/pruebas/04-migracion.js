@@ -14,6 +14,19 @@ ok(DB.sesiones.filter(s => s.fecha < "2026-09-12").every(s => s.modo === "casa")
 ok(DB.sesiones.filter(s => s.modo === "gym").length === 5, "5 sesiones de hotel");
 const a2 = DB.sesiones.find(s => s.dia === "A" && s.semanaV1 === 2);
 ok(a2.reg.press_banca[0].modo === "gym" && a2.reg.press_banca[0].kg === 10 && a2.reg.press_banca[0].nivel === null, "en el hotel el press guarda kilos y modo gym");
+ok(a2.reg.dominadas.every(r => r.incompleta === 1 && r.nivel === null && r.nota === "nivel desconocido") && a2.reg.dominadas[0].reps === 10, "las dominadas del hotel (10, 5) quedan con nivel desconocido: no se sabe qué fueron");
+ok(historial("dominadas").length === 2 && mejorSerie("dominadas", historial("dominadas").slice(-1)[0].series.filter(r => !r.incompleta) .concat([{reps:0}])).reps === 0, "para Avances y sugerencias esas series no existen");
+sel = {dia:"A", adhoc:null}; DB.modo = "casa"; pintarHoy();
+ok(capt["#app"].includes("Última vez: 5, 4 con banda media"), "la sugerencia de dominadas usa la sesión de casa (5, 4), no las 10 del hotel: " + (capt["#app"].match(/Última vez: [^<]{0,40}/) || ["no"])[0]);
+/* Semana: tocar un día muestra la sesión como se ve en HOY, completada */
+semanaVista = "2026-09-14"; verDia("2026-09-16");
+ok(capt["#app"].includes('id="sesionCompletada"') && capt["#app"].includes("Día D · Mixto") && capt["#app"].includes("23 min") && capt["#app"].includes("17 <small>kg</small>"), "el día 16 muestra la sesión D con su tiempo y sus series");
+ok(capt["#app"].includes("Peso muerto rumano") && capt["#app"].includes("hecha-fija") && capt["#app"].includes("¿Por qué este ejercicio?"), "tarjetas por ejercicio como en HOY, con series fijas");
+verDia("2026-09-16");
+ok(!capt["#app"].includes('id="sesionCompletada"'), "tocar de nuevo cierra");
+semanaVista = "2026-09-07"; verDia("2026-09-12");
+ok(capt["#app"].split('id="sesionCompletada"').length === 3 && capt["#app"].includes("nivel desconocido"), "un día con dos sesiones muestra las dos, con la nota de nivel desconocido en las dominadas del hotel");
+diaVisto = null; semanaVista = null;
 ok(a1.reg.press_banca && a1.reg.press_banca.length === 2 && a1.reg.press_banca[0].incompleta === 1 && a1.reg.press_banca[0].nivel === null, "press de banca de la semana 1 sin kilos: series incompletas, no cero");
 ok(a1.reg.press_militar && a1.reg.press_militar[0].kg === 0 && a1.reg.press_militar[0].nivel === 2 && a1.reg.press_militar[0].reps === 10, "press de hombro en casa con 10 kg → press militar nivel 2 (10 kg), sin kilos sueltos");
 ok(a1.reg.laterales[0].nivel === 1 && a1.reg.laterales[0].kg === 0, "laterales con 7,5 kg → nivel 1");

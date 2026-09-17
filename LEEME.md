@@ -95,6 +95,10 @@ corregir; al vencer el descanso pasa solo al siguiente paso. El paso vive en
 a la lista para corregir cualquier serie. En los ejercicios por tiempo hay que
 apretar Empezar y el check anota los segundos que corrió el reloj.
 
+**Semana** deja tocar un día con sesión y muestra esa sesión tal como se ve
+en HOY, pero completada: tarjeta por ejercicio con nivel, series, RIR y
+descanso real, y el tiempo que tomó (`sesionCompletadaHTML`).
+
 **El mapa de Avances** es una fila por semana con un recuadro por día: azul
 casa, ámbar gimnasio, gris ad hoc extra. Tocar un recuadro abre el detalle de
 esa sesión con las series de cada ejercicio y su tendencia (sparkline con el
@@ -126,8 +130,11 @@ peldaño (7,5 → nivel 1, 10 → nivel 2); una serie de mancuerna sin kilos que
 marcada `incompleta` y no cuenta como cero en el volumen ni entra a Antes y
 ahora. Los ejercicios con banda (face pull) guardan nivel de banda y nunca
 kilos, y van en modo casa aunque la sesión sea de hotel: una banda es una
-banda. "Dominadas (o negativas)" de la v1 quedan en banda media; las negativas
-ahora son un peldaño propio de la escalera.
+banda. "Dominadas (o negativas)" de la v1 quedan en banda media en casa; las
+del hotel (10 y 5 el 12-09) no se sabe qué fueron y quedan con "nivel
+desconocido": visibles en el detalle, fuera de Avances y de las sugerencias.
+`MIGRACION_V1` versiona estas reglas: al subirla, las sesiones de origen v1 se
+vuelven a traducir desde las claves fz_* sin tocar las registradas en la v2.
 
 ## Importar JSON
 
