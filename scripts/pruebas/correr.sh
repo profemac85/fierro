@@ -37,7 +37,7 @@ correr(){   # $1 = prueba
     cat "$T/out.txt"; echo "FALLO en $1"; exit 1
   fi
 }
-for prueba in 01-biblioteca 02-logica 03-sesion 04-migracion 05-importar; do correr "$prueba"; done
+for prueba in 01-biblioteca 02-logica 03-sesion 04-migracion 05-importar 06-guia; do correr "$prueba"; done
 
 rm -rf "$T"
 echo "todo verde"

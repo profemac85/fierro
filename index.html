@@ -219,6 +219,81 @@ body.con-descanso #barra{display:block}
 .barra-ctl button{min-width:44px;min-height:44px;border:1px solid var(--linea);border-radius:7px;background:var(--fondo);
   font-size:11px;font-weight:700;padding:0 6px}
 
+/* ============ la sesión guiada ============ */
+body.en-playback main{padding-top:8px;padding-bottom:210px}
+.pb-cab{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.pb-puntos{display:flex;gap:3px;margin-bottom:10px}
+.pb-puntos i{flex:1;height:4px;border-radius:2px;background:var(--linea)}
+.pb-puntos i.ok{background:var(--acento)}
+.pb-puntos i.aqui{background:var(--acento);box-shadow:0 0 0 2px var(--fondo),0 0 0 3px var(--acento)}
+.pb-link{font-size:12px;font-weight:700;color:var(--acento);min-height:44px;padding:0 4px}
+.pb-link:disabled{color:var(--linea)}
+/* el reloj manda: es lo primero que se ve */
+.pb-reloj{font-size:62px;line-height:1;font-weight:800;font-variant-numeric:tabular-nums;text-align:center;letter-spacing:-.02em}
+.pb-reloj.descanso{color:var(--acento)}
+.pb-reloj.pasado{color:var(--marca)}
+.pb-etq{display:block;text-align:center;margin:2px 0 12px}
+.pb-caja{background:var(--tarjeta);border:1px solid var(--linea);border-radius:10px;padding:14px}
+.pb-visual{height:170px;display:flex;align-items:center;justify-content:center;background:var(--blanco);border:1px solid var(--linea);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.pb-visual img{max-width:100%;max-height:170px;object-fit:contain}
+.pb-visual svg{width:100%;max-height:170px}
+.pb-visual svg.estatico{display:none}
+@media (prefers-color-scheme: dark){ .pb-visual img,.pb-sigue-img img{filter:invert(.92) hue-rotate(180deg)} }
+.pb-nombre{font-size:25px;font-weight:800;line-height:1.15;letter-spacing:-.01em}
+.pb-sub{font-size:14px;font-weight:600;color:var(--suave);margin-top:2px}
+.pb-ctx{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--suave);margin-top:8px}
+.pb-ultima{font-size:13px;color:var(--suave);margin-top:6px}
+.pb-ultima b{color:var(--tinta)}
+.pb-check{display:block;width:100%;min-height:76px;margin-top:14px;border-radius:12px;background:var(--acento);color:var(--blanco);font-size:32px;font-weight:800;line-height:1}
+@media (prefers-color-scheme: dark){ .pb-check{color:var(--fondo)} }
+.pb-check.pb-empezar{font-size:22px;letter-spacing:.02em}
+.pb-nav{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+.pb-hecho{font-size:16px;font-weight:800;margin-bottom:10px}
+.pb-rec{color:var(--marca);font-size:12px;font-weight:700}
+.pb-campos{display:flex;gap:10px;margin-bottom:10px}
+.pb-campo{flex:1;border:1px solid var(--linea);border-radius:9px;background:var(--fondo);padding:6px 4px 4px;text-align:center}
+.pb-campo:focus-within{border-color:var(--acento);outline:1px solid var(--acento);background:var(--blanco)}
+.pb-campo input{width:100%;border:none;background:none;text-align:center;outline:none;font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;min-height:44px}
+.pb-campo select{width:100%;border:none;background:none;font-size:14px;font-weight:700;min-height:44px;text-align:center;-webkit-appearance:none;appearance:none}
+.pb-campo-sel{flex:1.6}
+.pb-campo .etq{display:block}
+.pb-sigue{border-top:1px solid var(--linea);padding-top:10px;margin-top:8px}
+.pb-sigue-n{font-size:19px;font-weight:800;line-height:1.2;margin-top:2px}
+.pb-sigue-img{height:92px;display:flex;align-items:center;justify-content:center;margin-top:8px;background:var(--blanco);border:1px solid var(--linea);border-radius:8px;overflow:hidden}
+.pb-sigue-img img{max-width:100%;max-height:92px;object-fit:contain}
+.pb-sigue-img svg{max-height:92px;width:100%}
+.pb-sigue-img svg.estatico{display:none}
+.pb-controles{display:flex;gap:6px;margin-top:12px}
+.pb-controles .btn-chico{flex:1}
+.pb-fin{text-align:center}
+.pb-grande{font-size:26px;font-weight:800;margin-bottom:6px}
+.prep-lista{margin-top:10px}
+.prep-item{border-top:1px solid var(--linea);padding:9px 0}
+.prep-item:first-child{border-top:none}
+.prep-tit{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.prep-tit b{font-size:15px}
+.prep-tit span{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acento);white-space:nowrap}
+.prep-item p{font-size:13px;color:var(--suave);margin-top:3px}
+
+/* ============ mapa de recuadros (Avances) ============ */
+.mapa{display:grid;grid-template-columns:44px repeat(7,1fr);gap:3px;align-items:center}
+.mapa .rot{font-size:9px;font-weight:700;color:var(--suave);text-align:right;padding-right:3px;white-space:nowrap}
+.mapa .cab-col{font-size:9px;font-weight:700;color:var(--suave);text-align:center;letter-spacing:.1em}
+.mapa .celda-mapa{aspect-ratio:1.4/1;border:1px solid var(--linea);border-radius:5px;background:var(--fondo);
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--blanco);padding:0}
+.mapa .celda-mapa.futuro{opacity:.35;border-style:dashed}
+.mapa .celda-mapa.hoy{outline:2px solid var(--acento);outline-offset:1px}
+.mapa .celda-mapa.ok{background:var(--acento);border-color:var(--acento)}
+.mapa .celda-mapa.ok.gym{background:var(--marca);border-color:var(--marca)}
+.mapa .celda-mapa.ok.adhoc{background:var(--suave);border-color:var(--suave)}
+@media (prefers-color-scheme: dark){ .mapa .celda-mapa.ok{color:var(--fondo)} }
+.detalle-tit{font-size:13px;color:var(--suave);margin-bottom:6px}
+.detalle-ej{border-top:1px solid var(--linea);padding:8px 0}
+.detalle-ej-cab b{font-size:14px}
+.detalle-series{font-size:13px;font-variant-numeric:tabular-nums;margin-top:3px}
+.detalle-series .rec{color:var(--marca);font-weight:700}
+.detalle-series small{color:var(--suave);font-size:11px}
+
 /* ============ navegación ============ */
 nav{position:fixed;left:0;right:0;bottom:0;background:var(--tarjeta);border-top:1px solid var(--linea);
   z-index:30;padding-bottom:env(safe-area-inset-bottom)}
@@ -386,11 +461,7 @@ textarea.json:focus{border-color:var(--acento)}
       <div class="barra-info" id="bInfo"></div>
     </div>
     <div class="barra-reloj" id="bReloj">0:00</div>
-    <div class="barra-ctl">
-      <button onclick="ajustarDescanso(-15)">−15</button>
-      <button onclick="ajustarDescanso(30)">+30</button>
-      <button onclick="terminarDescanso()">Listo</button>
-    </div>
+    <div class="barra-ctl" id="bCtl"></div>
   </div>
 </div>
 
@@ -1669,7 +1740,7 @@ function serieDe(id, i){
   const p = pendiente(); if(!p || !p.reg[id]) return null;
   return p.reg[id][i] || null;
 }
-/* guarda la serie i de un ejercicio desde los campos */
+/* guarda la serie i de un ejercicio desde los campos de la lista */
 function anotarSerie(id, i){
   const p = asegurarPendiente();
   const prog = progDe(id, p.modo);
@@ -1684,6 +1755,23 @@ function anotarSerie(id, i){
   }
   const nivLeido = nivIn ? parseInt(nivIn.value, 10) : NaN;
   const nivel = prog === "nivel" ? (Number.isInteger(nivLeido) ? nivLeido : nivelActual(id)) : null;
+  const r = guardarSerieValor(id, i, kg, reps, nivel, false);
+  const dot = $("#rec_" + id + "_" + i); if(dot) dot.classList.toggle("si", !!(r && r.rec));
+  const inp = $("#r_" + id + "_" + i); if(inp) inp.classList.toggle("hecha", reps > 0);
+  if(reps > 0){
+    abrirSerieSiguiente(id, i);
+    const x = ej(id);
+    if(x && x.descanso && !lget("sinDescanso", false)) iniciarDescanso(x.descanso, x.n);
+  }
+  actualizarBotonGuardar();
+}
+/* el registro de verdad: lo usan la lista y la sesión guiada. `enGuia` evita
+   arrancar el descanso de la lista (la guía lo maneja ella). */
+function guardarSerieValor(id, i, kg, reps, nivel, enGuia){
+  const p = asegurarPendiente();
+  const prog = progDe(id, p.modo);
+  if(prog !== "peso") kg = 0;
+  if(prog !== "nivel") nivel = null;
   p.reg[id] = p.reg[id] || [];
   while(p.reg[id].length <= i) p.reg[id].push(null);
   const previa = p.reg[id][i] || {};
@@ -1703,15 +1791,8 @@ function anotarSerie(id, i){
   if(reps > 0 && !p.primeraSerieISO) p.primeraSerieISO = r.ts;
   aplicarRIR(id);
   guardar();
-  avisoDescansoCorto(id, r);
-  const dot = $("#rec_" + id + "_" + i); if(dot) dot.classList.toggle("si", !!(reps > 0 && r.rec));
-  const inp = $("#r_" + id + "_" + i); if(inp) inp.classList.toggle("hecha", reps > 0);
-  if(reps > 0){
-    abrirSerieSiguiente(id, i);
-    const x = ej(id);
-    if(x && x.descanso && !lget("sinDescanso", false)) iniciarDescanso(x.descanso, x.n);
-  }
-  actualizarBotonGuardar();
+  if(reps > 0) avisoDescansoCorto(id, r);
+  return reps > 0 ? r : null;
 }
 /* menos repeticiones con menos descanso no es retroceso: se avisa antes de
    que lo anote como mala sesión */
@@ -1825,7 +1906,7 @@ function actualizarBotonGuardar(){
 }
 function descartarPendiente(){
   abrirModal("Descartar la sesión", "Se borran las series anotadas hoy. El historial no se toca.",
-    [["Descartar", () => { DB.pendiente = null; guardar(); cerrarModal(); pintar(); }], ["Volver", cerrarModal]]);
+    [["Descartar", () => { DB.pendiente = null; verLista = false; guardar(); cerrarModal(); document.body.classList.remove("con-descanso", "en-playback"); pintar(); }], ["Volver", cerrarModal]]);
 }
 
 /* ---- descanso entre series ---- */
@@ -1853,7 +1934,7 @@ function soltarWakeLock(){ try{ if(wakeLock){ wakeLock.release(); wakeLock = nul
 function iniciarDescanso(seg, nombre){
   iniciarAudio();
   const p = asegurarPendiente();
-  p.descansoFinISO = new Date(Date.now() + seg * 1000).toISOString();
+  p.descansoFinISO = new Date(pbAhora() + seg * 1000).toISOString();
   p.descansoDe = nombre || "";
   p.descansoAviso = false;
   guardar();
@@ -1870,25 +1951,55 @@ function ajustarDescanso(seg){
 function terminarDescanso(){
   const p = pendiente(); if(!p) return;
   p.descansoFinISO = null; guardar();
-  document.body.classList.remove("con-descanso");
-  soltarWakeLock();
+  if(!enPlayback()){ document.body.classList.remove("con-descanso"); soltarWakeLock(); }
 }
 function descansoManual(id){
   const x = ej(id); if(!x) return;
   const p = pendiente();
   if(p && p.descansoFinISO) terminarDescanso(); else iniciarDescanso(x.descanso || 90, x.n);
 }
+/* cuánto lleva la sesión, descontando las pausas */
+function tiempoSesionMs(p, desde){
+  const ini = desde || p.primeraSerieISO || p.inicioISO;
+  if(!ini) return 0;
+  return pbAhora() - new Date(ini).getTime() - (p.msPausados || 0);
+}
+let barraModo = "";
+function pintarBarra(modo, p){
+  /* los botones se reescriben solo al cambiar de modo: reescribirlos cada
+     medio segundo dejaría los toques en el aire */
+  if(barraModo === modo) return;
+  barraModo = modo;
+  $("#bCtl").innerHTML = modo === "guia"
+    ? '<button id="btnPausa" onclick="pausarReanudar()">Pausa</button><button onclick="terminarPlayback()">Salir</button>'
+    : '<button onclick="ajustarDescanso(-15)">−15</button><button onclick="ajustarDescanso(30)">+30</button><button onclick="terminarDescanso()">Listo</button>';
+}
 function tick(){
   const p = pendiente();
   const rel = $("#relojSesion");
-  if(rel && p && p.primeraSerieISO) rel.textContent = fmtReloj(Date.now() - new Date(p.primeraSerieISO).getTime());
+  if(rel && p && p.primeraSerieISO) rel.textContent = fmtReloj(tiempoSesionMs(p));
+  const guia = typeof enPlayback === "function" && enPlayback();
+  document.body.classList.toggle("en-playback", guia);
+  if(guia){
+    /* en la guía la barra de abajo lleva el reloj de la sesión completa */
+    document.body.classList.add("con-descanso");
+    pintarBarra("guia", p);
+    $("#bTit").textContent = "Sesión completa" + (p.pausadoEn ? " · en pausa" : "");
+    $("#bInfo").textContent = tituloSesion(p) + " · " + seriesAnotadas() + (seriesAnotadas() === 1 ? " serie" : " series");
+    $("#bReloj").textContent = fmtReloj(tiempoSesionMs(p, p.inicioISO));
+    $("#bReloj").className = "barra-reloj" + (p.pausadoEn ? " pasado" : "");
+    const bp = $("#btnPausa"); if(bp) bp.textContent = p.pausadoEn ? "Seguir" : "Pausa";
+    refrescarPB();
+    return;
+  }
   const hay = !!(p && p.descansoFinISO);
   document.body.classList.toggle("con-descanso", hay);
   if(!hay) return;
-  const falta = new Date(p.descansoFinISO).getTime() - Date.now();
+  pintarBarra("descanso", p);
+  const falta = new Date(p.descansoFinISO).getTime() - pbAhora();
   $("#bReloj").textContent = fmtReloj(falta);
   $("#bReloj").className = "barra-reloj" + (falta < 0 ? " pasado" : "");
-  $("#bTit").textContent = falta < 0 ? "Descanso cumplido" : "Descanso";
+  $("#bTit").textContent = falta < 0 ? "Descanso cumplido" : "Descanso" + (p.pausadoEn ? " · en pausa" : "");
   $("#bInfo").textContent = p.descansoDe || "";
   if(falta <= 0 && !p.descansoAviso){ p.descansoAviso = true; guardar(); beep(2); vibrar([120, 80, 120]); }
   /* pasados 2 minutos del fin, la barra se cierra sola */
@@ -1938,8 +2049,9 @@ function guardarSesion(){
   const reg = {};
   Object.keys(p.reg).forEach(id => { const s = seriesValidas(p.reg[id]); if(s.length) reg[id] = s; });
   const ad = p.adhoc ? adHocDe(p.adhoc) : null;
+  if(p.pausadoEn) pausarReanudar();
   const ses = {fecha:fechaISO(), ts:hoyISO(), dia:p.dia, modo:p.modo, adhoc:p.adhoc || null, reg,
-    duracion:Math.round((Date.now() - new Date(p.primeraSerieISO || p.inicioISO).getTime()) / 1000)};
+    duracion:Math.round(tiempoSesionMs(p) / 1000)};
   if(ad && DIAS.includes(ad.reemplazaDia)) ses.reemplazaDia = ad.reemplazaDia;
   /* récords y volumen se evalúan contra el historial ANTERIOR a esta sesión */
   const logros = [];
@@ -1991,6 +2103,8 @@ function guardarSesion(){
   DB.sesiones.push(ses);
   DB.sesiones.sort((a, b) => (a.fecha + (a.ts || "")).localeCompare(b.fecha + (b.ts || "")));
   DB.pendiente = null;
+  verLista = false;
+  document.body.classList.remove("en-playback");
   const st = statsLogros(ses);
   const nuevos = [];
   LOGROS.forEach(l => { if(!DB.logros[l.id] && l.t(st)){ DB.logros[l.id] = fechaISO(); nuevos.push(l); } });
@@ -2072,11 +2186,273 @@ function aviso(txt, accion){
 }
 function deshacerToast(){ if(toastAccion) toastAccion(); toastAccion = null; $("#toast").classList.remove("abierto"); }
 
+/* ================= la sesión guiada (playback) =================
+   Al apretar "Empezar sesión" la vista HOY deja de ser una lista y pasa a
+   conducir: un paso a la vez, con el reloj de la serie arriba y el de la
+   sesión completa abajo. Los pasos son la preparación más las series de las
+   casillas del día, en orden: no hay una segunda fuente de verdad. El estado
+   vive en DB.pendiente.pb, así cerrar la app a mitad de sesión retoma en el
+   mismo paso. */
+let verLista = false;
+let pbFirma = "";
+const MOVILIDAD = {
+  torso:[
+    {n:"Círculos de brazos", c:"10 adelante y 10 atrás", d:"Brazos estirados a los lados, círculos grandes, lo más amplios que den los hombros."},
+    {n:"Palo por encima de la cabeza", c:"8 pasadas", d:"Manos bien separadas en un palo de escoba. Pásalo de adelante hacia atrás por sobre la cabeza sin forzar."},
+    {n:"Rotaciones de tronco", c:"8 por lado", d:"De rodillas, una mano en la nuca. Gira el pecho abriendo el codo al techo y vuelve."},
+    {n:"Colgarse de la barra", c:"2 × 20 segundos", d:"Colgado pasivo, hombros sueltos. Prepara el agarre y abre la espalda para las dominadas."}
+  ],
+  pierna:[
+    {n:"Sentadilla profunda sostenida", c:"30 segundos", d:"Agárrate de algo firme y baja al fondo. Talones en el suelo, rodillas hacia afuera con los codos."},
+    {n:"Balanceo de pierna", c:"10 por lado", d:"Agarrado de la pared, balancea una pierna como péndulo, adelante y atrás, sin forzar el rango."},
+    {n:"Rodilla a la pared", c:"8 por lado", d:"Pie a un palmo de la pared. Lleva la rodilla a tocarla sin despegar el talón."},
+    {n:"Puente de glúteo", c:"10", d:"De espaldas, pies apoyados. Sube la cadera apretando el glúteo, pausa arriba, baja controlado."}
+  ]
+};
+function tipoMovilidad(){ return (sel.dia === "B" || sel.dia === "D") ? "pierna" : "torso"; }
+function pasosPB(){
+  const p = pendiente();
+  const modo = p ? p.modo : DB.modo;
+  const pasos = [{tipo:"prep"}];
+  casillasHoy(sel, modo).forEach(c => { for(let i = 0; i < c.series; i++) pasos.push({tipo:"serie", c, i}); });
+  return pasos;
+}
+function enPlayback(){ const p = pendiente(); return !!(p && p.pb && p.dia === sel.dia && p.adhoc === sel.adhoc) && !verLista; }
+function pbAhora(){
+  /* el reloj se congela en pausa: todo se mide contra "ahora" descontando lo pausado */
+  const p = pendiente();
+  return p && p.pausadoEn ? new Date(p.pausadoEn).getTime() : Date.now();
+}
+function empezarSesion(){
+  const p = asegurarPendiente();
+  if(!p.pb){
+    /* se retoma en la primera serie sin anotar, por si venía de la lista */
+    const pasos = pasosPB();
+    let i = pasos.findIndex(x => x.tipo === "serie" && !serieDe(x.c.id, x.i));
+    if(i < 0) i = pasos.length;
+    if(!seriesAnotadas()) i = 0;
+    p.pb = {idx:i, ejIniISO:hoyISO(), avisoEj:false};
+    if(!p.inicioISO) p.inicioISO = hoyISO();
+    guardar();
+  }
+  iniciarAudio(); pedirWakeLock();
+  verLista = false;
+  pintar();
+}
+function pasoActualPB(){
+  const p = pendiente(); const pasos = pasosPB();
+  const i = Math.max(0, Math.min(pasos.length, p.pb.idx));
+  return {pasos, i, paso:pasos[i] || null};
+}
+function estimadoPasoMs(paso){
+  if(!paso || paso.tipo !== "serie") return 3 * 60000;
+  return trabajoSerieSeg(paso.c.id, {reps:paso.c.max}) * 1000;
+}
+function esDeTiempo(paso){ return !!(paso && paso.tipo === "serie" && progDe(paso.c.id, pendiente().modo) === "tiempo"); }
+
+function pintarPlayback(){
+  const p = pendiente(); if(!p || !p.pb) return;
+  const {pasos, i, paso} = pasoActualPB();
+  const enDescanso = !!p.descansoFinISO && paso && paso.tipo === "serie";
+  pbFirma = i + "|" + (enDescanso ? "d" : "t") + "|" + (p.pb.ejIniISO ? "1" : "0") + "|" + (p.pausadoEn ? "p" : "");
+  const ad = sel.adhoc ? adHocDe(sel.adhoc) : null;
+  const titulo = ad ? esc(ad.nombre) : "Día " + sel.dia + " · " + RUTINA[sel.dia].n;
+  const puntos = [];
+  for(let k = 1; k < pasos.length; k++) puntos.push('<i class="' + (k < i ? "ok" : k === i ? "aqui" : "") + '"></i>');
+  let h = '<div class="pb-cab"><span class="etq">' + titulo + " · " + nombreModo(p.modo) + '</span><button class="pb-link" onclick="verLista=true;pintar()">Ver lista</button></div>' +
+    '<div class="pb-puntos">' + puntos.join("") + "</div>";
+  if(!paso){
+    h += '<div class="pb-caja pb-fin"><div class="pb-grande">Sesión completa</div>' +
+      '<p class="aviso-suave">Anotaste todas las series del día. Guarda para que quede registrada.</p>' +
+      '<button class="btn-grande btn-acento" onclick="guardarSesion()">Guardar sesión · ' + seriesAnotadas() + " series</button>" +
+      '<button class="btn-grande btn-borde" style="margin-top:8px" onclick="verLista=true;pintar()">Ver la lista</button></div>';
+  } else if(enDescanso) h += pbDescansoHTML(p, pasos, i);
+  else h += paso.tipo === "prep" ? pbPrepHTML() : pbTrabajoHTML(p, paso, i);
+  $("#app").innerHTML = h;
+  if(enDescanso) enfocarCampoPB(paso);
+  vigilarImagenes();
+}
+function pbPrepHTML(){
+  const lista = MOVILIDAD[tipoMovilidad()];
+  return '<div class="pb-reloj" id="pbReloj">3:00</div><div class="etq pb-etq" id="pbRelojEtq">preparación</div>' +
+    '<div class="pb-caja"><div class="pb-nombre">Preparación</div><div class="pb-sub">3 minutos, para no entrar en frío</div>' +
+    '<div class="prep-lista">' + lista.map(m => '<div class="prep-item"><div class="prep-tit"><b>' + m.n + "</b><span>" + m.c + "</span></div><p>" + m.d + "</p></div>").join("") + "</div>" +
+    '<button class="pb-check" onclick="pbCheck()">✓</button>' +
+    '<div class="pb-nav"><span></span><button class="pb-link" onclick="pbSaltar()">saltar ›</button></div></div>';
+}
+function pbTrabajoHTML(p, paso, i){
+  const c = paso.c, x = ej(c.id), prog = progDe(c.id, p.modo);
+  const deTiempo = prog === "tiempo";
+  const esperando = deTiempo && !p.pb.ejIniISO;
+  const s = sugerencia(c, p.modo);
+  const reloj = esperando
+    ? '<div class="pb-reloj" id="pbReloj">' + c.max + 's</div><div class="etq pb-etq">aguanta este tiempo</div>'
+    : '<div class="pb-reloj" id="pbReloj">0:00</div><div class="etq pb-etq" id="pbRelojEtq">esta serie · referente, no plazo</div>';
+  const boton = esperando
+    ? '<button class="pb-check pb-empezar" onclick="pbEmpezarEj()">Empezar</button>'
+    : '<button class="pb-check" onclick="pbCheck()" aria-label="serie hecha">✓</button>';
+  return reloj + '<div class="pb-caja">' +
+    '<div class="pb-visual">' + visualPB(c.id) + "</div>" +
+    '<div class="pb-nombre">' + esc(x.n) + "</div>" +
+    '<div class="pb-sub">' + prescripcion(c, p.modo) + (x.descanso ? " · descanso " + x.descanso + " s" : "") + "</div>" +
+    (prog === "nivel" ? '<div class="nivel-linea"><span class="nivel-chip"><small>nivel ' + nivelActual(c.id) + "</small>" + esc(nombreNivel(c.id, nivelActual(c.id))) + "</span></div>" : "") +
+    '<div class="pb-ctx">Serie ' + (paso.i + 1) + " de " + c.series + "</div>" +
+    '<div class="pb-ultima">' + s.t + "</div>" +
+    boton +
+    '<div class="pb-nav"><button class="pb-link" onclick="pbAtras()"' + (i <= 1 ? " disabled" : "") + '>‹ atrás</button>' +
+    '<button class="pb-link" onclick="pbSaltar()">saltar ›</button></div>' +
+    '<button class="btn-porque" id="bporque_' + c.id + '" onclick="alternarPorque(\'' + c.id + '\')">▸ ¿Por qué este ejercicio?</button>' +
+    '<div class="fund-panel" id="porque_' + c.id + '" hidden>' + fundamentoHTML(c.id) + "</div></div>";
+}
+function pbDescansoHTML(p, pasos, i){
+  const paso = pasos[i], sig = pasos[i + 1], c = paso.c, x = ej(c.id);
+  const prog = progDe(c.id, p.modo);
+  const r = serieDe(c.id, paso.i) || {};
+  let campos = "";
+  if(prog === "nivel"){
+    campos += '<div class="pb-campo pb-campo-sel"><select id="pbNivel" onchange="pbGuardarCampos()">' +
+      escaleraDe(c.id).map(nv => '<option value="' + nv.i + '"' + (nv.i === (r.nivel != null ? r.nivel : nivelActual(c.id)) ? " selected" : "") + ">" + esc(nv.n) + "</option>").join("") + '</select><span class="etq">nivel</span></div>';
+  }
+  if(prog === "peso") campos += '<div class="pb-campo"><input id="pbKg" inputmode="decimal" enterkeyhint="done" value="' + (num(r.kg) ? fmtNum(num(r.kg)) : "") + '" onchange="pbGuardarCampos()"><span class="etq">kg</span></div>';
+  campos += '<div class="pb-campo"><input id="pbReps" inputmode="numeric" enterkeyhint="done" value="' + (num(r.reps) || "") + '" onchange="pbGuardarCampos()"><span class="etq">' + (prog === "tiempo" ? "segundos" : x.unidad || "reps") + "</span></div>";
+  const esUltima = paso.i === c.series - 1;
+  const rir = p.rir[c.id] != null ? p.rir[c.id] : null;
+  return '<div class="pb-reloj descanso" id="pbReloj">' + fmtReloj(new Date(p.descansoFinISO).getTime() - pbAhora()) + '</div><div class="etq pb-etq" id="pbRelojEtq">descanso</div>' +
+    '<div class="pb-caja"><div class="pb-hecho">' + esc(x.n) + " · serie " + (paso.i + 1) + (r.rec ? ' <span class="pb-rec">● récord</span>' : "") + "</div>" +
+    '<div class="pb-campos">' + campos + "</div>" +
+    (esUltima ? '<div class="rir" id="rir_' + c.id + '"><span class="etq">RIR última serie</span>' +
+      [[1, "0-1"], [2, "2-3"], [4, "4+"]].map(([v, t]) => '<button data-v="' + v + '" class="' + (rir === v ? "sel" : "") + '" onclick="marcarRIR(\'' + c.id + "'," + v + ')">' + t + "</button>").join("") + "</div>" : "") +
+    '<div class="nota-desc" id="notad_' + c.id + '"' + (r.desc != null && x.descanso >= 120 && r.desc < x.descanso * 0.7 ? "" : " hidden") + ">" +
+      (r.desc != null ? "Descanso de " + r.desc + " s (sugerido " + x.descanso + "). Menos repeticiones con menos descanso no es retroceso." : "") + "</div>" +
+    (sig ? '<div class="pb-sigue"><span class="etq">sigue</span><div class="pb-sigue-n">' + (sig.tipo === "prep" ? "Preparación" : esc(ej(sig.c.id).n) + " · serie " + (sig.i + 1)) + "</div>" +
+      (sig.tipo === "serie" && sig.c.id !== c.id ? '<div class="pb-sigue-img">' + visualPB(sig.c.id) + "</div>" : "") + "</div>"
+      : '<div class="pb-sigue"><span class="etq">era la última</span></div>') +
+    '<div class="pb-controles"><button class="btn-chico" onclick="ajustarDescanso(-30)">−30 s</button><button class="btn-chico" onclick="ajustarDescanso(30)">+30 s</button>' +
+    '<button class="btn-chico acc" onclick="pbListo()">Listo ›</button></div></div>';
+}
+function visualPB(id){
+  const x = ej(id); if(!x) return "";
+  if(x.img) return '<img src="media/ejercicios/' + x.img + '" alt="" onerror="imgFallo(this,\'' + id + '\')">';
+  return esquemaSVG(id);
+}
+function enfocarCampoPB(paso){
+  /* el foco va en el mismo gesto del toque: es lo que deja a iOS abrir el teclado */
+  const el = $("#pbReps"); if(el){ el.focus(); el.select(); }
+}
+/* el valor que queda anotado al apretar el check: lo de la vez pasada, no el
+   tope del rango, para que la curva no mienta si no se corrige */
+function valorSugeridoPB(paso){
+  const p = pendiente(), c = paso.c, prog = progDe(c.id, p.modo);
+  const hist = historial(c.id, p.modo).map(e => Object.assign({}, e, {series:e.series.filter(r => !r.incompleta)})).filter(e => e.series.length);
+  const u = hist.length ? hist[hist.length - 1] : null;
+  const previa = paso.i > 0 ? serieDe(c.id, paso.i - 1) : null;
+  if(prog === "tiempo") return {kg:0, reps: previa ? num(previa.reps) : u ? Math.max(...u.series.map(r => num(r.reps))) : c.min, nivel:null};
+  if(prog === "peso") return {kg: kgHeredado(c.id, paso.i, p.modo), reps: previa ? num(previa.reps) : u ? num(u.series[0].reps) : c.min, nivel:null};
+  const niv = nivelActual(c.id);
+  const enNivel = u ? u.series.filter(r => (r.nivel == null ? niv : r.nivel) === niv) : [];
+  return {kg:0, reps: previa ? num(previa.reps) : enNivel.length ? num(enNivel[0].reps) : c.min, nivel: prog === "nivel" ? niv : null};
+}
+function pbCheck(){
+  const p = pendiente(); if(!p || !p.pb) return;
+  const {pasos, i, paso} = pasoActualPB();
+  if(!paso) return;
+  iniciarAudio();
+  if(paso.tipo === "prep"){ pbIr(i + 1); return; }
+  const v = valorSugeridoPB(paso);
+  if(esDeTiempo(paso) && p.pb.ejIniISO){
+    const corrido = Math.round((pbAhora() - new Date(p.pb.ejIniISO).getTime()) / 1000);
+    if(corrido > 0) v.reps = corrido;
+  }
+  if(!serieDe(paso.c.id, paso.i)) guardarSerieValor(paso.c.id, paso.i, v.kg, v.reps, v.nivel, true);
+  vibrar(60);
+  p.pb.ejIniISO = null; guardar();
+  if(i + 1 >= pasos.length){ pbIr(i + 1); return; }
+  const x = ej(paso.c.id);
+  const sig = pasos[i + 1];
+  /* entre ejercicios el descanso es el del que termina; si no tiene, uno breve */
+  iniciarDescanso(x.descanso || 60, x.n);
+  pintarPlayback();
+}
+function pbEmpezarEj(){ const p = pendiente(); if(!p || !p.pb) return; iniciarAudio(); p.pb.ejIniISO = hoyISO(); guardar(); pintarPlayback(); }
+function pbListo(){ const p = pendiente(); if(!p || !p.pb) return; const {i} = pasoActualPB(); pbIr(i + 1); }
+function pbAtras(){ const p = pendiente(); if(!p || !p.pb) return; const {i} = pasoActualPB(); pbIr(Math.max(0, i - 1)); }
+function pbSaltar(){ const p = pendiente(); if(!p || !p.pb) return; const {i} = pasoActualPB(); pbIr(i + 1); }
+function pbIr(idx){
+  const p = pendiente(); if(!p || !p.pb) return;
+  const pasos = pasosPB();
+  p.pb.idx = Math.max(0, Math.min(pasos.length, idx));
+  /* moverse de paso corta el descanso: si no, queda uno corriendo por detrás */
+  p.descansoFinISO = null;
+  const paso = pasos[p.pb.idx];
+  p.pb.ejIniISO = (paso && (paso.tipo === "prep" || !esDeTiempo(paso))) ? hoyISO() : null;
+  p.pb.avisoEj = false;
+  guardar();
+  document.body.classList.remove("con-descanso");
+  pintarPlayback();
+}
+function pbGuardarCampos(){
+  const p = pendiente(); if(!p || !p.pb) return;
+  const {paso} = pasoActualPB();
+  if(!paso || paso.tipo !== "serie") return;
+  const c = paso.c, prog = progDe(c.id, p.modo);
+  const reps = num(($("#pbReps") || {}).value);
+  const kg = prog === "peso" ? num(($("#pbKg") || {}).value) : 0;
+  const nivIn = $("#pbNivel");
+  const nivel = prog === "nivel" ? (nivIn && Number.isInteger(parseInt(nivIn.value, 10)) ? parseInt(nivIn.value, 10) : nivelActual(c.id)) : null;
+  if(!reps) return;
+  const r = guardarSerieValor(c.id, paso.i, kg, reps, nivel, true);
+  const caja = $(".pb-hecho");
+  if(caja && r && r.rec && !caja.innerHTML.includes("pb-rec")) caja.innerHTML += ' <span class="pb-rec">● récord</span>';
+}
+/* pausa: congela el reloj de sesión y el descanso */
+function pausarReanudar(){
+  const p = pendiente(); if(!p) return;
+  if(p.pausadoEn){
+    const ms = Date.now() - new Date(p.pausadoEn).getTime();
+    p.msPausados = (p.msPausados || 0) + ms;
+    if(p.descansoFinISO) p.descansoFinISO = new Date(new Date(p.descansoFinISO).getTime() + ms).toISOString();
+    if(p.pb && p.pb.ejIniISO) p.pb.ejIniISO = new Date(new Date(p.pb.ejIniISO).getTime() + ms).toISOString();
+    p.pausadoEn = null;
+  } else p.pausadoEn = hoyISO();
+  guardar(); tick();
+  if(enPlayback()) pintarPlayback();
+}
+function terminarPlayback(){
+  abrirModal("Salir de la sesión guiada", "Lo anotado se conserva en la lista. Puedes guardar la sesión desde ahí o volver a la guía cuando quieras.",
+    [["Salir a la lista", () => { const p = pendiente(); if(p){ p.pb = null; p.pausadoEn = null; guardar(); } verLista = false; cerrarModal(); pintar(); }], ["Volver", cerrarModal]]);
+}
+/* los relojes se refrescan cada tick sin repintar, para no botar el teclado */
+function refrescarPB(){
+  const p = pendiente(); if(!p || !p.pb || verLista) return;
+  const {pasos, i, paso} = pasoActualPB();
+  const firma = i + "|" + (p.descansoFinISO && paso && paso.tipo === "serie" ? "d" : "t") + "|" + (p.pb.ejIniISO ? "1" : "0") + "|" + (p.pausadoEn ? "p" : "");
+  if(firma !== pbFirma){ pintarPlayback(); return; }
+  const rel = $("#pbReloj"); if(!rel || !paso) return;
+  if(p.descansoFinISO){
+    const falta = new Date(p.descansoFinISO).getTime() - pbAhora();
+    rel.textContent = fmtReloj(Math.max(0, falta));
+    if(falta <= 0 && !p.pausadoEn){
+      /* el descanso termina pasando solo al siguiente paso */
+      beep(1); vibrar(150);
+      pbIr(i + 1);
+    }
+    return;
+  }
+  if(!p.pb.ejIniISO) return;
+  const corrido = pbAhora() - new Date(p.pb.ejIniISO).getTime();
+  const falta = estimadoPasoMs(paso) - corrido;
+  rel.textContent = fmtReloj(Math.abs(falta));
+  rel.classList.toggle("pasado", falta < 0);
+  /* al llegar a cero no pasa nada, salvo en los de tiempo: ahí el tiempo es el ejercicio */
+  if(esDeTiempo(paso) && falta <= 0 && !p.pb.avisoEj){ p.pb.avisoEj = true; guardar(); beep(1); vibrar(150); }
+}
+
 /* ============ 6. vistas ============ */
 let vista = "hoy";
 function irVista(v){ vista = v; pintar(); window.scrollTo(0, 0); }
 function pintar(){
   ["hoy", "semana", "avances", "metodo", "importar"].forEach(v => { const b = $("#nav_" + v); if(b) b.classList.toggle("sel", v === vista); });
+  document.body.classList.toggle("en-playback", vista === "hoy" && enPlayback());
   if(vista === "hoy") pintarHoy();
   else if(vista === "semana") pintarSemana();
   else if(vista === "avances") pintarAvances();
@@ -2115,12 +2491,25 @@ function elegirDia(d){ sel = {dia:d, adhoc:null}; pintarHoy(); }
 function elegirAdHoc(id){ sel = {dia:null, adhoc:id}; pintarHoy(); }
 
 /* ---------- HOY ---------- */
+/* las casillas que se ven de verdad: las del día menos las pausadas con
+   sustituto, más el sustituto en su lugar */
+function casillasHoy(selx, modo){
+  const cas = casillasDe(selx, modo);
+  const out = [];
+  cas.forEach(c => {
+    const pa = DB.pausados[c.id];
+    if(!pa) out.push(c);
+    else if(pa.sustituto && ej(pa.sustituto) && !cas.some(o => o.id === pa.sustituto)) out.push(Object.assign(casillaDe(pa.sustituto, {series:c.series, min:c.min, max:c.max}), {sustituyeA:c.id}));
+  });
+  return out;
+}
 function pintarHoy(){
   const p = pendiente();
   if(!sel.dia && !sel.adhoc){
     if(p && (p.dia || p.adhoc)) sel = {dia:p.dia, adhoc:p.adhoc};
     else sel = {dia:diaSugerido(), adhoc:null};
   }
+  if(enPlayback()){ pintarPlayback(); return; }
   const modo = (p && seriesAnotadas() > 0 && p.dia === sel.dia && p.adhoc === sel.adhoc) ? p.modo : DB.modo;
   const sug = diaSugerido();
   let h = cabeceraHTML();
@@ -2153,6 +2542,10 @@ function pintarHoy(){
   if(p && seriesAnotadas() > 0 && (p.dia !== sel.dia || p.adhoc !== sel.adhoc)){
     h += '<div class="aviso acc">Hay una sesión en curso (' + esc(tituloSesion(p)) + ", " + seriesAnotadas() + ' series). Al anotar acá se descarta esa. <button class="link" onclick="sel={dia:pendiente().dia,adhoc:pendiente().adhoc};pintarHoy()">Volver a ella</button></div>';
   }
+  /* la sesión guiada: conduce paso a paso; la lista queda para corregir */
+  const guiaAqui = p && p.pb && p.dia === sel.dia && p.adhoc === sel.adhoc;
+  if(cas.length) h += '<button class="btn-grande btn-acento" style="margin-bottom:12px" onclick="empezarSesion()">' +
+    (guiaAqui ? "‹ Volver a la sesión guiada" : (p && seriesAnotadas() > 0 && p.dia === sel.dia && p.adhoc === sel.adhoc ? "Seguir con la guía" : "Empezar sesión · " + fmtMin(estimadoSesionSeg(cas, modo)))) + "</button>";
   if(!cas.length) h += '<div class="tarjeta aviso-suave">Esta sesión no tiene ejercicios en modo ' + nombreModo(modo) + ".</div>";
   cas.forEach((c, i) => {
     h += ejercicioHTML(c, i + 1, modo);
@@ -2162,7 +2555,7 @@ function pintarHoy(){
     }
   });
   const enCurso = p && p.dia === sel.dia && p.adhoc === sel.adhoc && seriesAnotadas() > 0;
-  h += '<button class="btn-grande btn-acento" id="btnGuardar" onclick="guardarSesion()"' + (enCurso ? "" : " disabled") + ">Guardar sesión" +
+  h += '<button class="btn-grande ' + (guiaAqui ? "btn-borde" : "btn-acento") + '" id="btnGuardar" onclick="guardarSesion()"' + (enCurso ? "" : " disabled") + ">Guardar sesión" +
     (enCurso ? " · " + seriesAnotadas() + " series" : "") + "</button>";
   if(enCurso) h += '<button class="btn-grande btn-borde" style="margin-top:8px" onclick="descartarPendiente()">Descartar lo anotado</button>';
   h += '<div class="aviso-suave" style="margin:10px 2px 0">Mantén apretado un ejercicio (o toca ⋯) para pausarlo, cambiar de nivel o leer el fundamento.</div>';
@@ -2420,6 +2813,9 @@ function pintarAvances(){
     h += '<div class="tarjeta aviso-suave">Acá van a aparecer los avances por ejercicio. Guarda la primera sesión para partir.</div>';
     $("#app").innerHTML = h; return;
   }
+  h += '<div class="tarjeta"><div class="tarjeta-cab"><span class="etq">Mapa</span><span class="etq">toca un día para ver la sesión</span></div>' + mapaSemanasHTML() +
+    '<div class="aviso-suave" style="margin-top:6px">Azul casa, ámbar gimnasio, gris ad hoc extra.</div></div>' +
+    '<div id="detalleSesion"></div>';
   const bib = todaLaBiblioteca();
   const orden = [];
   DIAS.forEach(d => RUTINA[d].items.forEach(it => ["casa", "gym"].forEach(m => { if(it[m] && !orden.includes(it[m])) orden.push(it[m]); })));
@@ -2431,6 +2827,57 @@ function pintarAvances(){
     h += '<details class="tarjeta porque"><summary>Ejercicios de la rutina anterior (' + legado.length + ")</summary>" + legado.map(id => avanceHTML(id, true)).join("") + "</details>";
   }
   $("#app").innerHTML = h;
+}
+/* el mapa: una fila por semana, siete recuadros, pintado el día que hubo
+   sesión. Desde la primera sesión (hasta 16 semanas atrás) hasta hoy. */
+function mapaSemanasHTML(){
+  const hoy = fechaISO();
+  const lunesHoy = lunesDe(hoy);
+  let inicio = DB.sesiones.length ? lunesDe(DB.sesiones[0].fecha) : lunesHoy;
+  if(diasEntre(inicio, lunesHoy) > 7 * 15) inicio = sumarDias(lunesHoy, -7 * 15);
+  const porDia = {};
+  DB.sesiones.forEach(s => { (porDia[s.fecha] = porDia[s.fecha] || []).push(s); });
+  const meses = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  let h = '<div class="mapa"><span></span>' + ["L", "M", "M", "J", "V", "S", "D"].map(d => '<span class="cab-col">' + d + "</span>").join("");
+  for(let l = inicio; l <= lunesHoy; l = sumarDias(l, 7)){
+    const d = deFecha(l);
+    h += '<span class="rot">' + d.getDate() + " " + meses[d.getMonth()] + "</span>";
+    for(let i = 0; i < 7; i++){
+      const f = sumarDias(l, i), ses = porDia[f] || [];
+      if(!ses.length){ h += '<div class="celda-mapa' + (f > hoy ? " futuro" : "") + (f === hoy ? " hoy" : "") + '"></div>'; continue; }
+      const s = ses[0];
+      h += '<button class="celda-mapa ok' + (s.modo === "gym" ? " gym" : "") + (s.adhoc && !diaQueAvanza(s) ? " adhoc" : "") + (f === hoy ? " hoy" : "") +
+        '" onclick="verSesionMapa(\'' + esc(s.ts || s.fecha) + '\')" title="' + esc(tituloSesion(s)) + '">' +
+        ses.map(x => x.adhoc ? (diaQueAvanza(x) || "+") : x.dia).join("") + "</button>";
+    }
+  }
+  return h + "</div>";
+}
+function verSesionMapa(ts){
+  const s = DB.sesiones.find(x => (x.ts || x.fecha) === ts); if(!s) return;
+  const cont = $("#detalleSesion"); if(!cont) return;
+  cont.innerHTML = detalleSesionHTML(s);
+  if(cont.scrollIntoView) cont.scrollIntoView({behavior:"smooth", block:"start"});
+}
+/* el detalle de una sesión: cada ejercicio con sus series y su tendencia,
+   con el punto de esta sesión marcado */
+function detalleSesionHTML(s){
+  const nS = Object.keys(s.reg).reduce((a, id) => a + s.reg[id].length, 0);
+  let h = '<div class="tarjeta detalle-ses"><div class="tarjeta-cab"><span class="etq">' + esc(tituloSesion(s)) + '</span><button class="link" onclick="$(\'#detalleSesion\').innerHTML=\'\'">cerrar</button></div>' +
+    '<div class="detalle-tit">' + fmtFechaLarga(s.fecha) + " · " + nombreModo(s.modo).toLowerCase() + (s.duracion ? " · " + Math.round(s.duracion / 60) + " min" : "") +
+    " · " + nS + " series · " + fmtNum(Math.round(tonelajeSesion(s))) + " kg" + (s.origen === "v1" ? " · registrada en la v1" : "") + "</div>";
+  Object.keys(s.reg).forEach(id => {
+    const x = ej(id); if(!x) return;
+    const ser = s.reg[id];
+    const prog = progDe(id, s.modo);
+    const nivelSer = ser.find(r => r.nivel != null);
+    const hist = historial(id, x.legado ? undefined : s.modo).map(e => Object.assign({}, e, {series:e.series.filter(r => !r.incompleta)})).filter(e => e.series.length);
+    const idx = hist.findIndex(e => e.sesion === s);
+    h += '<div class="detalle-ej"><div class="detalle-ej-cab"><b>' + esc(x.n) + "</b>" + (nivelSer ? ' <span class="chip acc">' + esc(nombreNivel(id, nivelSer.nivel)) + "</span>" : "") + "</div>" +
+      '<div class="detalle-series">' + ser.map(r => '<span class="' + (r.rec ? "rec" : "") + '">' + fmtSerie(id, r) + (r.incompleta ? " <small>sin peso</small>" : "") + (r.rir != null ? " <small>RIR " + r.rir + "</small>" : "") + (r.desc != null ? " <small>d" + r.desc + "</small>" : "") + "</span>").join(" · ") + "</div>" +
+      (hist.length >= 2 ? sparklineHTML(id, hist, prog, idx) : '<div class="aviso-suave">Única sesión con este ejercicio' + (hist.length ? "" : " (series sin peso anotado)") + ".</div>") + "</div>";
+  });
+  return h + "</div>";
 }
 function valorComparable(id, r, prog){
   if(prog === "peso" || num(r.kg) > 0) return num(r.kg) * num(r.reps);
@@ -2490,7 +2937,7 @@ function escaleraHTML(id){
     return '<div class="peldano ' + cls + '"><i>' + (cls === "hecho" ? "✓" : nv.i) + "</i><span>" + esc(nv.n) + (nv.i === act && criterioDe(id, nv.i) ? ' <span class="aviso-suave">· sube con ' + esc(textoCriterio(id, nv.i)) + "</span>" : "") + "</span></div>";
   }).join("") + "</div>";
 }
-function sparklineHTML(id, hist, prog){
+function sparklineHTML(id, hist, prog, marcar){
   const vals = hist.map(e => { const m = mejorSerie(id, e.series); return valorComparable(id, m, prog); });
   const max = Math.max(...vals) || 1, min = Math.min(...vals);
   const W = 320, H = 56;
@@ -2499,11 +2946,12 @@ function sparklineHTML(id, hist, prog){
   let s = '<svg class="spark" viewBox="0 0 ' + W + " " + H + '">';
   s += '<polyline fill="none" stroke="var(--acento)" stroke-width="2" points="' + vals.map((v, i) => X(i) + "," + Y(v)).join(" ") + '"/>';
   vals.forEach((v, i) => {
-    s += '<circle cx="' + X(i) + '" cy="' + Y(v) + '" r="3" fill="var(--acento)"/>';
-    if(i === 0 || i === vals.length - 1 || v === max) s += '<text x="' + X(i) + '" y="' + (Y(v) - 6) + '" text-anchor="middle" font-size="9" font-weight="700" fill="var(--tinta)">' + (prog === "peso" ? Math.round(v) : v) + "</text>";
+    const esMarcado = marcar != null && i === marcar;
+    s += '<circle cx="' + X(i) + '" cy="' + Y(v) + '" r="' + (esMarcado ? 5 : 3) + '" fill="var(--' + (esMarcado ? "marca" : "acento") + ')"/>';
+    if(i === 0 || i === vals.length - 1 || v === max || esMarcado) s += '<text x="' + X(i) + '" y="' + (Y(v) - 7) + '" text-anchor="middle" font-size="9" font-weight="700" fill="var(--tinta)">' + (prog === "peso" ? Math.round(v) : v) + "</text>";
   });
   const conKg = hist.some(e => e.series.some(r => num(r.kg) > 0));
-  return s + "</svg>" + '<div class="aviso-suave">' + ((prog === "peso" || conKg) ? "Kilos por repeticiones de la mejor serie" : prog === "tiempo" ? "Segundos de la mejor serie" : "Repeticiones de la mejor serie") + ", sesión a sesión (" + vals.length + ").</div>";
+  return s + "</svg>" + '<div class="aviso-suave">' + ((prog === "peso" || conKg) ? "Kilos por repeticiones de la mejor serie" : prog === "tiempo" ? "Segundos de la mejor serie" : "Repeticiones de la mejor serie") + ", sesión a sesión (" + vals.length + ")" + (marcar != null ? ", en ámbar esta sesión" : "") + ".</div>";
 }
 
 /* ---------- MÉTODO ---------- */
@@ -2777,6 +3225,7 @@ function init(){
   cargar();
   const p = pendiente();
   if(p) sel = {dia:p.dia, adhoc:p.adhoc};
+  if(p && p.pb) pedirWakeLock();
   pintar();
   if(tickInt) clearInterval(tickInt);
   tickInt = setInterval(tick, 500);

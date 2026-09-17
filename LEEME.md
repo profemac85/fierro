@@ -85,6 +85,21 @@ cinturón de lastre: el interruptor `DB.lastre` (Ajustes) pasa dominadas y
 fondos a "peso" en los dos modos; `progDe()` lo resuelve y la escalera queda
 archivada, no borrada.
 
+**La sesión guiada.** "Empezar sesión" convierte HOY en un conductor: un paso
+a la vez (`pasosPB`: preparación más las series de `casillasHoy`), el reloj de
+la serie arriba (referente, no plazo: al llegar a cero sigue en ámbar) y el
+reloj de la sesión completa en la barra de abajo, con pausa. El check anota lo
+de la vez pasada (`valorSugeridoPB`) y abre el descanso con los campos para
+corregir; al vencer el descanso pasa solo al siguiente paso. El paso vive en
+`DB.pendiente.pb.idx`, así cerrar la app retoma donde iba. "Ver lista" vuelve
+a la lista para corregir cualquier serie. En los ejercicios por tiempo hay que
+apretar Empezar y el check anota los segundos que corrió el reloj.
+
+**El mapa de Avances** es una fila por semana con un recuadro por día: azul
+casa, ámbar gimnasio, gris ad hoc extra. Tocar un recuadro abre el detalle de
+esa sesión con las series de cada ejercicio y su tendencia (sparkline con el
+punto de esa sesión en ámbar).
+
 **La sesión pendiente se guarda a cada cambio** en `DB.pendiente`, así cerrar la
 app a mitad de sesión no pierde nada. Las series se abren de a una y la
 siguiente se abre en el sitio (`abrirSerieSiguiente`), sin repintar: repintar
